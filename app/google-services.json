@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:767151248681:android:c9cb85ccf3a724b1ac5338",
+        "mobilesdk_app_id": "1:767151248681:android:b639dafad7f6b215ac5338",
         "android_client_info": {
-          "package_name": "com.rae.recyclerview.admin"
+          "package_name": "com.rae.daply"
         }
       },
       "oauth_client": [
@@ -37,38 +37,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:767151248681:android:6b2979cfb437aaedac5338",
+        "mobilesdk_app_id": "1:767151248681:android:d328016e91c8c710ac5338",
         "android_client_info": {
-          "package_name": "com.rae.recyclierview"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD65z3-CIWvanhhip8-KIVnXWFPHSp95pM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:767151248681:android:652ce88b1dd8111bac5338",
-        "android_client_info": {
-          "package_name": "com.rae.recyclierview.admin"
+          "package_name": "com.rae.daply.admin"
         }
       },
       "oauth_client": [

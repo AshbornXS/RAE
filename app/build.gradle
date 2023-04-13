@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.rae.recyclierview'
+    namespace 'com.rae.daply'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.rae.recyclierview"
+        applicationId "com.rae.daply"
         minSdk 24
         targetSdk 33
         versionCode 1
