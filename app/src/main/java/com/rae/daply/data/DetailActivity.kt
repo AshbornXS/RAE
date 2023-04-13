@@ -1,8 +1,9 @@
-package com.rae.daply
+package com.rae.daply.data
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,6 +12,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.rae.daply.BuildConfig
+import com.rae.daply.GlideApp
+import com.rae.daply.MainActivity
+import com.rae.daply.R
 
 class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +31,10 @@ class DetailActivity : AppCompatActivity() {
         val edit: FloatingActionButton = findViewById(R.id.editButton)
         var key = ""
         var imageURL = ""
+
+        if(BuildConfig.FLAVOR == "student"){
+            edit.visibility = View.GONE
+        }
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {

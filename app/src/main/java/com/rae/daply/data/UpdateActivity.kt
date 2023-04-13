@@ -1,4 +1,4 @@
-package com.rae.daply
+package com.rae.daply.data
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -16,6 +16,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.rae.daply.GlideApp
+import com.rae.daply.MainActivity
+import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUpdateBinding
 
 class UpdateActivity : AppCompatActivity() {

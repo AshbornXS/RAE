@@ -8,9 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import com.rae.daply.data.DataClass
+import com.rae.daply.data.MyAdaptor
+import com.rae.daply.data.UploadActivity
 
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
         val fab: View = findViewById(R.id.fab)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+
+        if(BuildConfig.FLAVOR == "student"){
+            fab.visibility = View.GONE
+        }
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setCancelable(false)

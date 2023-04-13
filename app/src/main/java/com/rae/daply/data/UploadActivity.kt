@@ -1,4 +1,4 @@
-package com.rae.daply
+package com.rae.daply.data
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.rae.daply.MainActivity
+import com.rae.daply.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

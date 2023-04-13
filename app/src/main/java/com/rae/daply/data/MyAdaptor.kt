@@ -1,4 +1,4 @@
-package com.rae.daply
+package com.rae.daply.data
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.rae.daply.GlideApp
+import com.rae.daply.R
 
 class MyAdaptor(val context: Context, private val avisosArrayList: ArrayList<DataClass>) :
     RecyclerView.Adapter<MyAdaptor.MyViewHolder>() {

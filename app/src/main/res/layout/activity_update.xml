@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fillViewport="true"
     android:background="@color/background_black"
-    tools:context=".UpdateActivity">
+    tools:context=".data.UpdateActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

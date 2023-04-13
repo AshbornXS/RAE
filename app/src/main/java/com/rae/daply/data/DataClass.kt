@@ -1,4 +1,4 @@
-package com.rae.daply
+package com.rae.daply.data
 
 data class DataClass(
     var titulo: String? = null, var aviso: String? = null,
