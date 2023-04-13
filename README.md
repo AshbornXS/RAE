@@ -2,7 +2,7 @@
 
 ## ***TODO***
 1. Cadastro:
-    - [] Nome completo;
+    - [ ] Nome completo;
     - Curso(alteravel no perfil a cada X dias);
     - E-mail institucional(com verificação);
     - Senha;
