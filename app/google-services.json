@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "767151248681",
+    "firebase_url": "https://recyclierview-77f9f-default-rtdb.firebaseio.com",
+    "project_id": "recyclierview-77f9f",
+    "storage_bucket": "recyclierview-77f9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767151248681:android:c9cb85ccf3a724b1ac5338",
+        "android_client_info": {
+          "package_name": "com.rae.recyclerview.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD65z3-CIWvanhhip8-KIVnXWFPHSp95pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767151248681:android:6b2979cfb437aaedac5338",
+        "android_client_info": {
+          "package_name": "com.rae.recyclierview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD65z3-CIWvanhhip8-KIVnXWFPHSp95pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767151248681:android:652ce88b1dd8111bac5338",
+        "android_client_info": {
+          "package_name": "com.rae.recyclierview.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD65z3-CIWvanhhip8-KIVnXWFPHSp95pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767151248681-0t6lck8p8004i4i67f8kl73pt5d3v7qt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

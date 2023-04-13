@@ -1,0 +1,67 @@
+package com.rae.recyclierview
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
+
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val fab: View = findViewById(R.id.fab)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+        builder.setView(R.layout.loading_layout)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
+        linearLayoutManager.reverseLayout = true
+        recyclerView.layoutManager = linearLayoutManager
+
+        val avisosArrayList: List<DataClass> = ArrayList()
+
+        val adapter = MyAdaptor(
+            this,
+            avisosArrayList as ArrayList<DataClass>
+        )
+        recyclerView.adapter = adapter
+
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("RAE")
+        dialog.show()
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                avisosArrayList.clear()
+                for (itemSnapshot in snapshot.children) {
+                    val dataClass = itemSnapshot.getValue(DataClass::class.java)
+                    dataClass!!.key = itemSnapshot.key
+                    avisosArrayList.add(dataClass)
+                }
+                adapter.notifyDataSetChanged()
+                dialog.dismiss()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                dialog.dismiss()
+            }
+        })
+
+        fab.setOnClickListener {
+            val intent = Intent(this, UploadActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}
