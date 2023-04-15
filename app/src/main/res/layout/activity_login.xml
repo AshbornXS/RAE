@@ -74,13 +74,25 @@
                     app:cornerRadius="30dp" />
 
                 <TextView
-                    android:id="@+id/signupRedirectText"
+                    android:id="@+id/forgot_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
                     android:padding="8dp"
                     android:textStyle="italic"
+                    android:text="Esqueceu a senha?"
+                    android:textColor="@color/teal_200"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/signupRedirectText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:textStyle="italic"
+                    android:layout_marginTop="14dp"
                     android:text="Não é um usuário? Cadastre-se."
                     android:textColor="@color/teal_200"
                     android:textSize="15sp" />
