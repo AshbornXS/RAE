@@ -33,7 +33,8 @@ class DetailActivity : AppCompatActivity() {
         var imageURL = ""
 
         if(BuildConfig.FLAVOR == "student"){
-            edit.visibility = View.GONE
+            val editFabMenu: com.github.clans.fab.FloatingActionMenu = findViewById(R.id.editFabMenu)
+            editFabMenu.visibility = View.GONE
         }
 
         val bundle: Bundle? = intent.extras

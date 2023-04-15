@@ -3,14 +3,18 @@ package com.rae.daply
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdaptor
 import com.rae.daply.data.UploadActivity
+import com.rae.daply.login.LoginActivity
 
 
 open class MainActivity : AppCompatActivity() {
@@ -22,9 +26,14 @@ open class MainActivity : AppCompatActivity() {
         val fab: View = findViewById(R.id.fab)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
-        if(BuildConfig.FLAVOR == "student"){
-            fab.visibility = View.GONE
+        val sair: Button = findViewById(R.id.buttonLogout)
+
+        sair.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
+
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setCancelable(false)

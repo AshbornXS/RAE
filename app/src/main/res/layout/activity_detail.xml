@@ -103,6 +103,7 @@
                 app:menu_colorNormal="@color/teal_200"
                 app:menu_colorPressed="@color/teal_200"
                 app:menu_fab_size="normal"
+                android:id="@+id/editFabMenu"
                 app:menu_icon="@drawable/ic_format_list_bulleted_24"
                 app:menu_openDirection="up"
                 app:menu_showShadow="true">

@@ -27,4 +27,12 @@
         app:tint="@color/white"
         android:contentDescription="Upload" />
 
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:id="@+id/buttonLogout"
+        android:text="Sair"
+        android:textSize="18sp"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>
