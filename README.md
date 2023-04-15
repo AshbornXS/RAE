@@ -2,10 +2,10 @@
 
 ## ***TODO***
 1. Cadastro:
-    - [ ] Nome completo;
+    - [X] Nome completo;
     - [ ] Curso(alteravel no perfil a cada X dias);
-    - [ ] E-mail institucional(com verificação);
-    - [ ] Senha;
+    - [X] E-mail institucional(ainda faltando com verificação);
+    - [X] Senha;
 
     - [ ] Cadastro da coordenação feito de forma geral, por exemplo, uma conta para coordenação onde todos os coordenadores terão acesso, uma para a secretaria e etc;
 
