@@ -10,4 +10,5 @@
     <color name="background_black">#FF151515</color>
     <color name="red">#c70000</color>
     <color name="green">#00ff00</color>
+    <color name="grey">#ff606060</color>
 </resources>

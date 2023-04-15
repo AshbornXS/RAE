@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.github.clans.fab.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -32,9 +33,19 @@ class DetailActivity : AppCompatActivity() {
         var key = ""
         var imageURL = ""
 
-        if(BuildConfig.FLAVOR == "student"){
-            edit.visibility = View.GONE
-        }
+        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+            ?.replace(".", "-")
+
+        val dbReference = FirebaseDatabase.getInstance()
+        dbReference.reference.child("Users").child(save.toString()).child("userType").get()
+            .addOnSuccessListener {
+                val userType = it.value.toString()
+                if (userType == "aluno") {
+                    val editFabMenu: com.github.clans.fab.FloatingActionMenu =
+                        findViewById(R.id.editFabMenu)
+                    editFabMenu.visibility = View.GONE
+                }
+            }
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
