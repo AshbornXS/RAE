@@ -90,4 +90,10 @@ open class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
 }
