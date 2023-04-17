@@ -34,20 +34,25 @@ class LoginActivity : AppCompatActivity() {
             val dialog: AlertDialog = builder.create()
             dialog.show()
 
-            val email = binding.loginEmail.text.toString()
-            val password = binding.loginPassword.text.toString()
+            var email = binding.loginEmail.text.toString()
+            var password = binding.loginPassword.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            dialog.dismiss()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            dialog.dismiss()
-                            Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
-                                .show()
+                            val verification = firebaseAuth.currentUser?.isEmailVerified
+                            if (verification == true) {
+                                dialog.dismiss()
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                binding.loginEmail.text.clear()
+                                binding.loginPassword.text.clear()
+                                dialog.dismiss()
+                                Toast.makeText(this, "Verifique seu email", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     }
             } else {
@@ -80,19 +85,20 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun compareEmail(email: EditText){
-        if (email.text.toString().isEmpty()){
+    private fun compareEmail(email: EditText) {
+        if (email.text.toString().isEmpty()) {
             return
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
             return
         }
-        firebaseAuth.sendPasswordResetEmail(email.text.toString())
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Check your email", Toast.LENGTH_SHORT).show()
-                }
+        firebaseAuth.sendPasswordResetEmail(email.text.toString()).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Olhe seu email!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Email não cadastrado", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     override fun onStart() {
