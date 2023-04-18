@@ -12,7 +12,7 @@
 
 2. Quadro de avisos:
     - [X] Possível ver o autor da publicação;
-    - [ ] E-mail para contato com o autor da publicação;
+    - [X] E-mail para contato com o autor da publicação;
     - [X] Opção de abrir a publicação para mais detalhes, como uma reportagem, por exemplo(se possível);
     - [ ] Avisos temporarios podendo escolher entre 1 dia e 1 semana;
     - [ ] Categorias / Filtro;
