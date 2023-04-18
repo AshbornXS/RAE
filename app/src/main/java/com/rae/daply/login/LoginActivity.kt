@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityLoginBinding
@@ -44,6 +45,20 @@ class LoginActivity : AppCompatActivity() {
                             val verification = firebaseAuth.currentUser?.isEmailVerified
                             if (verification == true) {
                                 dialog.dismiss()
+                                val save =
+                                    firebaseAuth.currentUser?.email?.replace("@etec.sp.gov.br", "")
+                                        ?.replace(".", "-")
+
+                                val dbReference = FirebaseDatabase.getInstance()
+                                dbReference.reference.child("Users").child(save.toString())
+                                    .child("name").get().addOnSuccessListener {
+                                        val name = it.value.toString()
+                                        Toast.makeText(
+                                            this, "Bem vindo(a) $name", Toast.LENGTH_SHORT
+                                        ).show()
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        startActivity(intent)
+                                    }
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             } else {
@@ -104,10 +119,18 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val currentUser: FirebaseUser? = firebaseAuth.currentUser
-        if (currentUser != null) {
-            Toast.makeText(this, "Bem vindo ${currentUser.email}", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        if (currentUser != null && currentUser.isEmailVerified) {
+            val save = currentUser.email?.replace("@etec.sp.gov.br", "")?.replace(".", "-")
+
+            val dbReference = FirebaseDatabase.getInstance()
+            dbReference.reference.child("Users").child(save.toString()).child("name").get()
+                .addOnSuccessListener {
+                    val name = it.value.toString()
+                    Toast.makeText(this, "Bem Vindo(a) $name", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+
         }
     }
 }

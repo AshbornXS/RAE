@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="20dp">
 
             <TextView
@@ -27,16 +27,16 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Cadastro"
-                android:textStyle="bold"
                 android:textColor="@color/teal_200"
-                android:textSize="80sp" />
+                android:textSize="80sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/signup_name"
                 android:layout_width="350dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/border"
+                android:background="@drawable/border_retangular"
                 android:drawableStart="@drawable/ic_name_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/teal_200"
@@ -50,7 +50,8 @@
                 android:layout_width="350dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border"
+                android:autofillHints="emailAddress"
+                android:background="@drawable/border_retangular"
                 android:drawableStart="@drawable/ic_email_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/teal_200"
@@ -65,7 +66,7 @@
                 android:layout_width="350dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border"
+                android:background="@drawable/border_retangular"
                 android:drawableStart="@drawable/ic_lock_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/teal_200"
@@ -80,7 +81,7 @@
                 android:layout_width="350dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border"
+                android:background="@drawable/border_retangular"
                 android:drawableStart="@drawable/ic_password_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/teal_200"
@@ -89,6 +90,66 @@
                 android:padding="8dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/border_retangular"
+                    android:drawablePadding="8dp"
+                    android:hint="Série:"
+                    android:padding="8dp"
+                    android:textColorHint="@color/grey"
+                    app:startIconDrawable="@drawable/ic_serie_24"
+                    app:startIconTint="@color/teal_200">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/signup_serie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="none"
+                        android:text="1° Ano"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="italic" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/border_retangular"
+                    android:drawablePadding="8dp"
+                    android:hint="Curso:"
+                    android:padding="8dp"
+                    android:textColorHint="@color/grey"
+                    app:startIconDrawable="@drawable/ic_cursos_24"
+                    app:startIconTint="@color/teal_200">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/signup_curso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="none"
+                        android:text="DS"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="italic" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/signup_button"
@@ -106,10 +167,10 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
-                android:textStyle="italic"
                 android:text="Já é um usuário? Faça login."
                 android:textColor="@color/teal_200"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textStyle="italic" />
 
         </LinearLayout>
 

@@ -39,7 +39,7 @@
                     android:layout_width="350dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="30dp"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_retangular"
                     android:drawableStart="@drawable/ic_email_24"
                     android:drawablePadding="8dp"
                     android:drawableTint="@color/teal_200"
@@ -47,14 +47,15 @@
                     android:inputType="textEmailAddress"
                     android:padding="8dp"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/grey" />
+                    android:textColorHint="@color/grey"
+                    android:autofillHints="emailAddress" />
 
                 <EditText
                     android:id="@+id/login_password"
                     android:layout_width="350dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_retangular"
                     android:drawableStart="@drawable/ic_lock_24"
                     android:drawablePadding="8dp"
                     android:drawableTint="@color/teal_200"

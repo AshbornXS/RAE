@@ -3,6 +3,8 @@ package com.rae.daply.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -15,11 +17,21 @@ class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
+    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
+        binding.signupSerie.setAdapter(adaptorItemsSerie)
+
+        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
+        binding.signupCurso.setAdapter(adaptorItemsCurso)
+
+
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -28,6 +40,8 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.signupEmail.text.toString()
             val password = binding.signupPassword.text.toString()
             val passwordConfirm = binding.signupConfirmPassword.text.toString()
+            val serie = binding.signupSerie.text.toString()
+            val curso = binding.signupCurso.text.toString()
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setCancelable(false)
@@ -42,7 +56,7 @@ class SignupActivity : AppCompatActivity() {
                     .show()
             } else if (name.isNotEmpty() && email.isNotEmpty() && email.contains("@etec.sp.gov.br") && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
                 if (password == passwordConfirm) {
-                    val dataClass = DataClass(email = email, userType = "aluno", name = name)
+                    val dataClass = DataClass(email = email, userType = "aluno", name = name, serie = serie, curso = curso)
                     val save = email.replace("@etec.sp.gov.br", "").replace(".", "-")
 
                     FirebaseDatabase.getInstance().getReference("Users").child(save)
@@ -59,17 +73,18 @@ class SignupActivity : AppCompatActivity() {
                                             "Email de verificação enviado!",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        val intent = Intent(this, LoginActivity::class.java)
-                                        startActivity(intent)
                                     }?.addOnFailureListener {
                                         dialog.dismiss()
                                         Toast.makeText(
                                             this, it.toString(), Toast.LENGTH_SHORT
                                         ).show()
                                     }
-                            } else if(task.exception.toString().contains("The email address is already in use by another account.")) {
-                                    Toast.makeText(this, "Email já cadastrado!", Toast.LENGTH_SHORT).show()
-                                    dialog.dismiss()
+                            } else if (task.exception.toString()
+                                    .contains("The email address is already in use by another account.")
+                            ) {
+                                Toast.makeText(this, "Email já cadastrado!", Toast.LENGTH_SHORT)
+                                    .show()
+                                dialog.dismiss()
                             }
                         }
                 } else {
