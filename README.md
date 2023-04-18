@@ -3,15 +3,16 @@
 ## ***TODO***
 1. Cadastro:
     - [X] Nome completo;
-    - [ ] Curso(alteravel no perfil a cada X dias);
+    - [X] Curso(pendente: alteravel no perfil a cada X dias);
     - [X] E-mail institucional;
     - [X] Senha;
+    - [ ] Profile;
 
-    - [ ] Cadastro da coordenação feito de forma geral, por exemplo, uma conta para coordenação onde todos os coordenadores terão acesso, uma para a secretaria e etc;
+    - [X] (só adicionar o cadastro manualmente na db) Cadastro da coordenação feito de forma geral, por exemplo, uma conta para coordenação onde todos os coordenadores terão acesso, uma para a secretaria e etc;
 
 2. Quadro de avisos:
     - [X] Possível ver o autor da publicação;
-    - [ ] E-mail para contato com o autor da publicação;
+    - [X] E-mail para contato com o autor da publicação;
     - [X] Opção de abrir a publicação para mais detalhes, como uma reportagem, por exemplo(se possível);
     - [ ] Avisos temporarios podendo escolher entre 1 dia e 1 semana;
     - [ ] Categorias / Filtro;
