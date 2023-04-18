@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -80,7 +81,7 @@ class UploadActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
 
-        if (uri == null || uploadTitulo.text.toString() == "" || uploadAviso.text.toString() == "" || uploadAutor.text.toString() == "") {
+        if (uri == null || uploadTitulo.text.toString().isEmpty() || uploadAviso.text.toString().isEmpty() || uploadAutor.text.toString().isEmpty()) {
             dialog.dismiss()
             Toast.makeText(this, "Nenhum dos campos podem ser vazios!", Toast.LENGTH_SHORT).show()
         } else {
@@ -103,8 +104,10 @@ class UploadActivity : AppCompatActivity() {
         val data = LocalDateTime.now().format(format)
 
         val titulo = uploadTitulo.text.toString()
-        val aviso = uploadAviso.text.toString()
+        val avisoPre = uploadAviso.text.toString()
         val autor = uploadAutor.text.toString()
+
+        val aviso = avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
 
         val dataClass = DataClass(titulo, aviso, data, autor, imageURL)
 

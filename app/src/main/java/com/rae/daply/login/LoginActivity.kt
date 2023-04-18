@@ -15,8 +15,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityLoginBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity() {
+open class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -29,47 +33,13 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.loginButton.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setCancelable(false)
-            builder.setView(R.layout.loading_layout)
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
 
-            var email = binding.loginEmail.text.toString()
-            var password = binding.loginPassword.text.toString()
+
+            val email = binding.loginEmail.text.toString()
+            val password = binding.loginPassword.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val verification = firebaseAuth.currentUser?.isEmailVerified
-                            if (verification == true) {
-                                dialog.dismiss()
-                                val save =
-                                    firebaseAuth.currentUser?.email?.replace("@etec.sp.gov.br", "")
-                                        ?.replace(".", "-")
-
-                                val dbReference = FirebaseDatabase.getInstance()
-                                dbReference.reference.child("Users").child(save.toString())
-                                    .child("name").get().addOnSuccessListener {
-                                        val name = it.value.toString()
-                                        Toast.makeText(
-                                            this, "Bem vindo(a) $name", Toast.LENGTH_SHORT
-                                        ).show()
-                                        val intent = Intent(this, MainActivity::class.java)
-                                        startActivity(intent)
-                                    }
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
-                            } else {
-                                binding.loginEmail.text.clear()
-                                binding.loginPassword.text.clear()
-                                dialog.dismiss()
-                                Toast.makeText(this, "Verifique seu email", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                    }
+                login(email, password)
             } else {
                 Toast.makeText(this, "Digite seu email e senha", Toast.LENGTH_SHORT).show()
             }
@@ -81,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
             val userEmail = view.findViewById<EditText>(R.id.editBox)
             builder.setView(view)
             val dialog = builder.create()
+
             view.findViewById<Button>(R.id.btnReset).setOnClickListener {
                 compareEmail(userEmail)
                 dialog.dismiss()
@@ -116,21 +87,53 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onStart() {
         super.onStart()
-        val currentUser: FirebaseUser? = firebaseAuth.currentUser
-        if (currentUser != null && currentUser.isEmailVerified) {
-            val save = currentUser.email?.replace("@etec.sp.gov.br", "")?.replace(".", "-")
+        GlobalScope.launch(Dispatchers.Main) {
+            val currentUser: FirebaseUser? = firebaseAuth.currentUser
+            if (currentUser != null && currentUser.isEmailVerified) {
+                getName()
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
 
-            val dbReference = FirebaseDatabase.getInstance()
-            dbReference.reference.child("Users").child(save.toString()).child("name").get()
-                .addOnSuccessListener {
-                    val name = it.value.toString()
-                    Toast.makeText(this, "Bem Vindo(a) $name", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
+    private fun getName() {
+        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+            ?.replace(".", "-")
+
+        val dbReference = FirebaseDatabase.getInstance()
+        dbReference.reference.child("Users").child(save.toString()).child("name").get()
+            .addOnSuccessListener {
+                val name = it.value.toString()
+                val teste = name.replaceAfter(" ", "")
+                Toast.makeText(this, "Bem Vindo(a), $teste", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun login(email: String, password: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@LoginActivity)
+        builder.setCancelable(false)
+        builder.setView(R.layout.loading_layout)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val verification = firebaseAuth.currentUser?.isEmailVerified
+                if (verification == true) {
+                    dialog.dismiss()
+                    getName()
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
+                } else {
+                    binding.loginPassword.text.clear()
+                    dialog.dismiss()
+                    Toast.makeText(this@LoginActivity, "Verifique seu email", Toast.LENGTH_SHORT)
+                        .show()
                 }
-
+            }
         }
     }
 }

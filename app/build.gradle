@@ -59,4 +59,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.14.2'
     implementation 'com.github.clans:fab:1.6.4'
 
+    def coroutines_version = "1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
 }

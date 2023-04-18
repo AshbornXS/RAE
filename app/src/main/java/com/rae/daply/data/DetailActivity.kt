@@ -17,8 +17,13 @@ import com.rae.daply.BuildConfig
 import com.rae.daply.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.R
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -33,19 +38,21 @@ class DetailActivity : AppCompatActivity() {
         var key = ""
         var imageURL = ""
 
-        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-            ?.replace(".", "-")
+        GlobalScope.launch(Dispatchers.Main) {
+            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+                ?.replace(".", "-")
 
-        val dbReference = FirebaseDatabase.getInstance()
-        dbReference.reference.child("Users").child(save.toString()).child("userType").get()
-            .addOnSuccessListener {
-                val userType = it.value.toString()
-                if (userType == "aluno") {
-                    val editFabMenu: com.github.clans.fab.FloatingActionMenu =
-                        findViewById(R.id.editFabMenu)
-                    editFabMenu.visibility = View.GONE
+            val dbReference = FirebaseDatabase.getInstance()
+            dbReference.reference.child("Users").child(save.toString()).child("userType").get()
+                .addOnSuccessListener {
+                    val userType = it.value.toString()
+                    if (userType == "aluno") {
+                        val editFabMenu: com.github.clans.fab.FloatingActionMenu =
+                            findViewById(R.id.editFabMenu)
+                        editFabMenu.visibility = View.GONE
+                    }
                 }
-            }
+        }
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
@@ -53,9 +60,7 @@ class DetailActivity : AppCompatActivity() {
             imageURL = bundle.getString("Image").toString()
             aviso.text = bundle.getString("Aviso")
             titulo.text = bundle.getString("Titulo")
-            GlideApp.with(this)
-                .load(bundle.getString("Image"))
-                .into(imagem)
+            GlideApp.with(this).load(bundle.getString("Image")).into(imagem)
             autor.text = bundle.getString("Autor")
             data.text = bundle.getString("Data")
         }
@@ -78,12 +83,9 @@ class DetailActivity : AppCompatActivity() {
 
 
         edit.setOnClickListener {
-            val intent = Intent(this, UpdateActivity::class.java)
-                .putExtra("Image", imageURL)
-                .putExtra("Titulo", titulo.text.toString())
-                .putExtra("Aviso", aviso.text.toString())
-                .putExtra("Data", data.text.toString())
-                .putExtra("Autor", autor.text.toString())
+            val intent = Intent(this, UpdateActivity::class.java).putExtra("Image", imageURL)
+                .putExtra("Titulo", titulo.text.toString()).putExtra("Aviso", aviso.text.toString())
+                .putExtra("Data", data.text.toString()).putExtra("Autor", autor.text.toString())
             startActivity(intent)
         }
     }

@@ -3,7 +3,6 @@ package com.rae.daply.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -30,7 +29,6 @@ class SignupActivity : AppCompatActivity() {
 
         val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
         binding.signupCurso.setAdapter(adaptorItemsCurso)
-
 
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -73,6 +71,8 @@ class SignupActivity : AppCompatActivity() {
                                             "Email de verificação enviado!",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        val intent = Intent(this, LoginActivity::class.java)
+                                        startActivity(intent)
                                     }?.addOnFailureListener {
                                         dialog.dismiss()
                                         Toast.makeText(

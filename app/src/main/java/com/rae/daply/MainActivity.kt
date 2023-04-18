@@ -1,5 +1,6 @@
 package com.rae.daply
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,10 +15,15 @@ import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdaptor
 import com.rae.daply.data.UploadActivity
 import com.rae.daply.login.LoginActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 open class MainActivity : AppCompatActivity() {
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,18 +39,19 @@ open class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-            ?.replace(".", "-")
+        GlobalScope.launch(Dispatchers.Main) {
+            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+                ?.replace(".", "-")
 
-        val dbReference = FirebaseDatabase.getInstance()
-        dbReference.reference.child("Users").child(save.toString()).child("userType").get()
-            .addOnSuccessListener {
-                val userType = it.value.toString()
-                if (userType == "aluno") {
-                    fab.visibility = View.GONE
+            val dbReference = FirebaseDatabase.getInstance()
+            dbReference.reference.child("Users").child(save.toString()).child("userType").get()
+                .addOnSuccessListener {
+                    val userType = it.value.toString()
+                    if (userType != "admin") {
+                        fab.visibility = View.GONE
+                    }
                 }
-            }
-
+        }
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setCancelable(false)
@@ -67,9 +74,9 @@ open class MainActivity : AppCompatActivity() {
 
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("RAE")
-        dialog.show()
 
         databaseReference.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 avisosArrayList.clear()
                 for (itemSnapshot in snapshot.children) {
@@ -91,9 +98,8 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java", ReplaceWith("finishAffinity()"))
     override fun onBackPressed() {
-        super.onBackPressed()
         finishAffinity()
     }
 }
