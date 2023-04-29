@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.rae.daply.MainActivity
 import com.rae.daply.R
+import com.rae.daply.databinding.ActivityUploadBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,16 +34,19 @@ class UploadActivity : AppCompatActivity() {
     private lateinit var imageURL: String
     private var uri: Uri? = null
 
+    private lateinit var binding: ActivityUploadBinding
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_upload)
+        binding = ActivityUploadBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        uploadImage = findViewById(R.id.uploadImage)
-        saveButton = findViewById(R.id.uploadButton)
-        uploadTitulo = findViewById(R.id.uploadTitulo)
-        uploadAviso = findViewById(R.id.uploadAviso)
-        uploadAutor = findViewById(R.id.uploadAutor)
+        uploadImage = binding.uploadImage
+        saveButton = binding.uploadButton
+        uploadTitulo = binding.uploadTitulo
+        uploadAviso = binding.uploadAviso
+        uploadAutor = binding.uploadAutor
 
         val activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -117,7 +121,7 @@ class UploadActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
                     startActivity(intent)
                 }
             }.addOnFailureListener { e ->

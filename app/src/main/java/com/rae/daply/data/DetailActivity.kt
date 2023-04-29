@@ -17,24 +17,30 @@ import com.rae.daply.BuildConfig
 import com.rae.daply.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.R
+import com.rae.daply.databinding.ActivityDetailBinding
+import com.rae.daply.databinding.ActivityMainBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityDetailBinding
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val aviso: TextView = findViewById(R.id.detailAviso)
-        val titulo: TextView = findViewById(R.id.detailTitulo)
-        val imagem: ImageView = findViewById(R.id.detailImage)
-        val data: TextView = findViewById(R.id.detailData)
-        val autor: TextView = findViewById(R.id.detailAutor)
-        val delete: FloatingActionButton = findViewById(R.id.deleteButton)
-        val edit: FloatingActionButton = findViewById(R.id.editButton)
+        val aviso: TextView = binding.detailAviso
+        val titulo: TextView = binding.detailTitulo
+        val imagem: ImageView = binding.detailImage
+        val data: TextView = binding.detailData
+        val autor: TextView = binding.detailAutor
+        val delete: FloatingActionButton = binding.deleteButton
+        val edit: FloatingActionButton = binding.editButton
         var key = ""
         var imageURL = ""
 
@@ -48,7 +54,7 @@ class DetailActivity : AppCompatActivity() {
                     val userType = it.value.toString()
                     if (userType == "aluno") {
                         val editFabMenu: com.github.clans.fab.FloatingActionMenu =
-                            findViewById(R.id.editFabMenu)
+                            binding.editFabMenu
                         editFabMenu.visibility = View.GONE
                     }
                 }

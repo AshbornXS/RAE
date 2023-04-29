@@ -15,7 +15,6 @@ import com.rae.daply.R
 class MyAdaptor(val context: Context, private val avisosArrayList: ArrayList<DataClass>) :
     RecyclerView.Adapter<MyAdaptor.MyViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, parent, false)

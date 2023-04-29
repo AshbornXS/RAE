@@ -123,7 +123,7 @@ class UpdateActivity : AppCompatActivity() {
             binding.updateAviso.text.clear()
             binding.updateAutor.text.clear()
             Toast.makeText(this, "Atualizado com sucesso!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
             startActivity(intent)
         }.addOnFailureListener {
             Toast.makeText(this, "Falha para Atualizar", Toast.LENGTH_SHORT).show()

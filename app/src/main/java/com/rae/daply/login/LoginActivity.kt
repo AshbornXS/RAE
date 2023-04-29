@@ -1,7 +1,9 @@
 package com.rae.daply.login
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
@@ -9,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -25,16 +28,31 @@ open class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        GlobalScope.launch {
+            if (Build.VERSION.SDK_INT >= 33) {
+                val perms = arrayOf(
+                    android.Manifest.permission.POST_NOTIFICATIONS,
+                    android.Manifest.permission.READ_MEDIA_IMAGES
+                )
+                checkPermission(perms, 0)
+            } else {
+                val perms = arrayOf(
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                checkPermission(perms, 1)
+            }
+        }
+
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.loginButton.setOnClickListener {
-
-
             val email = binding.loginEmail.text.toString()
             val password = binding.loginPassword.text.toString()
 
@@ -107,9 +125,8 @@ open class LoginActivity : AppCompatActivity() {
         val dbReference = FirebaseDatabase.getInstance()
         dbReference.reference.child("Users").child(save.toString()).child("name").get()
             .addOnSuccessListener {
-                val name = it.value.toString()
-                val teste = name.replaceAfter(" ", "")
-                Toast.makeText(this, "Bem Vindo(a), $teste", Toast.LENGTH_SHORT).show()
+                val name = it.value.toString().replaceAfter(" ", "")
+                Toast.makeText(this, "Bem Vindo(a), $name", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -133,6 +150,14 @@ open class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Verifique seu email", Toast.LENGTH_SHORT)
                         .show()
                 }
+            }
+        }
+    }
+
+    private fun checkPermission(permission: Array<String>, requestCode: Int) {
+        for (i in permission.indices) {
+            if (checkSelfPermission(permission[i]) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, permission, requestCode)
             }
         }
     }
