@@ -15,7 +15,7 @@
     - [X] E-mail para contato com o autor da publicação;
     - [X] Opção de abrir a publicação para mais detalhes, como uma reportagem, por exemplo(se possível);
     - [ ] Avisos temporarios podendo escolher entre 1 dia e 1 semana;
-    - [ ] Categorias / Filtro;
+    - [X] Notificação de novos avisos;
 
 3. Horário de aulas do usuário:
     - [ ] Lista com nome e e-mail dos professores de cada aula que o usuário terá;
