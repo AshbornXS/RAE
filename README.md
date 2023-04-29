@@ -1,4 +1,4 @@
-# ***RAE***
+# ***RAE - Relação Aluno x Escola***
 
 ## ***TODO***
 1. Cadastro:
