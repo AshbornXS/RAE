@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdaptor
 import com.rae.daply.data.UploadActivity
@@ -33,6 +36,7 @@ open class MainActivity : AppCompatActivity() {
     private var notificationWorkManager: NotificationManager? = null
     private var isFirstUpdate = true
     private lateinit var binding: ActivityMainBinding
+    private val currentDate = System.currentTimeMillis()
 
     @SuppressLint("SetTextI18n")
     @OptIn(DelicateCoroutinesApi::class)
@@ -43,6 +47,8 @@ open class MainActivity : AppCompatActivity() {
 
         val fab: View = binding.fab
         val recyclerView: RecyclerView = binding.recyclerView
+
+        Toast.makeText(this, currentDate.toString(), Toast.LENGTH_SHORT).show()
 
         GlobalScope.launch(Dispatchers.Main) {
             val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
@@ -84,11 +90,30 @@ open class MainActivity : AppCompatActivity() {
                 for (itemSnapshot in snapshot.children) {
                     val dataClass = itemSnapshot.getValue(DataClass::class.java)
                     dataClass!!.key = itemSnapshot.key
+
+                    val image = dataClass.imageURL
+                    val key = dataClass.key
+                    val uploadDate = dataClass.dataMili
+
+                    if ((uploadDate != null) && (image != null) && (key != null)) {
+                        val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
+                        if (daysPassed >= 3) {
+                            val reference: DatabaseReference =
+                                FirebaseDatabase.getInstance().getReference("RAE")
+                            val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                            val storageReference: StorageReference =
+                                storage.getReferenceFromUrl(image)
+
+                            storageReference.delete().addOnSuccessListener {
+                                reference.child(key).removeValue()
+                            }
+                            itemSnapshot.ref.removeValue()
+                        }
+                    }
                     avisosArrayList.add(dataClass)
                 }
                 if (!isFirstUpdate) {
                     sendNotification()
-
                 }
                 isFirstUpdate = false
                 adapter.notifyDataSetChanged()

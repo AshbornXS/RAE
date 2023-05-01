@@ -113,7 +113,9 @@ class UploadActivity : AppCompatActivity() {
 
         val aviso = avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
 
-        val dataClass = DataClass(titulo, aviso, data, autor, imageURL)
+        val dataMili = System.currentTimeMillis()
+
+        val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili)
 
         val currentDate = data.replace("/", "-")
 
