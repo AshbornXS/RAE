@@ -85,7 +85,9 @@ class UploadActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
 
-        if (uri == null || uploadTitulo.text.toString().isEmpty() || uploadAviso.text.toString().isEmpty() || uploadAutor.text.toString().isEmpty()) {
+        if (uri == null || uploadTitulo.text.toString().isEmpty() || uploadAviso.text.toString()
+                .isEmpty() || uploadAutor.text.toString().isEmpty()
+        ) {
             dialog.dismiss()
             Toast.makeText(this, "Nenhum dos campos podem ser vazios!", Toast.LENGTH_SHORT).show()
         } else {
@@ -111,7 +113,8 @@ class UploadActivity : AppCompatActivity() {
         val avisoPre = uploadAviso.text.toString()
         val autor = uploadAutor.text.toString()
 
-        val aviso = avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
+        val aviso =
+            avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
 
         val dataMili = System.currentTimeMillis()
 
@@ -129,8 +132,5 @@ class UploadActivity : AppCompatActivity() {
             }.addOnFailureListener { e ->
                 Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
             }
-
-
     }
-
 }

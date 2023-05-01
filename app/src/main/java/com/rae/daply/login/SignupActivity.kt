@@ -11,6 +11,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
 import com.rae.daply.databinding.ActivitySignupBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SignupActivity : AppCompatActivity() {
 
@@ -19,6 +24,7 @@ class SignupActivity : AppCompatActivity() {
     private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
     private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
@@ -47,57 +53,67 @@ class SignupActivity : AppCompatActivity() {
             val dialog: AlertDialog = builder.create()
             dialog.show()
 
-            if (!email.contains("@etec.sp.gov.br")) {
-                Toast.makeText(this, "Digite um email válido!", Toast.LENGTH_SHORT).show()
-            } else if (password.length < 6) {
-                Toast.makeText(this, "A senha deve ter no mínimo 6 caracteres!", Toast.LENGTH_SHORT)
-                    .show()
-            } else if (name.isNotEmpty() && email.isNotEmpty() && email.contains("@etec.sp.gov.br") && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
-                if (password == passwordConfirm) {
-                    val dataClass = DataClass(email = email, userType = "aluno", name = name, serie = serie, curso = curso)
-                    val save = email.replace("@etec.sp.gov.br", "").replace(".", "-")
+            GlobalScope.launch(Dispatchers.IO) {
+                if (!email.contains("@etec.sp.gov.br")) {
+                    showToast("Digite um email válido!")
+                } else if (password.length < 6) {
+                    showToast("A senha deve ter no mínimo 6 caracteres!")
+                } else if (name.isNotEmpty() && email.isNotEmpty() && email.contains("@etec.sp.gov.br") && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
+                    if (password == passwordConfirm) {
+                        val dataClass = DataClass(
+                            email = email,
+                            userType = "aluno",
+                            name = name,
+                            serie = serie,
+                            curso = curso
+                        )
+                        val save = email.replace("@etec.sp.gov.br", "").replace(".", "-")
 
-                    FirebaseDatabase.getInstance().getReference("Users").child(save)
-                        .setValue(dataClass)
-
-                    firebaseAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                firebaseAuth.currentUser?.sendEmailVerification()
-                                    ?.addOnSuccessListener {
-                                        dialog.dismiss()
-                                        Toast.makeText(
-                                            this,
-                                            "Email de verificação enviado!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        val intent = Intent(this, LoginActivity::class.java)
-                                        startActivity(intent)
-                                    }?.addOnFailureListener {
-                                        dialog.dismiss()
-                                        Toast.makeText(
-                                            this, it.toString(), Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            } else if (task.exception.toString()
-                                    .contains("The email address is already in use by another account.")
-                            ) {
-                                Toast.makeText(this, "Email já cadastrado!", Toast.LENGTH_SHORT)
-                                    .show()
-                                dialog.dismiss()
-                            }
+                        withContext(Dispatchers.Main) {
+                            FirebaseDatabase.getInstance().getReference("Users").child(save)
+                                .setValue(dataClass)
                         }
+
+                        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this@SignupActivity) { task ->
+                                if (task.isSuccessful) {
+                                    firebaseAuth.currentUser?.sendEmailVerification()
+                                        ?.addOnSuccessListener {
+                                            dialog.dismiss()
+                                            showToast("Email de verificação enviado!")
+                                            val intent = Intent(
+                                                this@SignupActivity, LoginActivity::class.java
+                                            )
+                                            startActivity(intent)
+                                        }?.addOnFailureListener {
+                                            dialog.dismiss()
+                                            showToast(it.toString())
+                                        }
+                                } else if (task.exception.toString()
+                                        .contains("The email address is already in use by another account.")
+                                ) {
+                                    showToast("Email já cadastrado!")
+                                    dialog.dismiss()
+                                }
+                            }
+                    } else {
+                        showToast("As senhas não são iguais!")
+                    }
                 } else {
-                    Toast.makeText(this, "As senhas não são iguais!", Toast.LENGTH_SHORT).show()
+                    showToast("Preencha todos os campos!")
                 }
-            } else {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.loginRedirectText.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this@SignupActivity, LoginActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun showToast(message: String) {
+        runOnUiThread {
+            Toast.makeText(this@SignupActivity, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

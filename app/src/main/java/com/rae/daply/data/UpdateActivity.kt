@@ -11,12 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rae.daply.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUpdateBinding
@@ -35,7 +35,7 @@ class UpdateActivity : AppCompatActivity() {
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val imagem: ImageView = findViewById(R.id.updateImage)
+        val imagem: ImageView = binding.updateImage
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
@@ -46,9 +46,7 @@ class UpdateActivity : AppCompatActivity() {
             imageURL = bundle.getString("Image").toString()
             aviso.text = bundle.getString("Aviso")
             titulo.text = bundle.getString("Titulo")
-            GlideApp.with(this)
-                .load(bundle.getString("Image"))
-                .into(imagem)
+            Glide.with(this).load(bundle.getString("Image")).into(imagem)
             autor.text = bundle.getString("Autor")
         }
 
@@ -76,8 +74,9 @@ class UpdateActivity : AppCompatActivity() {
             val autor = binding.updateAutor.text.toString()
             val key = bundle?.getString("Data").toString().replace("/", "-")
 
-            val storageReference: StorageReference = FirebaseStorage.getInstance().reference
-                .child("Android Images").child(uri?.lastPathSegment.toString())
+            val storageReference: StorageReference =
+                FirebaseStorage.getInstance().reference.child("Android Images")
+                    .child(uri?.lastPathSegment.toString())
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setCancelable(false)
@@ -104,18 +103,12 @@ class UpdateActivity : AppCompatActivity() {
     }
 
     private fun updateData(
-        titulo: String,
-        aviso: String,
-        autor: String,
-        key: String,
-        imageURL: String
+        titulo: String, aviso: String, autor: String, key: String, imageURL: String
     ) {
+
         database = FirebaseDatabase.getInstance().getReference("RAE")
         val info = mapOf(
-            "titulo" to titulo,
-            "aviso" to aviso,
-            "autor" to autor,
-            "imageURL" to imageURL
+            "titulo" to titulo, "aviso" to aviso, "autor" to autor, "imageURL" to imageURL
         )
 
         database.child(key).updateChildren(info).addOnSuccessListener {
@@ -125,8 +118,9 @@ class UpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "Atualizado com sucesso!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
             startActivity(intent)
+            finish()
         }.addOnFailureListener {
-            Toast.makeText(this, "Falha para Atualizar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
         }
     }
 }

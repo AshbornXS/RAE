@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -22,24 +21,24 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.rae.daply.data.DataClass
-import com.rae.daply.data.MyAdaptor
+import com.rae.daply.data.MyAdapter
 import com.rae.daply.data.UploadActivity
 import com.rae.daply.databinding.ActivityMainBinding
 import com.rae.daply.login.LoginActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class MainActivity : AppCompatActivity() {
 
-    private var notificationWorkManager: NotificationManager? = null
+    private lateinit var notificationWorkManager: NotificationManager
     private var isFirstUpdate = true
     private lateinit var binding: ActivityMainBinding
     private val currentDate = System.currentTimeMillis()
 
-    @SuppressLint("SetTextI18n")
     @OptIn(DelicateCoroutinesApi::class)
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,20 +47,19 @@ open class MainActivity : AppCompatActivity() {
         val fab: View = binding.fab
         val recyclerView: RecyclerView = binding.recyclerView
 
-        Toast.makeText(this, currentDate.toString(), Toast.LENGTH_SHORT).show()
+        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+            ?.replace(".", "-")
 
         GlobalScope.launch(Dispatchers.Main) {
-            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-                ?.replace(".", "-")
+            val userType = withContext(Dispatchers.IO) {
+                val dbReference = FirebaseDatabase.getInstance()
+                dbReference.reference.child("Users").child(save.toString()).child("userType").get()
+                    .await().value.toString()
+            }
 
-            val dbReference = FirebaseDatabase.getInstance()
-            dbReference.reference.child("Users").child(save.toString()).child("userType").get()
-                .addOnSuccessListener {
-                    val userType = it.value.toString()
-                    if (userType != "admin") {
-                        fab.visibility = View.GONE
-                    }
-                }
+            if (userType != "admin") {
+                fab.visibility = View.GONE
+            }
         }
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -75,9 +73,9 @@ open class MainActivity : AppCompatActivity() {
         linearLayoutManager.reverseLayout = true
         recyclerView.layoutManager = linearLayoutManager
 
-        val avisosArrayList: List<DataClass> = ArrayList()
+        val avisosArrayList: ArrayList<DataClass> = ArrayList()
 
-        val adapter = MyAdaptor(this, avisosArrayList as ArrayList<DataClass>)
+        val adapter = MyAdapter(this, avisosArrayList)
         recyclerView.adapter = adapter
 
         val databaseReference: DatabaseReference =
@@ -86,38 +84,40 @@ open class MainActivity : AppCompatActivity() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
-                avisosArrayList.clear()
-                for (itemSnapshot in snapshot.children) {
-                    val dataClass = itemSnapshot.getValue(DataClass::class.java)
-                    dataClass!!.key = itemSnapshot.key
+                GlobalScope.launch(Dispatchers.Main) {
+                    avisosArrayList.clear()
+                    for (itemSnapshot in snapshot.children) {
+                        val dataClass = itemSnapshot.getValue(DataClass::class.java)
+                        dataClass!!.key = itemSnapshot.key
 
-                    val image = dataClass.imageURL
-                    val key = dataClass.key
-                    val uploadDate = dataClass.dataMili
+                        val image = dataClass.imageURL
+                        val key = dataClass.key
+                        val uploadDate = dataClass.dataMili
 
-                    if ((uploadDate != null) && (image != null) && (key != null)) {
-                        val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
-                        if (daysPassed >= 3) {
-                            val reference: DatabaseReference =
-                                FirebaseDatabase.getInstance().getReference("RAE")
-                            val storage: FirebaseStorage = FirebaseStorage.getInstance()
-                            val storageReference: StorageReference =
-                                storage.getReferenceFromUrl(image)
-
-                            storageReference.delete().addOnSuccessListener {
-                                reference.child(key).removeValue()
+                        if ((uploadDate != null) && (image != null) && (key != null)) {
+                            val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
+                            if (daysPassed >= 3) {
+                                withContext(Dispatchers.IO) {
+                                    val reference: DatabaseReference =
+                                        FirebaseDatabase.getInstance().getReference("RAE")
+                                    val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                                    val storageReference: StorageReference =
+                                        storage.getReferenceFromUrl(image)
+                                    storageReference.delete().await()
+                                    reference.child(key).removeValue().await()
+                                }
+                                itemSnapshot.ref.removeValue()
                             }
-                            itemSnapshot.ref.removeValue()
                         }
+                        avisosArrayList.add(dataClass)
                     }
-                    avisosArrayList.add(dataClass)
+                    if (!isFirstUpdate) {
+                        sendNotification()
+                    }
+                    isFirstUpdate = false
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
                 }
-                if (!isFirstUpdate) {
-                    sendNotification()
-                }
-                isFirstUpdate = false
-                adapter.notifyDataSetChanged()
-                dialog.dismiss()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -135,9 +135,6 @@ open class MainActivity : AppCompatActivity() {
             val view = layoutInflater.inflate(R.layout.dialog_profile, null)
             pfpBuilder.setView(view)
             val pfpDialog = pfpBuilder.create()
-
-            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-                ?.replace(".", "-")
 
             FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).get()
                 .addOnSuccessListener { snapshot ->
@@ -166,11 +163,6 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("finishAffinity()"))
-    override fun onBackPressed() {
-        finishAffinity()
-    }
-
     private fun createChannel() {
         notificationWorkManager =
             applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -184,7 +176,7 @@ open class MainActivity : AppCompatActivity() {
             notificationChannel.enableVibration(true)
             notificationChannel.description = "Notificação de avisos."
 
-            notificationWorkManager?.createNotificationChannel(notificationChannel)
+            notificationWorkManager.createNotificationChannel(notificationChannel)
         }
     }
 
@@ -204,6 +196,6 @@ open class MainActivity : AppCompatActivity() {
             .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
             .setDefaults(NotificationCompat.DEFAULT_ALL).setAutoCancel(true)
 
-        notificationWorkManager?.notify(0, notificationBuilder.build())
+        notificationWorkManager.notify(0, notificationBuilder.build())
     }
 }

@@ -9,26 +9,17 @@ import android.widget.TextView
 import android.widget.Toast
 import com.github.clans.fab.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rae.daply.BuildConfig
 import com.rae.daply.GlideApp
 import com.rae.daply.MainActivity
-import com.rae.daply.R
 import com.rae.daply.databinding.ActivityDetailBinding
-import com.rae.daply.databinding.ActivityMainBinding
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -44,21 +35,24 @@ class DetailActivity : AppCompatActivity() {
         var key = ""
         var imageURL = ""
 
-        GlobalScope.launch(Dispatchers.Main) {
-            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-                ?.replace(".", "-")
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val save = currentUser?.email?.replace("@etec.sp.gov.br", "")?.replace(".", "-")
 
-            val dbReference = FirebaseDatabase.getInstance()
-            dbReference.reference.child("Users").child(save.toString()).child("userType").get()
-                .addOnSuccessListener {
-                    val userType = it.value.toString()
-                    if (userType == "aluno") {
-                        val editFabMenu: com.github.clans.fab.FloatingActionMenu =
-                            binding.editFabMenu
-                        editFabMenu.visibility = View.GONE
-                    }
+        val dbReference = FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).child("userType")
+
+        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val userType = dataSnapshot.value.toString()
+                if (userType == "aluno") {
+                    val editFabMenu: com.github.clans.fab.FloatingActionMenu = binding.editFabMenu
+                    editFabMenu.visibility = View.GONE
                 }
-        }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
@@ -74,8 +68,8 @@ class DetailActivity : AppCompatActivity() {
         delete.setOnClickListener {
             val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("RAE")
             val storage: FirebaseStorage = FirebaseStorage.getInstance()
-
             val storageReference: StorageReference = storage.getReferenceFromUrl(imageURL)
+
             storageReference.delete().addOnSuccessListener {
                 reference.child(key).removeValue()
                 Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
@@ -86,7 +80,6 @@ class DetailActivity : AppCompatActivity() {
                 Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         edit.setOnClickListener {
             val intent = Intent(this, UpdateActivity::class.java).putExtra("Image", imageURL)

@@ -18,23 +18,21 @@ import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityLoginBinding
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 open class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
-    @OptIn(DelicateCoroutinesApi::class)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        GlobalScope.launch {
+        coroutineScope.launch {
             if (Build.VERSION.SDK_INT >= 33) {
                 val perms = arrayOf(
                     android.Manifest.permission.POST_NOTIFICATIONS,
@@ -71,7 +69,7 @@ open class LoginActivity : AppCompatActivity() {
             val dialog = builder.create()
 
             view.findViewById<Button>(R.id.btnReset).setOnClickListener {
-                compareEmail(userEmail)
+                coroutineScope.launch { compareEmail(userEmail) }
                 dialog.dismiss()
             }
             view.findViewById<Button>(R.id.btnCancel).setOnClickListener {
@@ -89,26 +87,26 @@ open class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun compareEmail(email: EditText) {
+    private suspend fun compareEmail(email: EditText) = withContext(Dispatchers.IO) {
         if (email.text.toString().isEmpty()) {
-            return
+            return@withContext
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
-            return
+            return@withContext
         }
         firebaseAuth.sendPasswordResetEmail(email.text.toString()).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Olhe seu email!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "Olhe seu email!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Email não cadastrado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "Email não cadastrado", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onStart() {
         super.onStart()
-        GlobalScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(Dispatchers.Main) {
             val currentUser: FirebaseUser? = firebaseAuth.currentUser
             if (currentUser != null && currentUser.isEmailVerified) {
                 getName()
@@ -124,9 +122,9 @@ open class LoginActivity : AppCompatActivity() {
 
         val dbReference = FirebaseDatabase.getInstance()
         dbReference.reference.child("Users").child(save.toString()).child("name").get()
-            .addOnSuccessListener {
-                val name = it.value.toString().replaceAfter(" ", "")
-                Toast.makeText(this, "Bem Vindo(a), $name", Toast.LENGTH_SHORT).show()
+            .addOnSuccessListener { snapshot ->
+                val name = snapshot.value.toString().replaceAfter(" ", "")
+                Toast.makeText(this@LoginActivity, "Bem Vindo(a), $name", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -141,7 +139,7 @@ open class LoginActivity : AppCompatActivity() {
                 val verification = firebaseAuth.currentUser?.isEmailVerified
                 if (verification == true) {
                     dialog.dismiss()
-                    getName()
+                    coroutineScope.launch { getName() }
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
                 } else {
@@ -160,5 +158,10 @@ open class LoginActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, permission, requestCode)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
     }
 }
