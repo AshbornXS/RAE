@@ -1,4 +1,5 @@
 # ***RAE - Relação Aluno x Escola***
+[![Android CI](https://github.com/AshbornXS/RAE/actions/workflows/android.yml/badge.svg)](https://github.com/AshbornXS/RAE/actions/workflows/android.yml)
 
 ## ***TODO***
 1. Cadastro:
