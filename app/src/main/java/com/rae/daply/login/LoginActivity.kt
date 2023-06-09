@@ -19,6 +19,7 @@ import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityLoginBinding
 import kotlinx.coroutines.*
+import com.rae.daply.utils.save as saveGlobal
 
 open class LoginActivity : AppCompatActivity() {
 
@@ -119,6 +120,8 @@ open class LoginActivity : AppCompatActivity() {
     private fun getName() {
         val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
             ?.replace(".", "-")
+
+        saveGlobal = save.toString()
 
         val dbReference = FirebaseDatabase.getInstance()
         dbReference.reference.child("Users").child(save.toString()).child("name").get()

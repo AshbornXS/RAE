@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RAE</string>
+    <string name="title_activity_update_profile">UpdateProfileActivity</string>
 </resources>

@@ -23,12 +23,20 @@ import com.google.firebase.storage.StorageReference
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdapter
 import com.rae.daply.data.UploadActivity
+import com.rae.daply.data.UpdateProfileActivity
 import com.rae.daply.databinding.ActivityMainBinding
 import com.rae.daply.login.LoginActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
+import com.rae.daply.utils.userType as userTypeGlobal
+import com.rae.daply.utils.name as nameGlobal
+import com.rae.daply.utils.email as emailGlobal
+import com.rae.daply.utils.serie as serieGlobal
+import com.rae.daply.utils.curso as cursoGlobal
+import com.rae.daply.utils.save
+
 
 open class MainActivity : AppCompatActivity() {
 
@@ -47,15 +55,14 @@ open class MainActivity : AppCompatActivity() {
         val fab: View = binding.fab
         val recyclerView: RecyclerView = binding.recyclerView
 
-        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-            ?.replace(".", "-")
-
         GlobalScope.launch(Dispatchers.Main) {
             val userType = withContext(Dispatchers.IO) {
                 val dbReference = FirebaseDatabase.getInstance()
-                dbReference.reference.child("Users").child(save.toString()).child("userType").get()
+                dbReference.reference.child("Users").child(save).child("userType").get()
                     .await().value.toString()
             }
+
+            userTypeGlobal = userType
 
             if (userType != "admin") {
                 fab.visibility = View.GONE
@@ -136,12 +143,17 @@ open class MainActivity : AppCompatActivity() {
             pfpBuilder.setView(view)
             val pfpDialog = pfpBuilder.create()
 
-            FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).get()
+            FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
                 .addOnSuccessListener { snapshot ->
                     val labelName = view?.findViewById<TextView>(R.id.pfpName)
                     val labelEmail = view?.findViewById<TextView>(R.id.pfpEmail)
                     val labelSerie = view?.findViewById<TextView>(R.id.pfpSerie)
                     val labelCurso = view?.findViewById<TextView>(R.id.pfpCurso)
+
+                    nameGlobal = snapshot.child("name").value.toString()
+                    emailGlobal = snapshot.child("email").value.toString()
+                    serieGlobal = snapshot.child("serie").value.toString()
+                    cursoGlobal = snapshot.child("curso").value.toString()
 
                     labelName?.text = "${labelName?.text}${snapshot.child("name").value}"
                     labelEmail?.text = "${labelEmail?.text}${snapshot.child("email").value}"
@@ -152,6 +164,13 @@ open class MainActivity : AppCompatActivity() {
             pfpDialog.show()
 
             pfpDialog.findViewById<Button>(R.id.pfpClose)?.setOnClickListener {
+                pfpDialog.dismiss()
+            }
+
+            pfpDialog.findViewById<Button>(R.id.pfpUpdate)?.setOnClickListener {
+                val intent = Intent(this, UpdateProfileActivity::class.java).putExtra("name", nameGlobal)
+                    .putExtra("email", emailGlobal).putExtra("serie", serieGlobal).putExtra("curso", cursoGlobal)
+                startActivity(intent)
                 pfpDialog.dismiss()
             }
 

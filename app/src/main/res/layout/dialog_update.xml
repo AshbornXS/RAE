@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:text="Perfil do Usuário"
+            android:text="Atualizar Informações de Perfil"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -25,44 +25,28 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/pfpName"
+        android:id="@+id/updateWarning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:padding="8dp"
-        android:text="Nome: "
+        android:text="Para concluir tais alterações é necessário digitar sua senha atual: "
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/pfpEmail"
+    <EditText
+        android:id="@+id/oldPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Email: "
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border"
+        android:gravity="start|center_vertical"
+        android:hint="Digite sua senha atual..."
+        android:maxLines="1"
+        android:padding="16dp"
+        android:inputType="textPassword"
         android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/pfpSerie"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Série: "
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/pfpCurso"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Curso: "
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textColorHint="@color/white" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -71,32 +55,22 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pfpExit"
+            android:id="@+id/updateCancelar"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:text="Sair"
+            android:text="Cancelar"
             android:textSize="15sp"
             app:cornerRadius="30dp" />
 
         <Button
-            android:id="@+id/pfpUpdate"
+            android:id="@+id/updateConfirmar"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:text="Atualizar"
-            android:textSize="11sp"
-            app:cornerRadius="30dp" />
-
-        <Button
-            android:id="@+id/pfpClose"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:text="Fechar"
+            android:text="Confirmar"
             android:textSize="15sp"
             app:cornerRadius="30dp" />
 

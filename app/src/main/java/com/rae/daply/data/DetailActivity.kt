@@ -8,18 +8,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.github.clans.fab.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rae.daply.GlideApp
+import com.rae.daply.utils.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.databinding.ActivityDetailBinding
+import com.rae.daply.utils.save
+import com.rae.daply.utils.userType
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -35,24 +41,13 @@ class DetailActivity : AppCompatActivity() {
         var key = ""
         var imageURL = ""
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val save = currentUser?.email?.replace("@etec.sp.gov.br", "")?.replace(".", "-")
-
-        val dbReference = FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).child("userType")
-
-        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val userType = dataSnapshot.value.toString()
-                if (userType == "aluno") {
-                    val editFabMenu: com.github.clans.fab.FloatingActionMenu = binding.editFabMenu
-                    editFabMenu.visibility = View.GONE
-                }
+        GlobalScope.launch(Dispatchers.Main) {
+            if(userType != "admin") {
+                val editFabMenu: com.github.clans.fab.FloatingActionMenu = binding.editFabMenu
+                editFabMenu.visibility = View.GONE
             }
+        }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-            }
-        })
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {

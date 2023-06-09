@@ -21,8 +21,13 @@ import com.google.firebase.storage.StorageReference
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUploadBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import com.rae.daply.utils.userType
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class UploadActivity : AppCompatActivity() {
 
@@ -36,6 +41,7 @@ class UploadActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUploadBinding
 
+    @OptIn(DelicateCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,12 @@ class UploadActivity : AppCompatActivity() {
         uploadTitulo = binding.uploadTitulo
         uploadAviso = binding.uploadAviso
         uploadAutor = binding.uploadAutor
+
+        GlobalScope.launch(Dispatchers.Main) {
+            if(userType != "admin") {
+                finishActivity(1)
+            }
+        }
 
         val activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
