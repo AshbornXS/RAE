@@ -11,34 +11,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdapter
-import com.rae.daply.data.UploadActivity
-import com.rae.daply.data.UpdateProfileActivity
 import com.rae.daply.databinding.FragmentHomeBinding
-import com.rae.daply.login.LoginActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
-import com.rae.daply.utils.userType as userTypeGlobal
-import com.rae.daply.utils.name as nameGlobal
-import com.rae.daply.utils.email as emailGlobal
-import com.rae.daply.utils.serie as serieGlobal
-import com.rae.daply.utils.curso as cursoGlobal
-import com.rae.daply.utils.save
 
 class HomeFragment : Fragment() {
 
@@ -49,7 +37,6 @@ class HomeFragment : Fragment() {
     private val currentDate = System.currentTimeMillis()
 
     @OptIn(DelicateCoroutinesApi::class)
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,22 +45,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val fab: View = binding.fab
         val recyclerView: RecyclerView = binding.recyclerView
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val userType = withContext(Dispatchers.IO) {
-                val dbReference = FirebaseDatabase.getInstance()
-                dbReference.reference.child("Users").child(save).child("userType").get()
-                    .await().value.toString()
-            }
-
-            userTypeGlobal = userType
-
-            if (userType != "admin") {
-                fab.visibility = View.GONE
-            }
-        }
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -137,61 +109,6 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
             }
         })
-
-        fab.setOnClickListener {
-            val intent = Intent(requireContext(), UploadActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.pfp.setOnClickListener {
-            val pfpBuilder = AlertDialog.Builder(requireContext())
-            val pfpView = layoutInflater.inflate(R.layout.dialog_profile, null)
-            pfpBuilder.setView(pfpView)
-            val pfpDialog = pfpBuilder.create()
-
-            FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
-                .addOnSuccessListener { snapshot ->
-                    val labelName = pfpView.findViewById<TextView>(R.id.pfpName)
-                    val labelEmail = pfpView.findViewById<TextView>(R.id.pfpEmail)
-                    val labelSerie = pfpView.findViewById<TextView>(R.id.pfpSerie)
-                    val labelCurso = pfpView.findViewById<TextView>(R.id.pfpCurso)
-
-                    nameGlobal = snapshot.child("name").value.toString()
-                    emailGlobal = snapshot.child("email").value.toString()
-                    serieGlobal = snapshot.child("serie").value.toString()
-                    cursoGlobal = snapshot.child("curso").value.toString()
-
-                    labelName.text = "${labelName.text}${snapshot.child("name").value}"
-                    labelEmail.text = "${labelEmail.text}${snapshot.child("email").value}"
-                    labelSerie.text = "${labelSerie.text}${snapshot.child("serie").value}"
-                    labelCurso.text = "${labelCurso.text}${snapshot.child("curso").value}"
-                }
-
-            pfpDialog.show()
-
-            pfpDialog.findViewById<Button>(R.id.pfpClose)?.setOnClickListener {
-                pfpDialog.dismiss()
-            }
-
-            pfpDialog.findViewById<Button>(R.id.pfpUpdate)?.setOnClickListener {
-                val intent = Intent(requireContext(), UpdateProfileActivity::class.java).putExtra(
-                    "name",
-                    nameGlobal
-                )
-                    .putExtra("email", emailGlobal).putExtra("serie", serieGlobal)
-                    .putExtra("curso", cursoGlobal)
-                startActivity(intent)
-                pfpDialog.dismiss()
-            }
-
-            pfpDialog.findViewById<Button>(R.id.pfpExit)?.setOnClickListener {
-                FirebaseAuth.getInstance().signOut()
-                val intent = Intent(requireContext(), LoginActivity::class.java)
-                startActivity(intent)
-                pfpDialog.dismiss()
-                requireActivity().finishAffinity()
-            }
-        }
 
         return view
     }
