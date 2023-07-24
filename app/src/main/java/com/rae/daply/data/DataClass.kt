@@ -11,6 +11,7 @@ data class DataClass(
     var email: String? = null,
     var userType: String? = null,
     var name: String? = null,
+    var periodo: String? = null,
     var serie: String? = null,
     var curso: String? = null,
 )

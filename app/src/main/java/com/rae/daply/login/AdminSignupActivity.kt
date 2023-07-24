@@ -3,83 +3,36 @@ package com.rae.daply.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
-import com.rae.daply.databinding.ActivitySignupBinding
+import com.rae.daply.databinding.ActivityAdminSignupBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignupActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivitySignupBinding
+class AdminSignupActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAdminSignupBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private val periodo = arrayOf("Manhã", "Tarde", "Noite")
-    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
-    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
+        binding = ActivityAdminSignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, periodo)
-        binding.signupPeriodo.setAdapter(adaptorItemsPeriodo)
-        binding.signupPeriodo.setText("Manhã", false)
-
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
-        binding.signupSerie.setAdapter(adaptorItemsSerie)
-        binding.signupSerie.setText("1º Ano", false)
-
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
-        binding.signupCurso.setAdapter(adaptorItemsCurso)
-        binding.signupCurso.setText("DS", false)
-
-        binding.signupPeriodo.onItemClickListener = AdapterView.OnItemClickListener {
-            parent, _, position, _ ->
-            when (parent?.getItemAtPosition(position).toString()) {
-                "Manhã", "Tarde", "Noite" -> binding.arrays.visibility = View.VISIBLE
-            }
-        }
-
-        binding.signupPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Não é necessário implementar
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val hasText = !s.isNullOrEmpty()
-                binding.signupConfirmPassword.visibility = if (hasText) View.VISIBLE else View.GONE
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // Não é necessário implementar
-            }
-        })
-
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.signupButton.setOnClickListener {
-            val name = binding.signupName.text.toString()
-            val email = binding.signupEmail.text.toString()
-            val password = binding.signupPassword.text.toString()
-            val passwordConfirm = binding.signupConfirmPassword.text.toString()
-            val periodo = binding.signupPeriodo.text.toString()
-            val serie = binding.signupSerie.text.toString()
-            val curso = binding.signupCurso.text.toString()
+        binding.signupAdminButton.setOnClickListener {
+            val name = binding.signupAdminName.text.toString()
+            val email = binding.signupAdminEmail.text.toString()
+            val password = binding.signupAdminPassword.text.toString()
+            val passwordConfirm = binding.signupAdminConfirmPassword.text.toString()
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setCancelable(false)
@@ -96,11 +49,10 @@ class SignupActivity : AppCompatActivity() {
                     if (password == passwordConfirm) {
                         val dataClass = DataClass(
                             email = email,
-                            userType = "aluno",
+                            userType = "admin",
                             name = name,
-                            periodo = periodo,
-                            serie = serie,
-                            curso = curso
+                            serie = "Admin",
+                            curso = "Admin"
                         )
                         val save = email.replace("@etec.sp.gov.br", "").replace(".", "-")
 
@@ -110,14 +62,14 @@ class SignupActivity : AppCompatActivity() {
                         }
 
                         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(this@SignupActivity) { task ->
+                            .addOnCompleteListener(this@AdminSignupActivity) { task ->
                                 if (task.isSuccessful) {
                                     firebaseAuth.currentUser?.sendEmailVerification()
                                         ?.addOnSuccessListener {
                                             dialog.dismiss()
                                             showToast("Email de verificação enviado!")
                                             val intent = Intent(
-                                                this@SignupActivity, LoginActivity::class.java
+                                                this@AdminSignupActivity, LoginActivity::class.java
                                             )
                                             startActivity(intent)
                                         }?.addOnFailureListener {
@@ -139,21 +91,11 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
-
-        binding.loginRedirectText.setOnClickListener {
-            val intent = Intent(this@SignupActivity, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.signupAdmin.setOnClickListener {
-            val intent = Intent(this@SignupActivity, AdminCheckActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun showToast(message: String) {
         runOnUiThread {
-            Toast.makeText(this@SignupActivity, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AdminSignupActivity, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

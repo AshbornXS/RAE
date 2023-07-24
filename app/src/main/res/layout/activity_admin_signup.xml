@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".login.AdminSignupActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Cadastro"
+            android:textColor="@color/teal_200"
+            android:textSize="80sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/signupAdmin_name"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/border_retangular"
+            android:drawableStart="@drawable/ic_name_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/teal_200"
+            android:hint="Nome Completo"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey" />
+
+        <EditText
+            android:id="@+id/signupAdmin_email"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:autofillHints="emailAddress"
+            android:background="@drawable/border_retangular"
+            android:drawableStart="@drawable/ic_email_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/teal_200"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey" />
+
+        <EditText
+            android:id="@+id/signupAdmin_password"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_retangular"
+            android:drawableStart="@drawable/ic_lock_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/teal_200"
+            android:hint="Senha"
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey" />
+
+        <EditText
+            android:id="@+id/signupAdmin_confirm_password"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_retangular"
+            android:drawableStart="@drawable/ic_password_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/teal_200"
+            android:hint="Confirme sua senha"
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey" />
+
+        <Button
+            android:id="@+id/signupAdmin_button"
+            android:layout_width="350dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:text="Cadastrar-se"
+            android:textSize="18sp"
+            app:cornerRadius="30dp" />
+
+    </LinearLayout>
+
+</ScrollView>
