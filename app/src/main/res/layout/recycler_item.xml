@@ -20,7 +20,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/recImage"
-            android:layout_marginStart="20dp"
             android:padding="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_cloud_upload_24"

@@ -7,6 +7,7 @@ data class DataClass(
     var autor: String? = null,
     var imageURL: String? = null,
     var dataMili: Long? = null,
+    var type: String? = null,
     var key: String? = null,
     var email: String? = null,
     var userType: String? = null,

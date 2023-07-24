@@ -44,6 +44,7 @@ class MyAdapter(private val context: Context, private val avisosArrayList: Array
                 putExtra("Data", aviso.data)
                 putExtra("Autor", aviso.autor)
                 putExtra("Key", aviso.key)
+                putExtra("Type", aviso.type)
             }
 
             context.startActivity(intent)

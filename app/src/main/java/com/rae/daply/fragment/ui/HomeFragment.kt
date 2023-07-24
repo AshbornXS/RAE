@@ -38,9 +38,7 @@ class HomeFragment : Fragment() {
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -124,9 +122,7 @@ class HomeFragment : Fragment() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                "primary_notification_channel",
-                "Avisos",
-                NotificationManager.IMPORTANCE_HIGH
+                "primary_notification_channel", "Avisos", NotificationManager.IMPORTANCE_HIGH
             )
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
@@ -144,18 +140,18 @@ class HomeFragment : Fragment() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            requireContext(), 0, notifyIntent,
+            requireContext(),
+            0,
+            notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notificationBuilder = NotificationCompat.Builder(requireContext(), "primary_notification_channel")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("ATENÇÃO!!!")
-            .setContentText("Um novo aviso foi postado.")
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setContentIntent(notifyPendingIntent)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setAutoCancel(true)
+        val notificationBuilder =
+            NotificationCompat.Builder(requireContext(), "primary_notification_channel")
+                .setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("ATENÇÃO!!!")
+                .setContentText("Um novo aviso foi postado.")
+                .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
+                .setDefaults(NotificationCompat.DEFAULT_ALL).setAutoCancel(true)
 
         notificationWorkManager.notify(0, notificationBuilder.build())
     }

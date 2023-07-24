@@ -5,14 +5,17 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -21,13 +24,14 @@ import com.google.firebase.storage.StorageReference
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUploadBinding
+import com.rae.daply.utils.userType
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import com.rae.daply.utils.userType
-import kotlinx.coroutines.DelicateCoroutinesApi
+
 
 class UploadActivity : AppCompatActivity() {
 
@@ -38,6 +42,9 @@ class UploadActivity : AppCompatActivity() {
     private lateinit var uploadAutor: EditText
     private lateinit var imageURL: String
     private var uri: Uri? = null
+    private val periodo = arrayOf("Manhã", "Tarde", "Noite")
+    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
+    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
     private lateinit var binding: ActivityUploadBinding
 
@@ -48,6 +55,18 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, periodo)
+        binding.signupPeriodo.setAdapter(adaptorItemsPeriodo)
+        binding.signupPeriodo.setText("Manhã", false)
+
+        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
+        binding.signupSerie.setAdapter(adaptorItemsSerie)
+        binding.signupSerie.setText("1º Ano", false)
+
+        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
+        binding.signupCurso.setAdapter(adaptorItemsCurso)
+        binding.signupCurso.setText("DS", false)
+
         uploadImage = binding.uploadImage
         saveButton = binding.uploadButton
         uploadTitulo = binding.uploadTitulo
@@ -55,7 +74,7 @@ class UploadActivity : AppCompatActivity() {
         uploadAutor = binding.uploadAutor
 
         GlobalScope.launch(Dispatchers.Main) {
-            if(userType != "admin") {
+            if (userType != "admin") {
                 finishActivity(1)
             }
         }
@@ -130,19 +149,51 @@ class UploadActivity : AppCompatActivity() {
 
         val dataMili = System.currentTimeMillis()
 
-        val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili)
-
         val currentDate = data.replace("/", "-")
 
-        FirebaseDatabase.getInstance().getReference("RAE").child(currentDate).setValue(dataClass)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
-                    startActivity(intent)
+        if (binding.exclusive.isChecked) {
+            val serie = binding.signupSerie.text.toString().take(1)
+            val periodo = binding.signupPeriodo.text.toString().take(1)
+
+            val classe = serie + "-" + binding.signupCurso.text.toString() + "-" + periodo
+
+            val type = "exclusive"
+
+            val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+
+            FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
+                .child(currentDate).setValue(dataClass)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
+                        startActivity(intent)
+                    }
+                }.addOnFailureListener { e ->
+                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
                 }
-            }.addOnFailureListener { e ->
-                Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-            }
+        } else {
+            val type = "normal"
+
+            val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+
+            FirebaseDatabase.getInstance().getReference("RAE").child(currentDate)
+                .setValue(dataClass)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
+                        startActivity(intent)
+                    }
+                }.addOnFailureListener { e ->
+                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    fun itemClicked(v: View) {
+        if ((v as CheckBox).isChecked) {
+            binding.arrays.visibility = View.VISIBLE
+        }
     }
 }

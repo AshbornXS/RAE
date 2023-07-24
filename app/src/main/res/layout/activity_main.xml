@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/tab_layout">
 
         <ImageView
@@ -23,15 +22,29 @@
             android:padding="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_face_24"
-            app:shapeAppearanceOverlay="@style/roundedImageView" />
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            android:contentDescription="Profile" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:text="RAE"
+            android:fontFamily="serif"
+            android:textColor="@color/white"
+            android:layout_marginEnd="47dp"/>
 
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,10 +52,10 @@
         app:tabIndicator="@drawable/tab_indicator"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@null"
-        app:tabTextColor="@color/white"
         app:tabIndicatorGravity="stretch"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white" />
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/white" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager2"
@@ -63,8 +76,8 @@
         android:contentDescription="Upload"
         android:src="@drawable/ic_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,6 @@ import com.google.firebase.storage.StorageReference
 import com.rae.daply.utils.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.databinding.ActivityDetailBinding
-import com.rae.daply.utils.save
 import com.rae.daply.utils.userType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -40,9 +39,10 @@ class DetailActivity : AppCompatActivity() {
         val edit: FloatingActionButton = binding.editButton
         var key = ""
         var imageURL = ""
+        var type = ""
 
         GlobalScope.launch(Dispatchers.Main) {
-            if(userType != "admin") {
+            if (userType != "admin") {
                 val editFabMenu: com.github.clans.fab.FloatingActionMenu = binding.editFabMenu
                 editFabMenu.visibility = View.GONE
             }
@@ -58,29 +58,53 @@ class DetailActivity : AppCompatActivity() {
             GlideApp.with(this).load(bundle.getString("Image")).into(imagem)
             autor.text = bundle.getString("Autor")
             data.text = bundle.getString("Data")
+            type = bundle.getString("Type").toString()
         }
+
+        Toast.makeText(this, type, Toast.LENGTH_SHORT).show()
 
         delete.setOnClickListener {
-            val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("RAE")
-            val storage: FirebaseStorage = FirebaseStorage.getInstance()
-            val storageReference: StorageReference = storage.getReferenceFromUrl(imageURL)
+            if (type == "normal") {
+                val reference: DatabaseReference =
+                    FirebaseDatabase.getInstance().getReference("RAE")
+                val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                val storageReference: StorageReference = storage.getReferenceFromUrl(imageURL)
 
-            storageReference.delete().addOnSuccessListener {
-                reference.child(key).removeValue()
-                Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()
+                storageReference.delete().addOnSuccessListener {
+                    reference.child(key).removeValue()
+                    Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                val reference: DatabaseReference =
+                    FirebaseDatabase.getInstance().getReference("Exclusive").child(com.rae.daply.utils.classe)
+                val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                val storageReference: StorageReference = storage.getReferenceFromUrl(imageURL)
+
+                storageReference.delete().addOnSuccessListener {
+                    reference.child(key).removeValue()
+                    Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
 
         edit.setOnClickListener {
             val intent = Intent(this, UpdateActivity::class.java).putExtra("Image", imageURL)
                 .putExtra("Titulo", titulo.text.toString()).putExtra("Aviso", aviso.text.toString())
                 .putExtra("Data", data.text.toString()).putExtra("Autor", autor.text.toString())
+                .putExtra("Type", type)
             startActivity(intent)
         }
+
     }
 }
