@@ -32,8 +32,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var notificationWorkManager: NotificationManager
     private var isFirstUpdate = true
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentHomeBinding
+
     private val currentDate = System.currentTimeMillis()
 
     private lateinit var mContext: Context
@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
         val recyclerView: RecyclerView = binding.recyclerView

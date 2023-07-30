@@ -43,8 +43,7 @@ class ExclusiveFragment : Fragment() {
 
     private lateinit var notificationWorkManager: NotificationManager
     private var isFirstUpdate = true
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentHomeBinding
     private val currentDate = System.currentTimeMillis()
 
     private lateinit var mContext: Context
@@ -55,7 +54,7 @@ class ExclusiveFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
         FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
