@@ -172,7 +172,9 @@
 
         </HorizontalScrollView>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:backgroundTint="@color/teal_200"
             android:id="@+id/uploadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

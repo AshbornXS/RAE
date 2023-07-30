@@ -14,6 +14,8 @@ import com.google.firebase.storage.StorageReference
 import com.rae.daply.utils.GlideApp
 import com.rae.daply.MainActivity
 import com.rae.daply.databinding.ActivityDetailBinding
+import com.rae.daply.fragment.ui.ExclusiveFragment
+import com.rae.daply.fragment.ui.HomeFragment
 import com.rae.daply.utils.userType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -61,8 +63,6 @@ class DetailActivity : AppCompatActivity() {
             type = bundle.getString("Type").toString()
         }
 
-        Toast.makeText(this, type, Toast.LENGTH_SHORT).show()
-
         delete.setOnClickListener {
             if (type == "normal") {
                 val reference: DatabaseReference =
@@ -73,8 +73,6 @@ class DetailActivity : AppCompatActivity() {
                 storageReference.delete().addOnSuccessListener {
                     reference.child(key).removeValue()
                     Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
                     finish()
                 }.addOnFailureListener {
                     Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()
@@ -88,8 +86,6 @@ class DetailActivity : AppCompatActivity() {
                 storageReference.delete().addOnSuccessListener {
                     reference.child(key).removeValue()
                     Toast.makeText(this, "Apagado!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
                     finish()
                 }.addOnFailureListener {
                     Toast.makeText(this, "Falha", Toast.LENGTH_SHORT).show()

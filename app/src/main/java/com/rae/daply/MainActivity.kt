@@ -54,7 +54,7 @@ open class MainActivity : AppCompatActivity() {
 
             com.rae.daply.utils.userType = userType
 
-            if (userType != "admin") {
+            if (com.rae.daply.utils.userType != "admin") {
                 binding.fab.visibility = View.GONE
             }
         }

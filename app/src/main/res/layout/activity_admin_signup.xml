@@ -85,7 +85,9 @@
             android:textColor="@color/white"
             android:textColorHint="@color/grey" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:backgroundTint="@color/teal_200"
             android:id="@+id/signupAdmin_button"
             android:layout_width="350dp"
             android:layout_height="70dp"

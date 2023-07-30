@@ -1,62 +1,61 @@
-package com.rae.daply.login
+package com.rae.daply.fragment.ui.login
 
+import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
-import com.rae.daply.databinding.ActivitySignupBinding
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.rae.daply.databinding.FragmentSignupBinding
+import com.rae.daply.login.LoginActivity
+import kotlinx.coroutines.*
 
-class SignupActivity : AppCompatActivity() {
+class SignupFragment : Fragment() {
 
-    private lateinit var binding: ActivitySignupBinding
+    private lateinit var binding: FragmentSignupBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private val periodo = arrayOf("Manhã", "Tarde", "Noite")
     private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
     private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
     @OptIn(DelicateCoroutinesApi::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSignupBinding.inflate(inflater, container, false)
 
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, periodo)
+        val adaptorItemsPeriodo = ArrayAdapter(requireContext(), R.layout.list_item, periodo)
         binding.signupPeriodo.setAdapter(adaptorItemsPeriodo)
         binding.signupPeriodo.setText("Manhã", false)
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
+        val adaptorItemsSerie = ArrayAdapter(requireContext(), R.layout.list_item, series)
         binding.signupSerie.setAdapter(adaptorItemsSerie)
         binding.signupSerie.setText("1º Ano", false)
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
+        val adaptorItemsCurso = ArrayAdapter(requireContext(), R.layout.list_item, cursos)
         binding.signupCurso.setAdapter(adaptorItemsCurso)
         binding.signupCurso.setText("DS", false)
 
-        binding.signupPeriodo.onItemClickListener = AdapterView.OnItemClickListener {
-            parent, _, position, _ ->
-            when (parent?.getItemAtPosition(position).toString()) {
-                "Manhã", "Tarde", "Noite" -> binding.arrays.visibility = View.VISIBLE
+        binding.signupPeriodo.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                when (parent?.getItemAtPosition(position).toString()) {
+                    "Manhã", "Tarde", "Noite" -> binding.arrays.visibility = View.VISIBLE
+                }
             }
-        }
 
         binding.signupPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Não é necessário implementar
+                // Not needed for this implementation
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -65,10 +64,9 @@ class SignupActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Não é necessário implementar
+                // Not needed for this implementation
             }
         })
-
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -81,7 +79,7 @@ class SignupActivity : AppCompatActivity() {
             val serie = binding.signupSerie.text.toString()
             val curso = binding.signupCurso.text.toString()
 
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
             builder.setCancelable(false)
             builder.setView(R.layout.loading_layout)
             val dialog: AlertDialog = builder.create()
@@ -89,9 +87,9 @@ class SignupActivity : AppCompatActivity() {
 
             GlobalScope.launch(Dispatchers.IO) {
                 if (!email.contains("@etec.sp.gov.br")) {
-                    showToast("Digite um email válido!")
+                    Toast.makeText(activity, "Digite um email valido", Toast.LENGTH_SHORT).show()
                 } else if (password.length < 6) {
-                    showToast("A senha deve ter no mínimo 6 caracteres!")
+                    Toast.makeText(activity, "A senha deve ter no mínimo 6 caracteres!", Toast.LENGTH_SHORT).show()
                 } else if (name.isNotEmpty() && email.isNotEmpty() && email.contains("@etec.sp.gov.br") && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
                     if (password == passwordConfirm) {
                         val dataClass = DataClass(
@@ -110,50 +108,42 @@ class SignupActivity : AppCompatActivity() {
                         }
 
                         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(this@SignupActivity) { task ->
+                            .addOnCompleteListener(requireActivity()) { task ->
                                 if (task.isSuccessful) {
                                     firebaseAuth.currentUser?.sendEmailVerification()
                                         ?.addOnSuccessListener {
                                             dialog.dismiss()
-                                            showToast("Email de verificação enviado!")
+                                            Toast.makeText(activity, "Email de verificação enviado", Toast.LENGTH_SHORT).show()
                                             val intent = Intent(
-                                                this@SignupActivity, LoginActivity::class.java
+                                                requireContext(), LoginActivity::class.java
                                             )
                                             startActivity(intent)
                                         }?.addOnFailureListener {
                                             dialog.dismiss()
-                                            showToast(it.toString())
+                                            Toast.makeText(activity, it.toString(), Toast.LENGTH_SHORT).show()
                                         }
                                 } else if (task.exception.toString()
                                         .contains("The email address is already in use by another account.")
                                 ) {
-                                    showToast("Email já cadastrado!")
+                                    Toast.makeText(activity, "Email já cadastrado!", Toast.LENGTH_SHORT).show()
                                     dialog.dismiss()
                                 }
                             }
                     } else {
-                        showToast("As senhas não são iguais!")
+                        Toast.makeText(activity, "As senhas não são iguais!", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    showToast("Preencha todos os campos!")
+                    Toast.makeText(activity, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        binding.loginRedirectText.setOnClickListener {
-            val intent = Intent(this@SignupActivity, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
         binding.signupAdmin.setOnClickListener {
-            val intent = Intent(this@SignupActivity, AdminCheckActivity::class.java)
+            val intent =
+                Intent(requireContext(), com.rae.daply.login.AdminCheckActivity::class.java)
             startActivity(intent)
         }
-    }
 
-    private fun showToast(message: String) {
-        runOnUiThread {
-            Toast.makeText(this@SignupActivity, message, Toast.LENGTH_SHORT).show()
-        }
+        return binding.root
     }
 }

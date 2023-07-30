@@ -4,16 +4,17 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -45,6 +46,8 @@ class ExclusiveFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val currentDate = System.currentTimeMillis()
+
+    private lateinit var mContext: Context
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
@@ -137,14 +140,9 @@ class ExclusiveFragment : Fragment() {
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun createChannel() {
         notificationWorkManager =
-            requireContext().applicationContext.getSystemService(NotificationManager::class.java)
+            mContext.applicationContext.getSystemService(NotificationManager::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -164,15 +162,15 @@ class ExclusiveFragment : Fragment() {
     private fun sendNotification() {
         createChannel()
 
-        val notifyIntent = Intent(requireContext(), ExclusiveFragment::class.java).apply {
+        val notifyIntent = Intent(mContext, ExclusiveFragment::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            requireContext(), 0, notifyIntent,
+            mContext, 0, notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notificationBuilder = NotificationCompat.Builder(requireContext(), "secundary_notification_channel")
+        val notificationBuilder = NotificationCompat.Builder(mContext, "secundary_notification_channel")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("ATENÇÃO!!!")
             .setContentText("Um novo aviso de sala foi postado.")
@@ -182,5 +180,9 @@ class ExclusiveFragment : Fragment() {
             .setAutoCancel(true)
 
         notificationWorkManager.notify(0, notificationBuilder.build())
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 }

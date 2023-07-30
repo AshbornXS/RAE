@@ -4,26 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context=".login.SignupActivity">
+    tools:context="fragment.ui.login.SignupFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Cadastro"
-            android:textColor="@color/teal_200"
-            android:textSize="80sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/signup_name"
@@ -179,26 +168,16 @@
 
         </LinearLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/signup_button"
             android:layout_width="350dp"
             android:layout_height="70dp"
             android:layout_marginTop="30dp"
             android:text="Cadastrar-se"
             android:textSize="18sp"
-            app:cornerRadius="30dp" />
-
-        <TextView
-            android:id="@+id/loginRedirectText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:text="Já é um usuário? Faça login."
-            android:textColor="@color/teal_200"
-            android:textSize="15sp"
-            android:textStyle="italic" />
+            android:backgroundTint="@color/teal_200"
+            app:cornerRadius="30dp"/>
 
         <TextView
             android:id="@+id/signupAdmin"

@@ -37,6 +37,8 @@ class UpdateActivity : AppCompatActivity() {
 
         val imagem: ImageView = binding.updateImage
 
+        var type = ""
+
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             val titulo: TextView = binding.updateTitulo
@@ -48,6 +50,7 @@ class UpdateActivity : AppCompatActivity() {
             titulo.text = bundle.getString("Titulo")
             Glide.with(this).load(bundle.getString("Image")).into(imagem)
             autor.text = bundle.getString("Autor")
+            type = bundle.getString("Type").toString()
         }
 
         val activityResultLauncher = registerForActivityResult(
@@ -106,21 +109,40 @@ class UpdateActivity : AppCompatActivity() {
         titulo: String, aviso: String, autor: String, key: String, imageURL: String
     ) {
 
-        database = FirebaseDatabase.getInstance().getReference("RAE")
-        val info = mapOf(
-            "titulo" to titulo, "aviso" to aviso, "autor" to autor, "imageURL" to imageURL
-        )
+        if (intent.extras?.getString("Type").toString() == "normal") {
+            database = FirebaseDatabase.getInstance().getReference("RAE")
+            val info = mapOf(
+                "titulo" to titulo, "aviso" to aviso, "autor" to autor, "imageURL" to imageURL
+            )
 
-        database.child(key).updateChildren(info).addOnSuccessListener {
-            binding.updateTitulo.text.clear()
-            binding.updateAviso.text.clear()
-            binding.updateAutor.text.clear()
-            Toast.makeText(this, "Atualizado com sucesso!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
-            startActivity(intent)
-            finish()
-        }.addOnFailureListener {
-            Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
+            database.child(key).updateChildren(info).addOnSuccessListener {
+                binding.updateTitulo.text.clear()
+                binding.updateAviso.text.clear()
+                binding.updateAutor.text.clear()
+                Toast.makeText(this, "Atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
+                startActivity(intent)
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            database = FirebaseDatabase.getInstance().getReference("Exclusive").child(com.rae.daply.utils.classe)
+            val info = mapOf(
+                "titulo" to titulo, "aviso" to aviso, "autor" to autor, "imageURL" to imageURL
+            )
+
+            database.child(key).updateChildren(info).addOnSuccessListener {
+                binding.updateTitulo.text.clear()
+                binding.updateAviso.text.clear()
+                binding.updateAutor.text.clear()
+                Toast.makeText(this, "Atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
+                startActivity(intent)
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

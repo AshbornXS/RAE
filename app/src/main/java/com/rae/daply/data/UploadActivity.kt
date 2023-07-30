@@ -166,8 +166,7 @@ class UploadActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
-                        startActivity(intent)
+                        finish()
                     }
                 }.addOnFailureListener { e ->
                     Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
@@ -182,8 +181,7 @@ class UploadActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, MainActivity::class.java).putExtra(titulo, titulo)
-                        startActivity(intent)
+                        finish()
                     }
                 }.addOnFailureListener { e ->
                     Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
@@ -194,6 +192,8 @@ class UploadActivity : AppCompatActivity() {
     fun itemClicked(v: View) {
         if ((v as CheckBox).isChecked) {
             binding.arrays.visibility = View.VISIBLE
+        } else {
+            binding.arrays.visibility = View.GONE
         }
     }
 }

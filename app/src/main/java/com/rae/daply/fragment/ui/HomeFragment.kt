@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -26,7 +27,6 @@ import com.rae.daply.databinding.FragmentHomeBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
@@ -35,6 +35,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val currentDate = System.currentTimeMillis()
+
+    private lateinit var mContext: Context
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
@@ -111,14 +113,9 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun createChannel() {
         notificationWorkManager =
-            requireContext().applicationContext.getSystemService(NotificationManager::class.java)
+            mContext.applicationContext.getSystemService(NotificationManager::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -136,18 +133,18 @@ class HomeFragment : Fragment() {
     private fun sendNotification() {
         createChannel()
 
-        val notifyIntent = Intent(requireContext(), HomeFragment::class.java).apply {
+        val notifyIntent = Intent(mContext, HomeFragment::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            requireContext(),
+            mContext,
             0,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val notificationBuilder =
-            NotificationCompat.Builder(requireContext(), "primary_notification_channel")
+            NotificationCompat.Builder(mContext, "primary_notification_channel")
                 .setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("ATENÇÃO!!!")
                 .setContentText("Um novo aviso foi postado.")
                 .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
@@ -155,4 +152,10 @@ class HomeFragment : Fragment() {
 
         notificationWorkManager.notify(0, notificationBuilder.build())
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
 }
