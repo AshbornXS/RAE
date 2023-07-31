@@ -9,7 +9,7 @@
     - [X] Senha;
     - [X] Profile;
 
-    - [X] (só adicionar o cadastro manualmente na db) Cadastro da coordenação feito de forma geral, por exemplo, uma conta para coordenação onde todos os coordenadores terão acesso, uma para a secretaria e etc;
+    - [X] Cadastro da coordenação feito de forma geral, por exemplo, uma conta para coordenação onde todos os coordenadores terão acesso, uma para a secretaria e etc;
 
 2. Quadro de avisos:
     - [X] Possível ver o autor da publicação;
@@ -17,6 +17,7 @@
     - [X] Opção de abrir a publicação para mais detalhes, como uma reportagem, por exemplo;
     - [X] Avisos temporarios duram 3 dias;
     - [X] Notificação de novos avisos;
+    - [X] Avisos exclusivos por sala
 
 3. Horário de aulas do usuário:
     - [ ] Lista com nome e e-mail dos professores de cada aula que o usuário terá;
