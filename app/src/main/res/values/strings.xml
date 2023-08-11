@@ -1,6 +1,46 @@
 <resources>
     <string name="app_name">RAE</string>
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="periodos">
+        <item>Manhã</item>
+        <item>Tarde</item>
+        <item>Noite</item>
+    </string-array>
+
+    <string-array name="series">
+        <item>1º Ano</item>
+        <item>2º Ano</item>
+        <item>3º Ano</item>
+    </string-array>
+
+    <string-array name="cursos">
+        <item>IPIA</item>
+        <item>MEC</item>
+        <item>MECA</item>
+        <item>DS</item>
+        <item>ADM</item>
+        <item>MEIO</item>
+        <item>LOG</item>
+        <item>ELECTRO</item>
+    </string-array>
+
+    <string-array name="time">
+        <item>07:10</item>
+        <item>08:00</item>
+        <item>08:50</item>
+        <item>10:10</item>
+        <item>11:00</item>
+        <item>11:50</item>
+    </string-array>
+
+    <string-array name="dias">
+        <item>Segunda</item>
+        <item>Terça</item>
+        <item>Quarta</item>
+        <item>Quinta</item>
+        <item>Sexta</item>
+    </string-array>
+
+
 </resources>

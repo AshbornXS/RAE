@@ -36,7 +36,7 @@
             android:text="RAE"
             android:fontFamily="serif"
             android:textColor="@color/white"
-            android:layout_marginEnd="47dp"/>
+            android:layout_marginEnd="47dp" />
 
     </LinearLayout>
 

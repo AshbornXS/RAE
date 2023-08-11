@@ -23,7 +23,8 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_cloud_upload_24" />
+            android:src="@drawable/ic_cloud_upload_24"
+            android:contentDescription="Image" />
 
         <TextView
             android:id="@+id/detailTitulo"

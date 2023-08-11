@@ -154,7 +154,7 @@ class LoginFragment : Fragment() {
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
                 } else {
-                    binding.loginPassword.text.clear()
+                    binding.loginPassword.text?.clear()
                     dialog.dismiss()
                     Toast.makeText(activity, "Verifique seu email", Toast.LENGTH_SHORT).show()
                 }

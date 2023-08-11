@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/background_black"
     android:fillViewport="true"
-    android:orientation="vertical"
     tools:context=".data.UploadActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
         android:background="@drawable/border"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -30,155 +29,176 @@
             android:id="@+id/uploadImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="Image"
             android:src="@drawable/ic_cloud_upload_24" />
 
-        <EditText
-            android:id="@+id/uploadTitulo"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border"
-            android:gravity="start|center_vertical"
-            android:hint="Digite o título..."
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Título"
             android:maxLines="1"
-            android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:paddingBottom="5dp"
+            android:textColorHint="@color/grey"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/teal_200">
 
-        <EditText
-            android:id="@+id/uploadAviso"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border"
-            android:gravity="start|center_vertical"
-            android:hint="Digite o aviso..."
-            android:maxLength="2000"
-            android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/uploadTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:textColor="@color/white" />
 
-        <EditText
-            android:id="@+id/uploadAutor"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border"
-            android:gravity="start|center_vertical"
-            android:hint="Digite o autor..."
-            android:maxLength="20"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Título"
             android:maxLines="1"
-            android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:paddingBottom="5dp"
+            android:textColorHint="@color/grey"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/teal_200">
 
-        <CheckBox
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/uploadAviso"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/exclusive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/exclusive"
-            android:text="Aviso para sala especifica?"
             android:onClick="itemClicked"
+            android:buttonTint="@color/teal_200"
+            android:text="Aviso para sala especifica?"
             android:textColor="@color/white" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/arrays"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <LinearLayout
+                android:id="@+id/arrays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/border_retangular"
-                android:drawablePadding="8dp"
-                android:hint="Periodo:"
-                android:padding="8dp"
-                android:textColorHint="@color/grey"
-                app:startIconDrawable="@drawable/ic_serie_24"
-                app:startIconTint="@color/teal_200">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-                <AutoCompleteTextView
-                    android:id="@+id/signup_periodo"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="italic" />
+                    android:hint="Periodo:"
+                    android:padding="5dp"
+                    android:textColorHint="@color/grey"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/teal_200"
+                    app:startIconDrawable="@drawable/ic_serie_24"
+                    app:startIconTint="@color/teal_200">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/uploadPeriodo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="Manhã..."
+                        android:inputType="none"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="italic" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/border_retangular"
-                android:drawablePadding="8dp"
-                android:hint="Série:"
-                android:padding="8dp"
-                android:textColorHint="@color/grey"
-                app:startIconDrawable="@drawable/ic_serie_24"
-                app:startIconTint="@color/teal_200">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/signup_serie"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="italic" />
+                    android:hint="Série:"
+                    android:padding="5dp"
+                    android:textColorHint="@color/grey"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/teal_200"
+                    app:startIconDrawable="@drawable/ic_serie_24"
+                    app:startIconTint="@color/teal_200">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/uploadSerie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="1º Ano..."
+                        android:inputType="none"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="italic" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/border_retangular"
-                android:drawablePadding="8dp"
-                android:hint="Curso:"
-                android:padding="8dp"
-                android:textColorHint="@color/grey"
-                app:startIconDrawable="@drawable/ic_cursos_24"
-                app:startIconTint="@color/teal_200">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/signup_curso"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="italic" />
+                    android:hint="Curso:"
+                    android:padding="5dp"
+                    android:textColorHint="@color/grey"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/teal_200"
+                    app:startIconDrawable="@drawable/ic_cursos_24"
+                    app:startIconTint="@color/teal_200">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/uploadCurso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="DS..."
+                        android:inputType="none"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="italic" />
 
-        </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
         </HorizontalScrollView>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/teal_200"
             android:id="@+id/uploadButton"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:backgroundTint="@color/teal_200"
             android:text="Enviar"
             android:textSize="18sp"
             app:cornerRadius="20dp" />

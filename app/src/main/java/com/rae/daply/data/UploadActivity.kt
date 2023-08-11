@@ -8,10 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -21,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUploadBinding
 import com.rae.daply.utils.userType
@@ -35,16 +31,8 @@ import java.time.format.DateTimeFormatter
 
 class UploadActivity : AppCompatActivity() {
 
-    private lateinit var uploadImage: ImageView
-    private lateinit var saveButton: Button
-    private lateinit var uploadTitulo: EditText
-    private lateinit var uploadAviso: EditText
-    private lateinit var uploadAutor: EditText
     private lateinit var imageURL: String
     private var uri: Uri? = null
-    private val periodo = arrayOf("Manhã", "Tarde", "Noite")
-    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
-    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
 
     private lateinit var binding: ActivityUploadBinding
 
@@ -55,23 +43,14 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, periodo)
-        binding.signupPeriodo.setAdapter(adaptorItemsPeriodo)
-        binding.signupPeriodo.setText("Manhã", false)
+        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
+        binding.uploadPeriodo.setAdapter(adaptorItemsPeriodo)
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
-        binding.signupSerie.setAdapter(adaptorItemsSerie)
-        binding.signupSerie.setText("1º Ano", false)
+        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
+        binding.uploadSerie.setAdapter(adaptorItemsSerie)
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
-        binding.signupCurso.setAdapter(adaptorItemsCurso)
-        binding.signupCurso.setText("DS", false)
-
-        uploadImage = binding.uploadImage
-        saveButton = binding.uploadButton
-        uploadTitulo = binding.uploadTitulo
-        uploadAviso = binding.uploadAviso
-        uploadAutor = binding.uploadAutor
+        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
+        binding.uploadCurso.setAdapter(adaptorItemsCurso)
 
         GlobalScope.launch(Dispatchers.Main) {
             if (userType != "admin") {
@@ -85,7 +64,7 @@ class UploadActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 uri = data?.data!!
-                uploadImage.setImageURI(uri)
+                binding.uploadImage.setImageURI(uri)
             } else {
                 Toast.makeText(
                     this@UploadActivity, "Nenhuma imagem selecionada!", Toast.LENGTH_SHORT
@@ -93,12 +72,12 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
-        uploadImage.setOnClickListener {
+        binding.uploadImage.setOnClickListener {
             val photoPicker = Intent(Intent.ACTION_PICK)
             photoPicker.type = "image/*"
             activityResultLauncher.launch(photoPicker)
         }
-        saveButton.setOnClickListener {
+        binding.uploadButton.setOnClickListener {
             saveData()
         }
 
@@ -116,8 +95,8 @@ class UploadActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
 
-        if (uri == null || uploadTitulo.text.toString().isEmpty() || uploadAviso.text.toString()
-                .isEmpty() || uploadAutor.text.toString().isEmpty()
+        if (uri == null || binding.uploadTitulo.text.toString().isEmpty() || binding.uploadAviso.text.toString()
+                .isEmpty()
         ) {
             dialog.dismiss()
             Toast.makeText(this, "Nenhum dos campos podem ser vazios!", Toast.LENGTH_SHORT).show()
@@ -140,9 +119,9 @@ class UploadActivity : AppCompatActivity() {
         val format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
         val data = LocalDateTime.now().format(format)
 
-        val titulo = uploadTitulo.text.toString()
-        val avisoPre = uploadAviso.text.toString()
-        val autor = uploadAutor.text.toString()
+        val titulo = binding.uploadTitulo.text.toString()
+        val avisoPre = binding.uploadAviso.text.toString()
+        val autor = FirebaseDatabase.getInstance().reference.child("Users").child(com.rae.daply.utils.save).child("name").get().toString()
 
         val aviso =
             avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
@@ -152,10 +131,10 @@ class UploadActivity : AppCompatActivity() {
         val currentDate = data.replace("/", "-")
 
         if (binding.exclusive.isChecked) {
-            val serie = binding.signupSerie.text.toString().take(1)
-            val periodo = binding.signupPeriodo.text.toString().take(1)
+            val serie = binding.uploadSerie.text.toString().take(1)
+            val periodo = binding.uploadPeriodo.text.toString().take(1)
 
-            val classe = serie + "-" + binding.signupCurso.text.toString() + "-" + periodo
+            val classe = serie + "-" + binding.uploadCurso.text.toString() + "-" + periodo
 
             val type = "exclusive"
 

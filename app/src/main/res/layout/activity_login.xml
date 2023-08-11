@@ -24,7 +24,7 @@
             android:gravity="center_horizontal"
             android:text="RAE"
             android:fontFamily="serif"
-            android:textColor="@color/teal_200"/>
+            android:textColor="@color/teal_200" />
 
     </LinearLayout>
 

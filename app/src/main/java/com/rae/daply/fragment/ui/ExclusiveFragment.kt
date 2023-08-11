@@ -50,9 +50,7 @@ class ExclusiveFragment : Fragment() {
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -86,7 +84,8 @@ class ExclusiveFragment : Fragment() {
                 recyclerView.adapter = adapter
 
                 val databaseReference: DatabaseReference =
-                    FirebaseDatabase.getInstance().getReference("Exclusive").child(com.rae.daply.utils.classe)
+                    FirebaseDatabase.getInstance().getReference("Exclusive")
+                        .child(com.rae.daply.utils.classe)
 
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     @SuppressLint("NotifyDataSetChanged")
@@ -102,14 +101,17 @@ class ExclusiveFragment : Fragment() {
                                 val uploadDate = dataClass.dataMili
 
                                 if ((uploadDate != null) && (image != null) && (key != null)) {
-                                    val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
+                                    val daysPassed =
+                                        (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
                                     if (daysPassed >= 3) {
                                         withContext(Dispatchers.IO) {
                                             val reference: DatabaseReference =
-                                                FirebaseDatabase.getInstance().getReference("Exclusive").child(
-                                                    com.rae.daply.utils.classe
-                                                )
-                                            val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                                                FirebaseDatabase.getInstance()
+                                                    .getReference("Exclusive").child(
+                                                        com.rae.daply.utils.classe
+                                                    )
+                                            val storage: FirebaseStorage =
+                                                FirebaseStorage.getInstance()
                                             val storageReference: StorageReference =
                                                 storage.getReferenceFromUrl(image)
                                             storageReference.delete().await()
@@ -165,21 +167,22 @@ class ExclusiveFragment : Fragment() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            mContext, 0, notifyIntent,
+            mContext,
+            0,
+            notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notificationBuilder = NotificationCompat.Builder(mContext, "secundary_notification_channel")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("ATENÇÃO!!!")
-            .setContentText("Um novo aviso de sala foi postado.")
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setContentIntent(notifyPendingIntent)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setAutoCancel(true)
+        val notificationBuilder =
+            NotificationCompat.Builder(mContext, "secundary_notification_channel")
+                .setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("ATENÇÃO!!!")
+                .setContentText("Um novo aviso de sala foi postado.")
+                .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
+                .setDefaults(NotificationCompat.DEFAULT_ALL).setAutoCancel(true)
 
         notificationWorkManager.notify(0, notificationBuilder.build())
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context

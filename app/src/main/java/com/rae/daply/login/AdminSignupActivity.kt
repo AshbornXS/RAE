@@ -1,10 +1,13 @@
 package com.rae.daply.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.R
@@ -25,6 +28,21 @@ class AdminSignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminSignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.signupAdminPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed for this implementation
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val hasText = !s.isNullOrEmpty()
+                binding.confirmPassword.visibility = if (hasText) View.VISIBLE else View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed for this implementation
+            }
+        })
 
         firebaseAuth = FirebaseAuth.getInstance()
 

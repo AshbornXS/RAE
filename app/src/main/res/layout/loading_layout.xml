@@ -4,8 +4,7 @@
     android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_black"
-    >
+    android:background="@color/background_black">
 
     <ProgressBar
         android:layout_width="0dp"

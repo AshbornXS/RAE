@@ -1,7 +1,6 @@
 package com.rae.daply.data
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -9,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,23 +26,26 @@ class UpdateProfileActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var user: FirebaseUser
 
-    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
-    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
+        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
+        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
+
+        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
 
         val name = intent.getStringExtra("name")
+        val periodo = intent.getStringExtra("periodo")
         val serie = intent.getStringExtra("serie")
         val curso = intent.getStringExtra("curso")
 
         binding.updateNome.setText(name)
+
+        binding.updatePeriodo.setText(periodo)
+        binding.updatePeriodo.setAdapter(adaptorItemsPeriodo)
 
         binding.updateSerie.setText(serie)
         binding.updateSerie.setAdapter(adaptorItemsSerie)
@@ -57,6 +60,7 @@ class UpdateProfileActivity : AppCompatActivity() {
 
     private fun updateProfile() {
         val updatedName = binding.updateNome.text.toString()
+        val updatedPeriodo = binding.updatePeriodo.text.toString()
         val updatedSerie = binding.updateSerie.text.toString()
         val updatedCurso = binding.updateCurso.text.toString()
         val updatedPassword = binding.updatePassword.text.toString()
@@ -64,7 +68,7 @@ class UpdateProfileActivity : AppCompatActivity() {
         user = FirebaseAuth.getInstance().currentUser!!
         database = FirebaseDatabase.getInstance().getReference("Users")
         val info = mapOf(
-            "name" to updatedName, "serie" to updatedSerie, "curso" to updatedCurso
+            "name" to updatedName, "periodo" to updatedPeriodo, "serie" to updatedSerie, "curso" to updatedCurso
         )
 
         val updateProfileBuilder = AlertDialog.Builder(this)
@@ -80,7 +84,8 @@ class UpdateProfileActivity : AppCompatActivity() {
 
         updateProfileDialog.findViewById<Button>(R.id.updateConfirmar)?.setOnClickListener {
             val email = user.email.toString()
-            val oldPass = updateProfileDialog.findViewById<EditText>(R.id.oldPassword)?.text.toString()
+            val oldPass =
+                updateProfileDialog.findViewById<EditText>(R.id.oldPassword)?.text.toString()
             val credential = EmailAuthProvider.getCredential(email, oldPass)
 
             user.reauthenticate(credential).addOnCompleteListener { task ->

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -16,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.data.UpdateProfileActivity
 import com.rae.daply.data.UploadActivity
+import com.rae.daply.data.UploadTimeActivity
 import com.rae.daply.databinding.ActivityMainBinding
 import com.rae.daply.fragment.ui.FragmentPageAdapter
 import com.rae.daply.login.LoginActivity
@@ -92,8 +92,13 @@ open class MainActivity : AppCompatActivity() {
         })
 
         binding.fab.setOnClickListener {
-            val intent = Intent(this, UploadActivity::class.java)
-            startActivity(intent)
+            if (binding.viewPager2.currentItem == 0) {
+                val intent = Intent(this, UploadTimeActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, UploadActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.pfp.setOnClickListener {
@@ -112,9 +117,9 @@ open class MainActivity : AppCompatActivity() {
 
                     name = snapshot.child("name").value.toString()
                     email = snapshot.child("email").value.toString()
+                    periodo = snapshot.child("periodo").value.toString()
                     serie = snapshot.child("serie").value.toString()
                     curso = snapshot.child("curso").value.toString()
-                    periodo = snapshot.child("periodo").value.toString()
 
                     labelName.text = "${labelName.text}${snapshot.child("name").value}"
                     labelEmail.text = "${labelEmail.text}${snapshot.child("email").value}"
@@ -132,7 +137,8 @@ open class MainActivity : AppCompatActivity() {
             pfpDialog.findViewById<Button>(R.id.pfpUpdate)?.setOnClickListener {
                 val intent = Intent(this, UpdateProfileActivity::class.java).putExtra(
                     "name", name
-                ).putExtra("email", email).putExtra("serie", serie).putExtra("curso", curso)
+                ).putExtra("email", email).putExtra("periodo", periodo).putExtra("serie", serie)
+                    .putExtra("curso", curso)
                 startActivity(intent)
                 pfpDialog.dismiss()
             }

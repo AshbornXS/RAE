@@ -45,6 +45,16 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/pfpPeriodo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:padding="8dp"
+        android:text="Periodo: "
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/pfpSerie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,51 +74,39 @@
         android:textColor="@color/white"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/pfpPeriodo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Periodo: "
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/pfpExit"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Sair"
-            android:textSize="15sp"
-            app:cornerRadius="30dp" />
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/pfpUpdate"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Atualizar"
-            android:textSize="11sp"
-            app:cornerRadius="30dp" />
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/pfpClose"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Fechar"
-            android:textSize="15sp"
-            app:cornerRadius="30dp" />
-
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
     </LinearLayout>
 </LinearLayout>

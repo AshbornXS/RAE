@@ -2,13 +2,13 @@ package com.rae.daply.login
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.R
@@ -48,8 +48,8 @@ class AdminCheckActivity : AppCompatActivity() {
                             if (it.value.toString() != "aluno") {
                                 login(email, password)
                             } else {
-                                binding.checkEmail.text.clear()
-                                binding.checkPassword.text.clear()
+                                binding.checkEmail.text?.clear()
+                                binding.checkPassword.text?.clear()
                                 Toast.makeText(
                                     this@AdminCheckActivity,
                                     "Você não é um administrador",
@@ -121,7 +121,7 @@ class AdminCheckActivity : AppCompatActivity() {
                     val intent = Intent(this@AdminCheckActivity, AdminSignupActivity::class.java)
                     startActivity(intent)
                 } else {
-                    binding.checkPassword.text.clear()
+                    binding.checkPassword.text?.clear()
                     dialog.dismiss()
                     Toast.makeText(
                         this@AdminCheckActivity, "Verifique seu email", Toast.LENGTH_SHORT

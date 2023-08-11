@@ -1,21 +1,18 @@
 package com.rae.daply.data
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.github.clans.fab.FloatingActionButton
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rae.daply.utils.GlideApp
-import com.rae.daply.MainActivity
 import com.rae.daply.databinding.ActivityDetailBinding
-import com.rae.daply.fragment.ui.ExclusiveFragment
-import com.rae.daply.fragment.ui.HomeFragment
 import com.rae.daply.utils.userType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +54,7 @@ class DetailActivity : AppCompatActivity() {
             imageURL = bundle.getString("Image").toString()
             aviso.text = bundle.getString("Aviso")
             titulo.text = bundle.getString("Titulo")
-            GlideApp.with(this).load(bundle.getString("Image")).into(imagem)
+            Glide.with(this).load(bundle.getString("Image")).into(imagem)
             autor.text = bundle.getString("Autor")
             data.text = bundle.getString("Data")
             type = bundle.getString("Type").toString()
@@ -79,7 +76,8 @@ class DetailActivity : AppCompatActivity() {
                 }
             } else {
                 val reference: DatabaseReference =
-                    FirebaseDatabase.getInstance().getReference("Exclusive").child(com.rae.daply.utils.classe)
+                    FirebaseDatabase.getInstance().getReference("Exclusive")
+                        .child(com.rae.daply.utils.classe)
                 val storage: FirebaseStorage = FirebaseStorage.getInstance()
                 val storageReference: StorageReference = storage.getReferenceFromUrl(imageURL)
 

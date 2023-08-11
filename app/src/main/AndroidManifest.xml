@@ -18,6 +18,9 @@
         android:theme="@style/Theme.RAE"
         tools:targetApi="31">
         <activity
+            android:name=".data.UploadTimeActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.AdminCheckActivity"
             android:exported="false" />
         <activity
@@ -40,9 +43,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.SignupActivity"
-            android:exported="false" />
-        <activity
             android:name=".data.UpdateActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -58,8 +58,7 @@
             android:name=".MainActivity"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:taskAffinity=""
-            android:theme="@style/SplashTheme" />
+            android:taskAffinity="" />
     </application>
 
 </manifest>
