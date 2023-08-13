@@ -1,10 +1,9 @@
 package com.rae.daply.fragment.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -14,17 +13,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.FragmentLoginBinding
 import com.rae.daply.login.LoginActivity
 import kotlinx.coroutines.*
-import com.rae.daply.utils.save as saveGlobal
 
 class LoginFragment : Fragment() {
 
@@ -40,24 +37,7 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-
         firebaseAuth = FirebaseAuth.getInstance()
-
-        coroutineScope.launch {
-            if (Build.VERSION.SDK_INT >= 33) {
-                val perms = arrayOf(
-                    android.Manifest.permission.POST_NOTIFICATIONS,
-                    android.Manifest.permission.READ_MEDIA_IMAGES
-                )
-                checkPermission(perms, 0)
-            } else {
-                val perms = arrayOf(
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                checkPermission(perms, 1)
-            }
-        }
 
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString()
@@ -113,23 +93,18 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        coroutineScope.launch(Dispatchers.Main) {
-            val currentUser: FirebaseUser? = firebaseAuth.currentUser
-            if (currentUser != null && currentUser.isEmailVerified) {
-                getName()
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-            }
-        }
-    }
-
-    private fun getName() {
+    fun getName() {
         val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
             ?.replace(".", "-")
 
-        saveGlobal = save.toString()
+        if (!::activity.isInitialized) {
+            return
+        }
+
+        val sharedPreferences =
+            activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
+        val saveShared = sharedPreferences.edit().putString("save", save)
+        saveShared.apply()
 
         val dbReference = FirebaseDatabase.getInstance()
         dbReference.reference.child("Users").child(save.toString()).child("name").get()
@@ -140,35 +115,25 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(email: String, password: String) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(false)
-        builder.setView(R.layout.loading_layout)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val verification = firebaseAuth.currentUser?.isEmailVerified
                 if (verification == true) {
-                    dialog.dismiss()
                     coroutineScope.launch { getName() }
+
+                    val sharedPreferences = activity.getSharedPreferences(
+                        "shared_prefs", AppCompatActivity.MODE_PRIVATE
+                    )
+                    val isLogged = sharedPreferences.edit()
+                    isLogged.putBoolean("isLogged", true)
+                    isLogged?.apply()
+
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
                 } else {
                     binding.loginPassword.text?.clear()
-                    dialog.dismiss()
                     Toast.makeText(activity, "Verifique seu email", Toast.LENGTH_SHORT).show()
                 }
-            }
-        }
-    }
-
-    private fun checkPermission(permission: Array<String>, requestCode: Int) {
-        for (i in permission.indices) {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(), permission[i]
-                ) == PackageManager.PERMISSION_DENIED
-            ) {
-                ActivityCompat.requestPermissions(requireActivity(), permission, requestCode)
             }
         }
     }
@@ -178,10 +143,12 @@ class LoginFragment : Fragment() {
         coroutineScope.cancel()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        this.activity = activity as LoginActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is LoginActivity) {
+            activity = context
+        }
     }
+
 
 }

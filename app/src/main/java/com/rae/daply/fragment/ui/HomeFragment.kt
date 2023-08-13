@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,11 +46,8 @@ class HomeFragment : Fragment() {
 
         val recyclerView: RecyclerView = binding.recyclerView
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(false)
-        builder.setView(R.layout.loading_layout)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        binding.dataView.visibility = View.GONE
+        binding.shimmerView.startShimmer()
 
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.stackFromEnd = true
@@ -101,12 +97,16 @@ class HomeFragment : Fragment() {
                     }
                     isFirstUpdate = false
                     adapter.notifyDataSetChanged()
-                    dialog.dismiss()
+                    binding.shimmerView.stopShimmer()
+                    binding.shimmerView.visibility = View.GONE
+                    binding.dataView.visibility = View.VISIBLE
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                dialog.dismiss()
+                binding.shimmerView.stopShimmer()
+                binding.shimmerView.visibility = View.GONE
+                binding.dataView.visibility = View.VISIBLE
             }
         })
 

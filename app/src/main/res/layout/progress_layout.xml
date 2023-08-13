@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_black">
+    android:background="@color/background"
+    android:orientation="horizontal"
+    android:padding="20dp">
 
     <ProgressBar
         android:layout_width="0dp"
@@ -16,9 +16,9 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:text="Salvando..."
-        android:textSize="18sp"
+        android:gravity="start|center_vertical"
+        android:text="@string/saving"
         android:textColor="@color/teal_200"
-        android:gravity="start|center_vertical" />
+        android:textSize="18sp" />
 
 </LinearLayout>

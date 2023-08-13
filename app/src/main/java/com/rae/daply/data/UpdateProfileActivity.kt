@@ -1,6 +1,7 @@
 package com.rae.daply.data
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -18,7 +19,6 @@ import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUploadProfileBinding
 import com.rae.daply.login.LoginActivity
-import com.rae.daply.utils.save
 
 class UpdateProfileActivity : AppCompatActivity() {
 
@@ -26,16 +26,25 @@ class UpdateProfileActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var user: FirebaseUser
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var edit : SharedPreferences.Editor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
+        sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        edit = sharedPreferences.edit()
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
+        val adaptorItemsPeriodo =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
+        val adaptorItemsSerie =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
+
+        val adaptorItemsCurso =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
 
         val name = intent.getStringExtra("name")
         val periodo = intent.getStringExtra("periodo")
@@ -68,7 +77,10 @@ class UpdateProfileActivity : AppCompatActivity() {
         user = FirebaseAuth.getInstance().currentUser!!
         database = FirebaseDatabase.getInstance().getReference("Users")
         val info = mapOf(
-            "name" to updatedName, "periodo" to updatedPeriodo, "serie" to updatedSerie, "curso" to updatedCurso
+            "name" to updatedName,
+            "periodo" to updatedPeriodo,
+            "serie" to updatedSerie,
+            "curso" to updatedCurso
         )
 
         val updateProfileBuilder = AlertDialog.Builder(this)
@@ -108,6 +120,10 @@ class UpdateProfileActivity : AppCompatActivity() {
                                 Log.i("UpdateProfileActivity", it.exception.toString())
                             }
                         }
+
+                        val save = getSharedPreferences("shared_prefs", MODE_PRIVATE).getString(
+                            "save", null
+                        ).toString()
 
                         database.child(save).updateChildren(info).addOnSuccessListener {
                             Toast.makeText(

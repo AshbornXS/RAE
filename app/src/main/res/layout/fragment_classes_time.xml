@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
+    android:background="@color/background"
     tools:context=".fragment.ui.ClassesTimeFragment">
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Dia:"
+            android:hint="@string/day"
             android:padding="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -41,9 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:hint="Sexta..."
                 android:inputType="none"
-                android:textColor="@color/white"
+                android:text="@string/dots"
+                android:textColor="@color/text"
                 android:textSize="15sp"
                 android:textStyle="italic" />
 
@@ -75,7 +75,7 @@
                 android:layout_weight="2"
                 android:background="@drawable/header_shape"
                 android:gravity="center"
-                android:text="Day"
+                android:text=""
                 android:textSize="40sp"
                 android:textStyle="bold|italic" />
 

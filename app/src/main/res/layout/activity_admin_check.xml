@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:gravity="center"
-    android:background="@color/background_black"
     android:orientation="vertical"
     tools:context=".login.AdminCheckActivity">
 
@@ -14,20 +14,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Login"
-        android:textStyle="bold"
+        android:text="@string/login"
         android:textColor="@color/teal_200"
-        android:textSize="80sp" />
+        android:textSize="80sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="OBS: Você precisa ter uma conta de administrador para prosseguir."
-        android:textStyle="bold"
+        android:text="@string/admin_signup_warning"
         android:textColor="@color/grey"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:hint="Email"
+        android:hint="@string/email"
         android:paddingBottom="5dp"
         android:textColorHint="@color/grey"
         app:boxCornerRadiusBottomEnd="20dp"
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:autofillHints="emailAddress"
             android:inputType="textEmailAddress"
-            android:textColor="@color/white" />
+            android:textColor="@color/text" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,7 +63,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:hint="Senha"
+        android:hint="@string/senha"
+        android:minEms="8"
         android:paddingBottom="5dp"
         android:textColorHint="@color/grey"
         app:boxCornerRadiusBottomEnd="20dp"
@@ -72,7 +73,6 @@
         app:boxCornerRadiusTopStart="20dp"
         app:boxStrokeColor="@color/teal_200"
         app:passwordToggleEnabled="true"
-        android:minEms="8"
         app:passwordToggleTint="@color/teal_200"
         app:startIconDrawable="@drawable/ic_lock_24"
         app:startIconTint="@color/teal_200">
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword"
-            android:textColor="@color/white" />
+            android:textColor="@color/text" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,7 +93,7 @@
         android:layout_height="70dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/teal_200"
-        android:text="Entrar"
+        android:text="@string/login"
         android:textSize="18sp"
         app:cornerRadius="30dp" />
 
@@ -104,7 +104,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:padding="8dp"
-        android:text="Esqueceu a senha?"
+        android:text="@string/forgot_password"
         android:textColor="@color/teal_200"
         android:textSize="15sp"
         android:textStyle="italic" />

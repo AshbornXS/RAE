@@ -1,6 +1,32 @@
 <resources>
     <string name="app_name">RAE</string>
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
+    <string name="email">Email</string>
+    <string name="senha">Senha</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
+    <string name="full_name">Nome Completo</string>
+    <string name="confirm_password">Confirme sua senha</string>
+    <string name="periodo">Periodo:</string>
+    <string name="dots">...</string>
+    <string name="serie">Série:</string>
+    <string name="curso">Curso:</string>
+    <string name="signup">Cadastrar-se</string>
+    <string name="admin_signup">Cadastre uma conta de administrador.</string>
+    <string name="profile">Profile</string>
+    <string name="upload">Upload</string>
+    <string name="admin_signup_warning">OBS: Você precisa ter uma conta de administrador para prosseguir.</string>
+    <string name="cadastro">Cadastro</string>
+    <string name="image">Image</string>
+    <string name="edit">Editar</string>
+    <string name="title">Título</string>
+    <string name="aviso">Aviso</string>
+    <string name="update">Update</string>
+    <string name="exclusive">Aviso para sala especifica?</string>
+    <string name="send">Enviar</string>
+    <string name="day">Dia:</string>
+    <string name="loading">Carregando...</string>
+    <string name="saving">Salvando...</string>
 
     <string-array name="periodos">
         <item>Manhã</item>

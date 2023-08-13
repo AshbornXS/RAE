@@ -15,11 +15,6 @@ class UploadTimeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUploadTimeBinding
 
-    private val periodo = arrayOf("Manhã", "Tarde", "Noite")
-    private val series = arrayOf("1º Ano", "2º Ano", "3º Ano")
-    private val cursos = arrayOf("IPIA", "MEC", "MECA", "DS", "ADM", "MEIO", "LOG", "ELECTRO")
-    private val dias = arrayOf("Segunda", "Terça", "Quarta", "Quinta", "Sexta")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadTimeBinding.inflate(layoutInflater)
@@ -27,17 +22,14 @@ class UploadTimeActivity : AppCompatActivity() {
 
         var i = 0
 
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, periodo)
+        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
         binding.timePeriodo.setAdapter(adaptorItemsPeriodo)
-        binding.timePeriodo.setText("Manhã", false)
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, series)
+        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
         binding.timeSerie.setAdapter(adaptorItemsSerie)
-        binding.timeSerie.setText("1º Ano", false)
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, cursos)
+        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
         binding.timeCurso.setAdapter(adaptorItemsCurso)
-        binding.timeCurso.setText("DS", false)
 
         binding.addButton.setOnClickListener {
             val first = binding.firstEditText.text.toString()
@@ -47,9 +39,9 @@ class UploadTimeActivity : AppCompatActivity() {
             val fifth = binding.fifthEditText.text.toString()
             val sixth = binding.sixthEditText.text.toString()
 
-            val tableRow = LayoutInflater.from(this).inflate(R.layout.table_row, null) as TableRow
+            val tableRow = LayoutInflater.from(this).inflate(R.layout.table_row, binding.root, false) as TableRow
 
-            tableRow.findViewById<TextView>(R.id.dayTextView).text = dias[i % dias.size]
+            tableRow.findViewById<TextView>(R.id.dayTextView).text = resources.getStringArray(R.array.dias)[i % resources.getStringArray(R.array.dias).size]
             tableRow.findViewById<TextView>(R.id.firstTextView).text = first
             tableRow.findViewById<TextView>(R.id.secondTextView).text = second
             tableRow.findViewById<TextView>(R.id.thirdTextView).text = third
@@ -69,7 +61,7 @@ class UploadTimeActivity : AppCompatActivity() {
                 .take(1) + "-" + binding.timeCurso.text.toString() + "-" + binding.timePeriodo.text.toString()
                 .take(1)
 
-            val day = dias[i % dias.size]
+            val day = resources.getStringArray(R.array.dias)[i % resources.getStringArray(R.array.dias).size]
 
             val list = ArrayList<String>(listOf(first, second, third, fourth, fifth, sixth))
 

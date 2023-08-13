@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/removeButton"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/removeButton">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/dayTextView"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -19,9 +19,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -29,9 +29,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -39,9 +39,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -49,9 +49,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -59,9 +59,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
     <TextView
@@ -69,9 +69,9 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="#000"
         android:background="@drawable/cell_shape"
+        android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="13sp" />
 
 </TableRow>

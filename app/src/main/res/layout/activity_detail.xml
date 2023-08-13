@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
+    android:background="@color/background"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:id="@+id/teste"
     tools:context=".data.DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_black"
+        android:background="@color/background"
         android:orientation="vertical">
 
         <ImageView
@@ -21,10 +20,10 @@
             android:layout_width="400dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/image"
             android:padding="8dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_cloud_upload_24"
-            android:contentDescription="Image" />
+            android:src="@drawable/ic_cloud_upload_24" />
 
         <TextView
             android:id="@+id/detailTitulo"
@@ -34,7 +33,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginBottom="12dp"
             android:padding="8dp"
-            android:text="Titulo"
+            android:text=""
             android:textColor="@color/teal_200"
             android:textSize="24sp" />
 
@@ -45,8 +44,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:padding="20dp"
-            android:text="Aviso..."
-            android:textColor="@color/white"
+            android:text=""
+            android:textColor="@color/text"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -76,8 +75,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="20dp"
                     android:gravity="center"
-                    android:text="phz"
-                    android:textColor="@color/white"
+                    android:text=""
+                    android:textColor="@color/text"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -87,14 +86,15 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:gravity="center"
-                    android:text="06/04/2023\n12:00"
-                    android:textColor="@color/white"
+                    android:text=""
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
             <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/editFabMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -105,7 +105,6 @@
                 app:menu_colorNormal="@color/teal_200"
                 app:menu_colorPressed="@color/teal_200"
                 app:menu_fab_size="normal"
-                android:id="@+id/editFabMenu"
                 app:menu_icon="@drawable/ic_format_list_bulleted_24"
                 app:menu_openDirection="up"
                 app:menu_showShadow="true">

@@ -6,13 +6,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,13 +26,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdapter
-import com.rae.daply.databinding.FragmentHomeBinding
+import com.rae.daply.databinding.FragmentExclusiveBinding
 import com.rae.daply.utils.curso
 import com.rae.daply.utils.periodo
-import com.rae.daply.utils.save
 import com.rae.daply.utils.serie
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -43,17 +45,29 @@ class ExclusiveFragment : Fragment() {
 
     private lateinit var notificationWorkManager: NotificationManager
     private var isFirstUpdate = true
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentExclusiveBinding
     private val currentDate = System.currentTimeMillis()
 
     private lateinit var mContext: Context
+    private lateinit var activity: MainActivity
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentExclusiveBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        sharedPreferences =
+            activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
+        val save = sharedPreferences.getString(
+            "save", null
+        ).toString()
 
         FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
             .addOnSuccessListener { snapshot ->
@@ -63,15 +77,13 @@ class ExclusiveFragment : Fragment() {
 
                 val classe = serie.take(1) + "-" + curso + "-" + periodo.take(1)
 
-                com.rae.daply.utils.classe = classe
+                editor.putString("classe", classe)
+                editor.apply()
 
                 val recyclerView: RecyclerView = binding.recyclerView
 
-                val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-                builder.setCancelable(false)
-                builder.setView(R.layout.loading_layout)
-                val dialog: AlertDialog = builder.create()
-                dialog.show()
+                binding.dataViewExclusive.visibility = View.GONE
+                binding.shimmerViewExclusive.startShimmer()
 
                 val linearLayoutManager = LinearLayoutManager(requireContext())
                 linearLayoutManager.stackFromEnd = true
@@ -85,7 +97,7 @@ class ExclusiveFragment : Fragment() {
 
                 val databaseReference: DatabaseReference =
                     FirebaseDatabase.getInstance().getReference("Exclusive")
-                        .child(com.rae.daply.utils.classe)
+                        .child(classe)
 
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     @SuppressLint("NotifyDataSetChanged")
@@ -108,7 +120,7 @@ class ExclusiveFragment : Fragment() {
                                             val reference: DatabaseReference =
                                                 FirebaseDatabase.getInstance()
                                                     .getReference("Exclusive").child(
-                                                        com.rae.daply.utils.classe
+                                                        classe
                                                     )
                                             val storage: FirebaseStorage =
                                                 FirebaseStorage.getInstance()
@@ -127,12 +139,16 @@ class ExclusiveFragment : Fragment() {
                             }
                             isFirstUpdate = false
                             adapter.notifyDataSetChanged()
-                            dialog.dismiss()
+                            binding.shimmerViewExclusive.stopShimmer()
+                            binding.shimmerViewExclusive.visibility = View.GONE
+                            binding.dataViewExclusive.visibility = View.VISIBLE
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        dialog.dismiss()
+                        binding.shimmerViewExclusive.stopShimmer()
+                        binding.shimmerViewExclusive.visibility = View.GONE
+                        binding.dataViewExclusive.visibility = View.VISIBLE
                     }
                 })
 
@@ -143,7 +159,7 @@ class ExclusiveFragment : Fragment() {
 
     private fun createChannel() {
         notificationWorkManager =
-            mContext.applicationContext.getSystemService(NotificationManager::class.java)
+            activity.applicationContext.getSystemService(NotificationManager::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -163,18 +179,18 @@ class ExclusiveFragment : Fragment() {
     private fun sendNotification() {
         createChannel()
 
-        val notifyIntent = Intent(mContext, ExclusiveFragment::class.java).apply {
+        val notifyIntent = Intent(activity, ExclusiveFragment::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            mContext,
+            activity,
             0,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val notificationBuilder =
-            NotificationCompat.Builder(mContext, "secundary_notification_channel")
+            NotificationCompat.Builder(activity, "secundary_notification_channel")
                 .setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("ATENÇÃO!!!")
                 .setContentText("Um novo aviso de sala foi postado.")
                 .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
@@ -183,8 +199,10 @@ class ExclusiveFragment : Fragment() {
         notificationWorkManager.notify(0, notificationBuilder.build())
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
+    override fun onAttach(mContext: Context) {
+        super.onAttach(mContext)
+        if (mContext is MainActivity) {
+            activity = mContext
+        }
     }
 }

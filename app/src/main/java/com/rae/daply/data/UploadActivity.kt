@@ -3,6 +3,7 @@ package com.rae.daply.data
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,7 +21,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.rae.daply.R
 import com.rae.daply.databinding.ActivityUploadBinding
-import com.rae.daply.utils.userType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,6 +36,9 @@ class UploadActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUploadBinding
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     @OptIn(DelicateCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +46,33 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adaptorItemsPeriodo = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
+        val position = intent.getIntExtra("position", 1)
+
+        if (position == 2) {
+            binding.exclusive.isChecked = true
+            binding.arrays.visibility = View.VISIBLE
+        }
+
+        sharedPreferences = getSharedPreferences("shared_prefs", MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
+        val adaptorItemsPeriodo =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
         binding.uploadPeriodo.setAdapter(adaptorItemsPeriodo)
 
-        val adaptorItemsSerie = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
+        val adaptorItemsSerie =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.series))
         binding.uploadSerie.setAdapter(adaptorItemsSerie)
 
-        val adaptorItemsCurso = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
+        val adaptorItemsCurso =
+            ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
         binding.uploadCurso.setAdapter(adaptorItemsCurso)
 
         GlobalScope.launch(Dispatchers.Main) {
+            val userType = getSharedPreferences("shared_prefs", MODE_PRIVATE).getString(
+                "userType", "user"
+            )
+
             if (userType != "admin") {
                 finishActivity(1)
             }
@@ -95,7 +115,8 @@ class UploadActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
 
-        if (uri == null || binding.uploadTitulo.text.toString().isEmpty() || binding.uploadAviso.text.toString()
+        if (uri == null || binding.uploadTitulo.text.toString()
+                .isEmpty() || binding.uploadAviso.text.toString()
                 .isEmpty()
         ) {
             dialog.dismiss()
@@ -116,12 +137,18 @@ class UploadActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun uploadData() {
+        sharedPreferences = getSharedPreferences("shared_prefs", MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
+        val save = sharedPreferences.getString(
+            "save", null
+        ).toString()
+
         val format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
         val data = LocalDateTime.now().format(format)
 
         val titulo = binding.uploadTitulo.text.toString()
         val avisoPre = binding.uploadAviso.text.toString()
-        val autor = FirebaseDatabase.getInstance().reference.child("Users").child(com.rae.daply.utils.save).child("name").get().toString()
 
         val aviso =
             avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
@@ -130,41 +157,44 @@ class UploadActivity : AppCompatActivity() {
 
         val currentDate = data.replace("/", "-")
 
-        if (binding.exclusive.isChecked) {
-            val serie = binding.uploadSerie.text.toString().take(1)
-            val periodo = binding.uploadPeriodo.text.toString().take(1)
+        FirebaseDatabase.getInstance().reference.child("Users").child(save).get().addOnSuccessListener {
+            val autor = it.child("name").value.toString()
+            if (binding.exclusive.isChecked) {
+                val serie = binding.uploadSerie.text.toString().take(1)
+                val periodo = binding.uploadPeriodo.text.toString().take(1)
 
-            val classe = serie + "-" + binding.uploadCurso.text.toString() + "-" + periodo
+                val classe = serie + "-" + binding.uploadCurso.text.toString() + "-" + periodo
 
-            val type = "exclusive"
+                val type = "exclusive"
 
-            val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+                val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
 
-            FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
-                .child(currentDate).setValue(dataClass)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                        finish()
+                FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
+                    .child(currentDate).setValue(dataClass)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    }.addOnFailureListener { e ->
+                        Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
                     }
-                }.addOnFailureListener { e ->
-                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            val type = "normal"
+            } else {
+                val type = "normal"
 
-            val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+                val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
 
-            FirebaseDatabase.getInstance().getReference("RAE").child(currentDate)
-                .setValue(dataClass)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
-                        finish()
+                FirebaseDatabase.getInstance().getReference("RAE").child(currentDate)
+                    .setValue(dataClass)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Salvo", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    }.addOnFailureListener { e ->
+                        Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
                     }
-                }.addOnFailureListener { e ->
-                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-                }
+            }
         }
     }
 

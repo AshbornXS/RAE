@@ -4,58 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/tab_layout">
+        app:layout_constraintBottom_toTopOf="@+id/tab_layout"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/pfp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@string/profile"
             android:padding="8dp"
             android:scaleType="centerCrop"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
             android:src="@drawable/ic_face_24"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
-            android:contentDescription="Profile" />
+            app:tint="@color/text" />
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_horizontal"
-            android:text="RAE"
-            android:fontFamily="serif"
-            android:textColor="@color/white"
-            android:layout_marginEnd="47dp" />
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/image"
+            android:src="@drawable/app_text" />
 
-    </LinearLayout>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/theme_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|end"
+            android:thumb="@drawable/thumb" />
+
+    </RelativeLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear"
         app:tabIndicator="@drawable/tab_indicator"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@null"
         app:tabIndicatorGravity="stretch"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/white" />
+        app:tabInlineLabel="true"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/reverse_text"
+        app:tabTextColor="@color/text" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager2"
@@ -73,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
         android:backgroundTint="@color/teal_200"
-        android:contentDescription="Upload"
+        android:contentDescription="@string/upload"
         android:src="@drawable/ic_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

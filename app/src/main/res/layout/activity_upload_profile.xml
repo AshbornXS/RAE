@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
+    android:background="@color/background"
     android:fillViewport="true"
     android:orientation="vertical"
     tools:context=".data.UpdateProfileActivity">
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="130dp"
-            android:text="Editar"
+            android:text="@string/edit"
             android:textAlignment="center"
             android:textColor="@color/teal_200"
             android:textSize="50sp"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Nome Completo"
+            android:hint="@string/full_name"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -48,7 +48,7 @@
                 android:id="@+id/updateNome"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white" />
+                android:textColor="@color/text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +59,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Senha"
+            android:hint="@string/senha"
             android:minEms="8"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
@@ -78,7 +78,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textPassword"
-                android:textColor="@color/white" />
+                android:minEms="8"
+                android:textColor="@color/text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +99,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Periodo:"
+                    android:hint="@string/periodo"
                     android:padding="5dp"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
@@ -114,9 +115,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:hint="Manhã..."
+                        android:hint="@string/dots"
                         android:inputType="none"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text"
                         android:textSize="15sp"
                         android:textStyle="italic" />
 
@@ -126,7 +127,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Série:"
+                    android:hint="@string/serie"
                     android:padding="5dp"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
@@ -142,9 +143,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:hint="1º Ano..."
+                        android:hint="@string/dots"
                         android:inputType="none"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text"
                         android:textSize="15sp"
                         android:textStyle="italic" />
 
@@ -154,7 +155,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Curso:"
+                    android:hint="@string/curso"
                     android:padding="5dp"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
@@ -170,9 +171,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="DS..."
+                        android:hint="@string/dots"
                         android:inputType="none"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text"
                         android:textSize="15sp"
                         android:textStyle="italic" />
 
@@ -189,7 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/teal_200"
-            android:text="Update"
+            android:text="@string/update"
             android:textSize="18sp"
             app:cornerRadius="20dp" />
 

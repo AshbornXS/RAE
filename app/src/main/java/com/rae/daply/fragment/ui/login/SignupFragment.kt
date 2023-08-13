@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -31,21 +30,26 @@ class SignupFragment : Fragment() {
     ): View {
         binding = FragmentSignupBinding.inflate(inflater, container, false)
 
-        val adaptorItemsPeriodo = ArrayAdapter(requireContext(), R.layout.list_item, resources.getStringArray(R.array.periodos))
+        val adaptorItemsPeriodo = ArrayAdapter(
+            requireContext(),
+            R.layout.list_item,
+            resources.getStringArray(R.array.periodos)
+        )
         binding.signupPeriodo.setAdapter(adaptorItemsPeriodo)
 
-        val adaptorItemsSerie = ArrayAdapter(requireContext(), R.layout.list_item, resources.getStringArray(R.array.series))
+        val adaptorItemsSerie = ArrayAdapter(
+            requireContext(),
+            R.layout.list_item,
+            resources.getStringArray(R.array.series)
+        )
         binding.signupSerie.setAdapter(adaptorItemsSerie)
 
-        val adaptorItemsCurso = ArrayAdapter(requireContext(), R.layout.list_item, resources.getStringArray(R.array.cursos))
+        val adaptorItemsCurso = ArrayAdapter(
+            requireContext(),
+            R.layout.list_item,
+            resources.getStringArray(R.array.cursos)
+        )
         binding.signupCurso.setAdapter(adaptorItemsCurso)
-
-        binding.signupPeriodo.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                when (parent?.getItemAtPosition(position).toString()) {
-                    "Manhã", "Tarde", "Noite" -> binding.arrays.visibility = View.VISIBLE
-                }
-            }
 
         binding.signupPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -55,6 +59,21 @@ class SignupFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val hasText = !s.isNullOrEmpty()
                 binding.confirmPassword.visibility = if (hasText) View.VISIBLE else View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed for this implementation
+            }
+        })
+
+        binding.signupConfirmPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed for this implementation
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val hasText = !s.isNullOrEmpty()
+                binding.arrays.visibility = if (hasText) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {

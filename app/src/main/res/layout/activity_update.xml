@@ -4,34 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/background"
     android:fillViewport="true"
-    android:background="@color/background_black"
+    android:orientation="vertical"
     tools:context=".data.UpdateActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:background="@drawable/border"
         android:gravity="center"
-        android:padding="20dp"
-        android:background="@drawable/border">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Editar"
-            android:textSize="50sp"
+            android:text="@string/edit"
             android:textAlignment="center"
             android:textColor="@color/teal_200"
+            android:textSize="50sp"
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/updateImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_cloud_upload_24"
-            android:id="@+id/updateImage"
-            android:contentDescription="Image" />
+            android:contentDescription="@string/image"
+            android:src="@drawable/ic_cloud_upload_24" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Título"
+            android:hint="@string/title"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
-                android:textColor="@color/white" />
+                android:textColor="@color/text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +65,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Aviso"
+            android:hint="@string/aviso"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -79,19 +79,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
-                android:textColor="@color/white" />
+                android:textColor="@color/text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateButton"
             style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/teal_200"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update"
-            android:id="@+id/updateButton"
-            android:textSize="18sp"
             android:layout_marginTop="20dp"
+            android:backgroundTint="@color/teal_200"
+            android:text="@string/update"
+            android:textSize="18sp"
             app:cornerRadius="20dp" />
 
     </LinearLayout>

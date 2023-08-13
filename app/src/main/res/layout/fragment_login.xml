@@ -8,84 +8,94 @@
     android:orientation="vertical"
     tools:context=".fragment.ui.login.LoginFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:hint="Email"
-        android:paddingBottom="5dp"
-        android:textColorHint="@color/grey"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/teal_200"
-        app:startIconDrawable="@drawable/ic_email_24"
-        app:startIconTint="@color/teal_200">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints="emailAddress"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/white" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:hint="Senha"
-        android:paddingBottom="5dp"
-        android:textColorHint="@color/grey"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/teal_200"
-        app:passwordToggleEnabled="true"
-        android:minEms="8"
-        app:passwordToggleTint="@color/teal_200"
-        app:startIconDrawable="@drawable/ic_lock_24"
-        app:startIconTint="@color/teal_200">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textPassword"
-            android:textColor="@color/white" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/login_button"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="350dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="30dp"
-        android:backgroundTint="@color/teal_200"
-        android:text="Entrar"
-        android:textSize="18sp"
-        app:cornerRadius="30dp" />
-
-    <TextView
-        android:id="@+id/forgot_password"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:padding="8dp"
-        android:text="Esqueceu a senha?"
-        android:textColor="@color/teal_200"
-        android:textSize="15sp"
-        android:textStyle="italic" />
+        android:background="@drawable/border_retangular"
+        android:orientation="vertical"
+        android:padding="15dp"
+        tools:ignore="UselessParent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/email"
+            android:paddingBottom="5dp"
+            android:textColorHint="@color/grey"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/teal_200"
+            app:startIconDrawable="@drawable/ic_email_24"
+            app:startIconTint="@color/teal_200">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="emailAddress"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/senha"
+            android:minEms="8"
+            android:paddingBottom="5dp"
+            android:textColorHint="@color/grey"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/teal_200"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/teal_200"
+            app:startIconDrawable="@drawable/ic_lock_24"
+            app:startIconTint="@color/teal_200">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:textColor="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_button"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/teal_200"
+            android:text="@string/login"
+            android:textSize="18sp"
+            app:cornerRadius="30dp" />
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:text="@string/forgot_password"
+            android:textColor="@color/teal_200"
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
 
 </LinearLayout>

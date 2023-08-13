@@ -7,9 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background_black">#FF151515</color>
     <color name="red">#c70000</color>
     <color name="green">#00ff00</color>
     <color name="grey">#ff606060</color>
+
+    <color name="background">#ffdddddd</color>
+    <color name="background_dimer">#ffffffff</color>
+    <color name="text">#ff000000</color>
+    <color name="reverse_text">#ffffffff</color>
+    <color name="recycler">#ffbbbbbb</color>
+
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#FF03DAC5</color>
 </resources>
