@@ -31,10 +31,11 @@ class AdminCheckActivity : AppCompatActivity() {
         binding = ActivityAdminCheckBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inicialização do Firebase Auth
         coroutineScope.launch {
-
             firebaseAuth = FirebaseAuth.getInstance()
 
+            // Configurando o botão de verificação do administrador
             binding.checkButton.setOnClickListener {
                 val email = binding.checkEmail.text.toString()
                 val password = binding.checkPassword.text.toString()
@@ -48,64 +49,75 @@ class AdminCheckActivity : AppCompatActivity() {
                             if (it.value.toString() != "aluno") {
                                 login(email, password)
                             } else {
-                                binding.checkEmail.text?.clear()
-                                binding.checkPassword.text?.clear()
-                                Toast.makeText(
-                                    this@AdminCheckActivity,
-                                    "Você não é um administrador",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                clearFieldsAndShowToast(
+                                    "Você não é um administrador"
+                                )
                             }
                         }
                 } else {
-                    Toast.makeText(
-                        this@AdminCheckActivity,
-                        "Digite seu acesso de administrador",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    clearFieldsAndShowToast(
+                        "Digite seu acesso de administrador"
+                    )
                 }
             }
 
+            // Configurando o botão "Esqueci minha senha"
             binding.forgotPassword.setOnClickListener {
-                val builder = AlertDialog.Builder(this@AdminCheckActivity)
-                val view = layoutInflater.inflate(R.layout.dialog_forgot, null)
-                val userEmail = view.findViewById<EditText>(R.id.editBox)
-                builder.setView(view)
-                val dialog = builder.create()
-
-                view.findViewById<Button>(R.id.btnReset).setOnClickListener {
-                    coroutineScope.launch { compareEmail(userEmail) }
-                    dialog.dismiss()
-                }
-                view.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-                    dialog.dismiss()
-                }
-                if (dialog.window != null) {
-                    dialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-                }
-                dialog.show()
+                showForgotPasswordDialog()
             }
         }
     }
 
+    // Limpa os campos de email e senha e exibe uma mensagem de toast
+    private fun clearFieldsAndShowToast(message: String) {
+        binding.checkEmail.text?.clear()
+        binding.checkPassword.text?.clear()
+        Toast.makeText(
+            this@AdminCheckActivity, message, Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    // Mostra o diálogo para redefinição de senha
+    private fun showForgotPasswordDialog() {
+        val builder = AlertDialog.Builder(this@AdminCheckActivity)
+        val view = layoutInflater.inflate(R.layout.dialog_forgot, null)
+        val userEmail = view.findViewById<EditText>(R.id.editBox)
+        builder.setView(view)
+        val dialog = builder.create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(0))
+
+        // Configurando os botões no diálogo de redefinição de senha
+        view.findViewById<Button>(R.id.btnReset).setOnClickListener {
+            coroutineScope.launch { compareEmail(userEmail) }
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    // Comparando o email inserido com o email cadastrado para redefinir a senha
     private suspend fun compareEmail(email: EditText) = withContext(Dispatchers.IO) {
-        if (email.text.toString().isEmpty()) {
+        if (email.text.toString()
+                .isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()
+        ) {
             return@withContext
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
-            return@withContext
-        }
+
         firebaseAuth.sendPasswordResetEmail(email.text.toString()).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this@AdminCheckActivity, "Olhe seu email!", Toast.LENGTH_SHORT)
-                    .show()
+                showToast("Olhe seu email!")
             } else {
-                Toast.makeText(this@AdminCheckActivity, "Email não cadastrado", Toast.LENGTH_SHORT)
-                    .show()
+                showToast("Email não cadastrado")
             }
         }
     }
 
+    // Exibe uma mensagem de toast
+    private fun showToast(message: String) {
+        Toast.makeText(this@AdminCheckActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // Realiza o login do administrador
     private fun login(email: String, password: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this@AdminCheckActivity)
         builder.setCancelable(false)
@@ -121,15 +133,11 @@ class AdminCheckActivity : AppCompatActivity() {
                     val intent = Intent(this@AdminCheckActivity, AdminSignupActivity::class.java)
                     startActivity(intent)
                 } else {
-                    binding.checkPassword.text?.clear()
+                    clearFieldsAndShowToast("Verifique seu email")
                     dialog.dismiss()
-                    Toast.makeText(
-                        this@AdminCheckActivity, "Verifique seu email", Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
-
     }
 
     override fun onDestroy() {

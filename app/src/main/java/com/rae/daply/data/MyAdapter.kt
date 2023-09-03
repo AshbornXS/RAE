@@ -10,10 +10,17 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.rae.daply.MainActivity
 import com.rae.daply.R
 
-class MyAdapter(private val context: Context, private val avisosArrayList: ArrayList<DataClass>) :
+class MyAdapter(private val context: Context, private var avisosArrayList: ArrayList<DataClass>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    // Atualiza os dados do adaptador
+    fun updateData(newData: ArrayList<DataClass>) {
+        avisosArrayList = newData
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
@@ -38,13 +45,14 @@ class MyAdapter(private val context: Context, private val avisosArrayList: Array
 
         holder.card.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java).apply {
-                putExtra("Image", aviso.imageURL)
-                putExtra("Titulo", aviso.titulo)
-                putExtra("Aviso", aviso.aviso)
-                putExtra("Data", aviso.data)
-                putExtra("Autor", aviso.autor)
-                putExtra("Key", aviso.key)
-                putExtra("Type", aviso.type)
+                putExtra("image", aviso.imageURL)
+                putExtra("titulo", aviso.titulo)
+                putExtra("aviso", aviso.aviso)
+                putExtra("data", aviso.data)
+                putExtra("autor", aviso.autor)
+                putExtra("emailAutor", aviso.emailAutor)
+                putExtra("key", aviso.key)
+                putExtra("type", aviso.type)
             }
 
             context.startActivity(intent)

@@ -1,8 +1,12 @@
 package com.rae.daply
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -28,7 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -47,10 +50,9 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("shared_prefs", MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
+        // Verificar tipo de usuário e definir visibilidade do FAB
         GlobalScope.launch(Dispatchers.Main) {
-            val save = sharedPreferences.getString(
-                "save", null
-            ).toString()
+            val save = sharedPreferences.getString("save", null).toString()
 
             val userType = withContext(Dispatchers.IO) {
                 val dbReference = FirebaseDatabase.getInstance()
@@ -61,8 +63,8 @@ class MainActivity : AppCompatActivity() {
             editor.putString("userType", userType)
             editor.apply()
 
-            if (userType != "admin") {
-                binding.fab.visibility = View.GONE
+            if (userType == "admin") {
+                binding.fab.visibility = View.VISIBLE
             }
         }
 
@@ -70,25 +72,51 @@ class MainActivity : AppCompatActivity() {
 
         adapter = FragmentPageAdapter(supportFragmentManager, lifecycle)
 
+        // Configurar abas e ViewPager
+        setupTabsAndPager(tabLayout)
+
+        // Configurar tema noturno
+        themeSwitch()
+
+        // Configurar clique do FAB
+        setupFabClick()
+
+        // Configurar clique da foto de perfil
+        binding.pfp.setOnClickListener {
+            showProfileDialog()
+        }
+    }
+
+    private fun setupTabsAndPager(tabLayout: TabLayout) {
         tabLayout.addTab(tabLayout.newTab().setText("Aulas").setIcon(R.drawable.ic_time_24))
-        tabLayout.addTab(tabLayout.newTab().setText("Home").setIcon(R.drawable.ic_home_24))
+        tabLayout.addTab(tabLayout.newTab().setText("Geral").setIcon(R.drawable.ic_home_24))
         tabLayout.addTab(tabLayout.newTab().setText("Sala").setIcon(R.drawable.ic_notifications_24))
 
         binding.viewPager2.adapter = adapter
         binding.viewPager2.currentItem = 1
         tabLayout.selectTab(tabLayout.getTabAt(1))
+        tabLayout.getTabAt(1)?.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
+            resources.getColor(R.color.reverse_text, theme), android.graphics.PorterDuff.Mode.SRC_IN
+        )
 
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.viewPager2.currentItem = tab!!.position
+                tab.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
+                    resources.getColor(R.color.reverse_text, theme),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-
+                tab!!.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
+                    resources.getColor(R.color.text, theme), android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                tabLayout.getTabAt(tab.position)?.orCreateBadge?.isVisible = false
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                // Nada a fazer quando uma aba é reselecionada
             }
         })
 
@@ -97,27 +125,90 @@ class MainActivity : AppCompatActivity() {
                 tabLayout.selectTab(tabLayout.getTabAt(position))
             }
         })
+    }
 
-        val nightMode = sharedPreferences.getBoolean("nightMode", false)
+    /* fun setupBadge(tab: Int) : (ActivityMainBinding) -> Unit {
+        return { val reference = if (tab == 1) {
+            FirebaseDatabase.getInstance().getReference("RAE")
+        } else {
+            val classe = sharedPreferences.getString("classe", null).toString()
 
-        if (nightMode) {
-            binding.themeSwitch.isChecked = true
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
         }
 
-        binding.themeSwitch.setOnClickListener {
-            if (nightMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", false)
-            } else {
+            reference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val size = dataSnapshot.childrenCount
+                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.number = size.toInt()
+                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.backgroundColor =
+                        resources.getColor(R.color.red, theme)
+                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.badgeTextColor =
+                        resources.getColor(R.color.white, theme)
+                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.badgeGravity =
+                        BadgeDrawable.TOP_START
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+    } */
+
+    private fun Context.isDarkThemeOn(): Boolean {
+        return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
+    }
+
+    private fun themeSwitch() {
+        val isDarkTheme = sharedPreferences.getBoolean("isDarkTheme", false)
+        val isAuto = sharedPreferences.getBoolean("isAutoTheme", true)
+
+        if (isAuto) {
+            binding.themeSwitcher.setImageResource(R.drawable.ic_auto_24)
+            binding.themeSwitcher.colorFilter = android.graphics.PorterDuffColorFilter(
+                resources.getColor(R.color.text, theme), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        } else {
+            if (isDarkTheme) {
+                binding.themeSwitcher.setImageResource(R.drawable.ic_night_24)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", true)
+            } else {
+                binding.themeSwitcher.setImageResource(R.drawable.ic_light_24)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+        }
+
+        binding.themeSwitcher.setOnClickListener {
+            if (isDarkTheme) {
+                binding.themeSwitcher.setImageResource(R.drawable.ic_light_24)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                editor.putBoolean("isDarkTheme", false)
+            } else {
+                binding.themeSwitcher.setImageResource(R.drawable.ic_night_24)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                editor.putBoolean("isDarkTheme", true)
+            }
+            editor.putBoolean("isAutoTheme", false)
             editor.apply()
         }
 
+        binding.themeSwitcher.setOnLongClickListener {
+            binding.themeSwitcher.setImageResource(R.drawable.ic_auto_24)
+            binding.themeSwitcher.colorFilter = android.graphics.PorterDuffColorFilter(
+                resources.getColor(R.color.text, theme), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            editor.putBoolean("isAutoTheme", true)
+            if (isDarkThemeOn()) {
+                editor.putBoolean("isDarkTheme", true)
+            } else {
+                editor.putBoolean("isDarkTheme", false)
+            }
+            editor.apply()
+            true
+        }
+    }
+
+    private fun setupFabClick() {
         binding.fab.setOnClickListener {
             if (binding.viewPager2.currentItem == 0) {
                 val intent = Intent(this, UploadTimeActivity::class.java)
@@ -129,18 +220,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
-        binding.pfp.setOnClickListener {
-            showProfileDialog()
-        }
-
     }
 
     private fun showProfileDialog() {
         val pfpBuilder = AlertDialog.Builder(this)
         val pfpView = layoutInflater.inflate(R.layout.dialog_profile, null)
+        pfpBuilder.setCancelable(true)
         pfpBuilder.setView(pfpView)
         val pfpDialog = pfpBuilder.create()
+
+        pfpDialog.window?.setBackgroundDrawable(ColorDrawable(0))
 
         val labelName = pfpView.findViewById<TextView>(R.id.pfpName)
         val labelEmail = pfpView.findViewById<TextView>(R.id.pfpEmail)
@@ -151,10 +240,6 @@ class MainActivity : AppCompatActivity() {
         fillProfileInfo(labelName, labelEmail, labelSerie, labelCurso, labelPeriodo)
 
         pfpDialog.show()
-
-        pfpDialog.findViewById<Button>(R.id.pfpClose)?.setOnClickListener {
-            pfpDialog.dismiss()
-        }
 
         pfpDialog.findViewById<Button>(R.id.pfpUpdate)?.setOnClickListener {
             val intent = Intent(this, UpdateProfileActivity::class.java).putExtra(
@@ -185,9 +270,7 @@ class MainActivity : AppCompatActivity() {
         labelCurso: TextView,
         labelPeriodo: TextView
     ) {
-        val save = getSharedPreferences("shared_prefs", MODE_PRIVATE).getString(
-            "save", null
-        ).toString()
+        val save = sharedPreferences.getString("save", null).toString()
 
         FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
             .addOnSuccessListener { snapshot ->
@@ -197,11 +280,11 @@ class MainActivity : AppCompatActivity() {
                 val serie = snapshot.child("serie").value.toString()
                 val curso = snapshot.child("curso").value.toString()
 
-                labelName.text = "${labelName.text}$name"
-                labelEmail.text = "${labelEmail.text}$email"
-                labelSerie.text = "${labelSerie.text}$serie"
-                labelCurso.text = "${labelCurso.text}$curso"
-                labelPeriodo.text = "${labelPeriodo.text}$periodo"
+                labelName.text = name
+                labelEmail.text = email
+                labelSerie.text = serie
+                labelCurso.text = curso
+                labelPeriodo.text = periodo
             }
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/border_retangular"
+    android:background="@drawable/background"
     tools:context=".data.UploadTimeActivity">
 
     <ScrollView
@@ -17,6 +17,7 @@
 
         <TableLayout
             android:id="@+id/tableLayout"
+            android:layout_marginBottom="100dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -115,7 +116,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@id/scrollview"
+        app:layout_constraintBottom_toTopOf="@+id/scrollAdd"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
@@ -123,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal"
             android:visibility="visible">
 
@@ -130,23 +134,23 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Periodo:"
+                android:hint="@string/periodo"
                 android:padding="5dp"
                 android:textColorHint="@color/grey"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="@color/teal_200"
+                app:boxStrokeColor="@color/accent_color"
                 app:startIconDrawable="@drawable/ic_serie_24"
-                app:startIconTint="@color/teal_200">
+                app:startIconTint="@color/accent_color">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/time_periodo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="..."
+                    android:hint="@string/dots"
                     android:inputType="none"
                     android:textColor="@color/text"
                     android:textSize="15sp"
@@ -158,23 +162,23 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Série:"
+                android:hint="@string/serie"
                 android:padding="5dp"
                 android:textColorHint="@color/grey"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="@color/teal_200"
+                app:boxStrokeColor="@color/accent_color"
                 app:startIconDrawable="@drawable/ic_serie_24"
-                app:startIconTint="@color/teal_200">
+                app:startIconTint="@color/accent_color">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/time_serie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="..."
+                    android:hint="@string/dots"
                     android:inputType="none"
                     android:textColor="@color/text"
                     android:textSize="15sp"
@@ -186,23 +190,23 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Curso:"
+                android:hint="@string/curso"
                 android:padding="5dp"
                 android:textColorHint="@color/grey"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="@color/teal_200"
+                app:boxStrokeColor="@color/accent_color"
                 app:startIconDrawable="@drawable/ic_cursos_24"
-                app:startIconTint="@color/teal_200">
+                app:startIconTint="@color/accent_color">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/time_curso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="..."
+                    android:hint="@string/dots"
                     android:inputType="none"
                     android:textColor="@color/text"
                     android:textSize="15sp"
@@ -214,11 +218,18 @@
 
     </HorizontalScrollView>
 
+    <ScrollView
+        android:id="@+id/scrollAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/horizontalScrollView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
         android:background="@color/background_dimer"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -250,7 +261,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/firstEditText"
@@ -275,7 +286,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/secondEditText"
@@ -300,7 +311,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/thirdEditText"
@@ -325,7 +336,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fourthEditText"
@@ -350,7 +361,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fifthEditText"
@@ -375,7 +386,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sixthEditText"
@@ -391,11 +402,12 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@color/accent_color"
             android:text="Enviar"
             android:textSize="18sp"
             app:cornerRadius="20dp" />
 
     </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,14 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background"
+    android:paddingTop="40dp"
     tools:context=".fragment.ui.ExclusiveFragment">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_exclusive"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/border_retangular"
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <include layout="@layout/recycler_item_placeholder" />
 
@@ -18,9 +22,12 @@
 
     <LinearLayout
         android:id="@+id/data_view_exclusive"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/border_retangular"
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

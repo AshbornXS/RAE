@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".login.AdminCheckActivity">
@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/login"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/accent_color"
         android:textSize="80sp"
         android:textStyle="bold" />
 
@@ -42,9 +42,9 @@
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/teal_200"
+        app:boxStrokeColor="@color/accent_color"
         app:startIconDrawable="@drawable/ic_email_24"
-        app:startIconTint="@color/teal_200">
+        app:startIconTint="@color/accent_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/check_email"
@@ -71,11 +71,11 @@
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/teal_200"
+        app:boxStrokeColor="@color/accent_color"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/teal_200"
+        app:passwordToggleTint="@color/accent_color"
         app:startIconDrawable="@drawable/ic_lock_24"
-        app:startIconTint="@color/teal_200">
+        app:startIconTint="@color/accent_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/check_password"
@@ -92,7 +92,7 @@
         android:layout_width="350dp"
         android:layout_height="70dp"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/teal_200"
+        android:backgroundTint="@color/accent_color"
         android:text="@string/login"
         android:textSize="18sp"
         app:cornerRadius="30dp" />
@@ -105,7 +105,7 @@
         android:layout_marginTop="8dp"
         android:padding="8dp"
         android:text="@string/forgot_password"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/accent_color"
         android:textSize="15sp"
         android:textStyle="italic" />
 

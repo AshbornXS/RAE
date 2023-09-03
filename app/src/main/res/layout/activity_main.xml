@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <RelativeLayout
@@ -35,16 +35,17 @@
             android:contentDescription="@string/image"
             android:src="@drawable/app_text" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/theme_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/theme_switcher"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/themeswitch"
+            android:padding="8dp"
+            android:src="@drawable/ic_light_24"
+            android:scaleType="centerCrop"
             android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="10dp"
-            android:gravity="center|end"
-            android:thumb="@drawable/thumb" />
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 
@@ -61,6 +62,7 @@
         app:tabIndicatorColor="@null"
         app:tabIndicatorGravity="stretch"
         app:tabInlineLabel="true"
+        app:tabGravity="center"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/reverse_text"
         app:tabTextColor="@color/text" />
@@ -80,9 +82,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
-        android:backgroundTint="@color/teal_200"
         android:contentDescription="@string/upload"
         android:src="@drawable/ic_add_24"
+        android:visibility="gone"
+        style="@style/FloatingActionButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

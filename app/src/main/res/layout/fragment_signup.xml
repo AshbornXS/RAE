@@ -29,9 +29,9 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200"
+            app:boxStrokeColor="@color/accent_color"
             app:startIconDrawable="@drawable/ic_name_24"
-            app:startIconTint="@color/teal_200">
+            app:startIconTint="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_name"
@@ -56,9 +56,9 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200"
+            app:boxStrokeColor="@color/accent_color"
             app:startIconDrawable="@drawable/ic_email_24"
-            app:startIconTint="@color/teal_200">
+            app:startIconTint="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_email"
@@ -79,18 +79,18 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:hint="@string/senha"
-            android:minEms="8"
+            android:minEms="6"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200"
+            app:boxStrokeColor="@color/accent_color"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/teal_200"
+            app:passwordToggleTint="@color/accent_color"
             app:startIconDrawable="@drawable/ic_lock_24"
-            app:startIconTint="@color/teal_200">
+            app:startIconTint="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_password"
@@ -110,7 +110,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:hint="@string/confirm_password"
-            android:minEms="8"
+            android:minEms="6"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
             android:visibility="gone"
@@ -118,11 +118,11 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200"
+            app:boxStrokeColor="@color/accent_color"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/teal_200"
+            app:passwordToggleTint="@color/accent_color"
             app:startIconDrawable="@drawable/ic_lock_24"
-            app:startIconTint="@color/teal_200">
+            app:startIconTint="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_confirm_password"
@@ -160,9 +160,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_serie_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/signup_periodo"
@@ -191,9 +191,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_serie_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/signup_serie"
@@ -222,9 +222,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_cursos_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/signup_curso"
@@ -249,7 +249,7 @@
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="30dp"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@color/accent_color"
             android:text="@string/signup"
             android:textSize="18sp"
             app:cornerRadius="30dp" />
@@ -262,7 +262,7 @@
             android:layout_marginTop="14dp"
             android:padding="8dp"
             android:text="@string/admin_signup"
-            android:textColor="@color/teal_200"
+            android:textColor="@color/accent_color"
             android:textSize="15sp"
             android:textStyle="italic" />
 

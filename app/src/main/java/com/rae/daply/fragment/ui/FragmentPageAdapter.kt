@@ -7,22 +7,25 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class FragmentPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
+
+    // Define o número total de fragmentos a serem exibidos no ViewPager
     override fun getItemCount(): Int {
         return 3
     }
 
+    // Cria e retorna o fragmento para uma posição específica no ViewPager
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                ClassesTimeFragment()
+                ClassesTimeFragment() // Primeira posição mostra o fragmento ClassesTimeFragment
             }
 
             1 -> {
-                HomeFragment()
+                HomeFragment() // Segunda posição mostra o fragmento HomeFragment
             }
 
             else -> {
-                ExclusiveFragment()
+                ExclusiveFragment() // Todas as outras posições mostram o fragmento ExclusiveFragment
             }
         }
     }

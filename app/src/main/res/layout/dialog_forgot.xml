@@ -1,98 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogForgot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    android:padding="20dp">
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_retangular"
+    android:padding="10dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dialogBox"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/forgotTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/border"
+            android:layout_gravity="center"
             android:drawablePadding="8dp"
-            android:drawableTint="@color/teal_200"
-            android:padding="10dp"
+            android:padding="16dp"
             android:text="Esqueceu a Senha"
-            android:textColor="@color/text"
-            android:textSize="17sp"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:drawableLeftCompat="@drawable/ic_reset_24"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:drawableTint="@color/accent_color" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/box"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Por favor digite seu email para receber um link para trocar sua senha"
+        android:textColor="@color/text"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout3" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/box"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints="emailAddress"
+        android:hint="Digite seu email:"
+        android:paddingBottom="5dp"
+        android:textColorHint="@color/grey"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="@color/accent_color"
+        app:layout_constraintTop_toBottomOf="@id/warning"
+        app:startIconDrawable="@drawable/ic_email_24"
+        app:startIconTint="@color/accent_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
             android:autofillHints="emailAddress"
-            android:hint="Digite seu email:"
-            android:paddingBottom="5dp"
-            android:textColorHint="@color/grey"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200"
-            app:layout_constraintBottom_toTopOf="@id/btnCancel"
-            app:layout_constraintTop_toBottomOf="@id/forgotTitle"
-            app:startIconDrawable="@drawable/ic_email_24"
-            app:startIconTint="@color/teal_200">
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text"
+            android:textColorHint="@color/grey" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="emailAddress"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/text"
-                android:textColorHint="@color/grey" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="8dp"
-            android:text="Cancelar"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toStartOf="@id/btnReset"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/box" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/box">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReset"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Reset"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnCancel" />
+            app:cornerRadius="20dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

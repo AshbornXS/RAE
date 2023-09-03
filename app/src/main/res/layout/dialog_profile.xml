@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_dimer"
-    android:orientation="vertical">
+    android:background="@drawable/border_retangular"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_retangular"
+        android:background="@drawable/border"
         android:orientation="vertical">
 
         <TextView
@@ -18,73 +19,119 @@
             android:layout_gravity="center"
             android:padding="16dp"
             android:text="Perfil do Usuário"
-            android:textColor="@color/text"
-            android:textSize="18sp"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:text="Nome: "
+        android:textColor="@color/accent_color"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/pfpName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Nome: "
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text=""
         android:textColor="@color/text"
         android:textSize="16sp" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Email: "
+        android:textColor="@color/accent_color"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/pfpEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Email: "
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text=""
         android:textColor="@color/text"
         android:textSize="16sp" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Periodo: "
+        android:textColor="@color/accent_color"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/pfpPeriodo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Periodo: "
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text=""
         android:textColor="@color/text"
         android:textSize="16sp" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Série: "
+        android:textColor="@color/accent_color"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/pfpSerie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Série: "
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text=""
         android:textColor="@color/text"
         android:textSize="16sp" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Curso: "
+        android:textColor="@color/accent_color"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/pfpCurso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:padding="8dp"
-        android:text="Curso: "
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text=""
         android:textColor="@color/text"
         android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pfpExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="50dp"
             android:text="Sair"
             android:textColor="@color/white"
             android:textSize="14sp"
@@ -94,19 +141,10 @@
             android:id="@+id/pfpUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:text="Atualizar"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:cornerRadius="20dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/pfpClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fechar"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="20dp" />
     </LinearLayout>
 </LinearLayout>

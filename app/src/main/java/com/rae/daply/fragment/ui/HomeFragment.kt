@@ -1,6 +1,5 @@
 package com.rae.daply.fragment.ui
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -29,74 +28,75 @@ import java.util.*
 
 class HomeFragment : Fragment() {
 
-    private lateinit var notificationWorkManager: NotificationManager
+    private lateinit var adapter: MyAdapter
+    private lateinit var notificationManager: NotificationManager
     private var isFirstUpdate = true
     private lateinit var binding: FragmentHomeBinding
-
     private val currentDate = System.currentTimeMillis()
-
     private lateinit var mContext: Context
+    private var firstSize = 0
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        setupRecyclerView()
+        loadDataFromFirebase()
+
+        return view
+    }
+
+    private fun setupRecyclerView() {
+        // Configuração do RecyclerView
         val recyclerView: RecyclerView = binding.recyclerView
-
-        binding.dataView.visibility = View.GONE
-        binding.shimmerView.startShimmer()
-
-        val linearLayoutManager = LinearLayoutManager(requireContext())
-        linearLayoutManager.stackFromEnd = true
-        linearLayoutManager.reverseLayout = true
+        val linearLayoutManager = LinearLayoutManager(requireContext()).apply {
+            stackFromEnd = true
+            reverseLayout = true
+        }
         recyclerView.layoutManager = linearLayoutManager
 
+        // Inicialização do adaptador e vinculação ao RecyclerView
         val avisosArrayList: ArrayList<DataClass> = ArrayList()
-
-        val adapter = MyAdapter(requireContext(), avisosArrayList)
+        adapter = MyAdapter(requireContext(), avisosArrayList)
         recyclerView.adapter = adapter
+    }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun loadDataFromFirebase() {
+        // Carregamento de dados do Firebase
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("RAE")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
+                val avisosArrayList: ArrayList<DataClass> = ArrayList()
+
                 GlobalScope.launch(Dispatchers.Main) {
-                    avisosArrayList.clear()
                     for (itemSnapshot in snapshot.children) {
                         val dataClass = itemSnapshot.getValue(DataClass::class.java)
-                        dataClass!!.key = itemSnapshot.key
+                        dataClass?.let {
+                            it.key = itemSnapshot.key
+                            val image = it.imageURL
+                            val key = it.key
+                            val uploadDate = it.dataMili
 
-                        val image = dataClass.imageURL
-                        val key = dataClass.key
-                        val uploadDate = dataClass.dataMili
-
-                        if ((uploadDate != null) && (image != null) && (key != null)) {
-                            val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
-                            if (daysPassed >= 3) {
-                                withContext(Dispatchers.IO) {
-                                    val reference: DatabaseReference =
-                                        FirebaseDatabase.getInstance().getReference("RAE")
-                                    val storage: FirebaseStorage = FirebaseStorage.getInstance()
-                                    val storageReference: StorageReference =
-                                        storage.getReferenceFromUrl(image)
-                                    storageReference.delete().await()
-                                    reference.child(key).removeValue().await()
+                            if (uploadDate != null && image != null && key != null) {
+                                val daysPassed = (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
+                                if (daysPassed >= 3) {
+                                    // Chamada da função deleteExpiredDataAndImages dentro da corrotina
+                                    deleteExpiredDataAndImages(key, image)
+                                    itemSnapshot.ref.removeValue().await()
                                 }
-                                itemSnapshot.ref.removeValue()
                             }
+                            avisosArrayList.add(it)
                         }
-                        avisosArrayList.add(dataClass)
                     }
-                    if (!isFirstUpdate) {
-                        sendNotification()
-                    }
-                    isFirstUpdate = false
-                    adapter.notifyDataSetChanged()
+
+                    checkNotification(databaseReference)
+
+                    adapter.updateData(avisosArrayList)
                     binding.shimmerView.stopShimmer()
                     binding.shimmerView.visibility = View.GONE
                     binding.dataView.visibility = View.VISIBLE
@@ -104,34 +104,48 @@ class HomeFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                // Tratar o erro, se necessário
                 binding.shimmerView.stopShimmer()
                 binding.shimmerView.visibility = View.GONE
                 binding.dataView.visibility = View.VISIBLE
             }
         })
-
-        return view
+        databaseReference.keepSynced(true)
     }
 
-    private fun createChannel() {
-        notificationWorkManager =
-            mContext.applicationContext.getSystemService(NotificationManager::class.java)
+    private fun checkNotification(reference: DatabaseReference) {
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (isFirstUpdate) {
+                    firstSize = dataSnapshot.childrenCount.toInt()
+                    isFirstUpdate = false
+                } else {
+                    if (dataSnapshot.childrenCount.toInt() > firstSize) {
+                        sendNotification()
+                    } else {
+                        firstSize = dataSnapshot.childrenCount.toInt()
+                    }
+                }
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                "primary_notification_channel", "Avisos", NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = "Notificação de avisos."
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
 
-            notificationWorkManager.createNotificationChannel(notificationChannel)
+    private suspend fun deleteExpiredDataAndImages(key: String, imageUrl: String) {
+        // Exclusão assíncrona de dados e imagens expirados
+        withContext(Dispatchers.IO) {
+            val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("RAE")
+            val storage: FirebaseStorage = FirebaseStorage.getInstance()
+            val storageReference: StorageReference = storage.getReferenceFromUrl(imageUrl)
+            storageReference.delete().await()
+            reference.child(key).removeValue().await()
         }
     }
 
     private fun sendNotification() {
-        createChannel()
+        // Envio de notificação
+        createNotificationChannel()
 
         val notifyIntent = Intent(mContext, HomeFragment::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -144,18 +158,40 @@ class HomeFragment : Fragment() {
         )
 
         val notificationBuilder =
-            NotificationCompat.Builder(mContext, "primary_notification_channel")
-                .setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("ATENÇÃO!!!")
-                .setContentText("Um novo aviso foi postado.")
-                .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(notifyPendingIntent)
-                .setDefaults(NotificationCompat.DEFAULT_ALL).setAutoCancel(true)
+            NotificationCompat.Builder(mContext, "primary_notification_channel").apply {
+                setSmallIcon(R.drawable.ic_launcher_foreground)
+                setContentTitle("ATENÇÃO!!!")
+                setContentText("Um novo aviso foi postado.")
+                priority = NotificationCompat.PRIORITY_MAX
+                setContentIntent(notifyPendingIntent)
+                setDefaults(NotificationCompat.DEFAULT_ALL)
+                setAutoCancel(true)
+            }
 
-        notificationWorkManager.notify(0, notificationBuilder.build())
+        notificationManager.notify(0, notificationBuilder.build())
+    }
+
+    private fun createNotificationChannel() {
+        // Criação do canal de notificação
+        notificationManager =
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                "primary_notification_channel", "Avisos", NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                enableLights(true)
+                lightColor = Color.RED
+                enableVibration(true)
+                description = "Notificação de avisos."
+            }
+
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
-
 }

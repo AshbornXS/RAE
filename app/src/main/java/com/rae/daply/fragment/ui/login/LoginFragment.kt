@@ -1,6 +1,5 @@
 package com.rae.daply.fragment.ui.login
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -21,15 +20,18 @@ import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.FragmentLoginBinding
 import com.rae.daply.login.LoginActivity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginFragment : Fragment() {
 
+    // Declaração das variáveis
     private lateinit var binding: FragmentLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var activity: LoginActivity
-
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
@@ -37,8 +39,10 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        // Inicialização da FirebaseAuth
         firebaseAuth = FirebaseAuth.getInstance()
 
+        // Configuração do clique no botão de login
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString()
             val password = binding.loginPassword.text.toString()
@@ -50,6 +54,7 @@ class LoginFragment : Fragment() {
             }
         }
 
+        // Configuração do clique no link "Esqueceu a senha?"
         binding.forgotPassword.setOnClickListener {
             showForgotPasswordDialog()
         }
@@ -57,26 +62,25 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    // Função para exibir o diálogo de recuperação de senha
     private fun showForgotPasswordDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val view = layoutInflater.inflate(R.layout.dialog_forgot, null)
         val userEmail = view.findViewById<EditText>(R.id.editBox)
+        builder.setCancelable(true)
         builder.setView(view)
         val dialog = builder.create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(0))
 
         view.findViewById<Button>(R.id.btnReset).setOnClickListener {
             coroutineScope.launch { compareEmail(userEmail) }
             dialog.dismiss()
         }
-        view.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-            dialog.dismiss()
-        }
-        if (dialog.window != null) {
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-        }
         dialog.show()
     }
 
+    // Função para comparar e enviar email de recuperação de senha
     private suspend fun compareEmail(email: EditText) = withContext(Dispatchers.IO) {
         if (email.text.toString().isEmpty()) {
             return@withContext
@@ -93,34 +97,44 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun getName() {
+    // Função para obter o nome do usuário após o login
+    fun getName(): String? {
+        // Obter o email do usuário atualmente logado
         val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
             ?.replace(".", "-")
 
-        if (!::activity.isInitialized) {
-            return
+        // Verificar se a variável de atividade foi inicializada
+        if (::activity.isInitialized) {
+            // Obter o nome do usuário a partir do banco de dados
+            val sharedPreferences =
+                activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
+            val saveShared = sharedPreferences.edit().putString("save", save)
+            saveShared.apply()
+
+            val dbReference = FirebaseDatabase.getInstance()
+            var name: String? = null
+            dbReference.reference.child("Users").child(save.toString()).child("name").get()
+                .addOnSuccessListener { snapshot ->
+                    name = snapshot.value.toString().replaceAfter(" ", "")
+                }
+
+            return name
         }
-
-        val sharedPreferences =
-            activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
-        val saveShared = sharedPreferences.edit().putString("save", save)
-        saveShared.apply()
-
-        val dbReference = FirebaseDatabase.getInstance()
-        dbReference.reference.child("Users").child(save.toString()).child("name").get()
-            .addOnSuccessListener { snapshot ->
-                val name = snapshot.value.toString().replaceAfter(" ", "")
-                Toast.makeText(activity, "Bem Vindo(a), $name", Toast.LENGTH_SHORT).show()
-            }
+        return null
     }
 
+
+    // Função para realizar o login
     private fun login(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // Verificar se o email foi verificado
                 val verification = firebaseAuth.currentUser?.isEmailVerified
                 if (verification == true) {
-                    coroutineScope.launch { getName() }
+                    // Obter o nome e realizar o redirecionamento após o login
+                    coroutineScope.launch { Toast.makeText(activity, "Bem Vindo(a), ${getName()}", Toast.LENGTH_SHORT).show() }
 
+                    // Salvar o status de login nas preferências compartilhadas
                     val sharedPreferences = activity.getSharedPreferences(
                         "shared_prefs", AppCompatActivity.MODE_PRIVATE
                     )
@@ -128,9 +142,11 @@ class LoginFragment : Fragment() {
                     isLogged.putBoolean("isLogged", true)
                     isLogged?.apply()
 
+                    // Redirecionar para a tela principal (MainActivity)
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
                 } else {
+                    // Limpar a senha e mostrar mensagem de verificação de email
                     binding.loginPassword.text?.clear()
                     Toast.makeText(activity, "Verifique seu email", Toast.LENGTH_SHORT).show()
                 }
@@ -138,17 +154,17 @@ class LoginFragment : Fragment() {
         }
     }
 
+    // Função chamada ao destruir o fragmento
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
     }
 
+    // Função para anexar a atividade ao fragmento
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is LoginActivity) {
             activity = context
         }
     }
-
-
 }

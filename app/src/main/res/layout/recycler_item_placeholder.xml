@@ -8,12 +8,13 @@
         android:id="@+id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="5dp"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="@color/recycler"
         android:elevation="8dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,6 +26,7 @@
                 android:id="@+id/recImage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_centerVertical="true"
                 android:background="@color/grey"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
@@ -32,40 +34,39 @@
 
             <TextView
                 android:id="@+id/recTitulo"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/recImage"
                 android:background="@color/grey"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/teal_200"
-                android:textSize="16sp" />
+                android:textColor="@color/accent_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recData"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="90dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/recTitulo"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
                 android:background="@color/grey"
-                android:gravity="center_horizontal"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/text"
                 android:textSize="11sp" />
 
             <TextView
-                android:id="@+id/recAviso"
-                android:layout_width="140dp"
-                android:layout_height="15dp"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/recTitulo"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toEndOf="@id/recImage"
                 android:background="@color/grey"
                 android:ellipsize="end"
+                android:maxEms="10"
                 android:maxLines="1"
                 android:textColor="@color/text"
                 android:textSize="12sp" />
@@ -78,13 +79,14 @@
         android:id="@+id/card1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="5dp"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="@color/recycler"
         android:elevation="8dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card">
 
         <RelativeLayout
@@ -95,6 +97,7 @@
                 android:id="@+id/recImage1"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_centerVertical="true"
                 android:background="@color/grey"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
@@ -102,40 +105,39 @@
 
             <TextView
                 android:id="@+id/recTitulo1"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/recImage1"
                 android:background="@color/grey"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/teal_200"
-                android:textSize="16sp" />
+                android:textColor="@color/accent_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recData1"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="90dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/recTitulo1"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
                 android:background="@color/grey"
-                android:gravity="center_horizontal"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/text"
                 android:textSize="11sp" />
 
             <TextView
-                android:id="@+id/recAviso1"
-                android:layout_width="140dp"
-                android:layout_height="15dp"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/recTitulo1"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toEndOf="@id/recImage1"
                 android:background="@color/grey"
                 android:ellipsize="end"
+                android:maxEms="10"
                 android:maxLines="1"
                 android:textColor="@color/text"
                 android:textSize="12sp" />
@@ -148,13 +150,14 @@
         android:id="@+id/card2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="5dp"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="@color/recycler"
         android:elevation="8dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card1">
 
         <RelativeLayout
@@ -165,6 +168,7 @@
                 android:id="@+id/recImage2"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_centerVertical="true"
                 android:background="@color/grey"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
@@ -172,40 +176,181 @@
 
             <TextView
                 android:id="@+id/recTitulo2"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/recImage2"
                 android:background="@color/grey"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/teal_200"
-                android:textSize="16sp" />
+                android:textColor="@color/accent_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recData2"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="90dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/recTitulo2"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
                 android:background="@color/grey"
-                android:gravity="center_horizontal"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/text"
                 android:textSize="11sp" />
 
             <TextView
-                android:id="@+id/recAviso2"
-                android:layout_width="140dp"
-                android:layout_height="15dp"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/recTitulo2"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toEndOf="@id/recImage2"
                 android:background="@color/grey"
                 android:ellipsize="end"
+                android:maxEms="10"
+                android:maxLines="1"
+                android:textColor="@color/text"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:backgroundTint="@color/recycler"
+        android:elevation="8dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/recImage3"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:background="@color/grey"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+            <TextView
+                android:id="@+id/recTitulo3"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/recImage3"
+                android:background="@color/grey"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/accent_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:background="@color/grey"
+                android:gravity="center"
+                android:textColor="@color/text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recTitulo3"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toEndOf="@id/recImage3"
+                android:background="@color/grey"
+                android:ellipsize="end"
+                android:maxEms="10"
+                android:maxLines="1"
+                android:textColor="@color/text"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:backgroundTint="@color/recycler"
+        android:elevation="8dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card3">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/recImage4"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:background="@color/grey"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+            <TextView
+                android:id="@+id/recTitulo4"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/recImage4"
+                android:background="@color/grey"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/accent_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="15dp"
+                android:background="@color/grey"
+                android:gravity="center"
+                android:textColor="@color/text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recTitulo4"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toEndOf="@id/recImage4"
+                android:background="@color/grey"
+                android:ellipsize="end"
+                android:maxEms="10"
                 android:maxLines="1"
                 android:textColor="@color/text"
                 android:textSize="12sp" />

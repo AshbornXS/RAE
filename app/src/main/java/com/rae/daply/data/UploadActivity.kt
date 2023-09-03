@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 class UploadActivity : AppCompatActivity() {
 
+    // Variáveis globais para armazenar informações temporárias
     private lateinit var imageURL: String
     private var uri: Uri? = null
 
@@ -46,6 +46,7 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Obtém a posição da intent para configuração inicial
         val position = intent.getIntExtra("position", 1)
 
         if (position == 2) {
@@ -53,9 +54,11 @@ class UploadActivity : AppCompatActivity() {
             binding.arrays.visibility = View.VISIBLE
         }
 
+        // Inicializa as SharedPreferences e o editor
         sharedPreferences = getSharedPreferences("shared_prefs", MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
+        // Configura ArrayAdapter para os campos de seleção
         val adaptorItemsPeriodo =
             ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.periodos))
         binding.uploadPeriodo.setAdapter(adaptorItemsPeriodo)
@@ -68,6 +71,7 @@ class UploadActivity : AppCompatActivity() {
             ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.cursos))
         binding.uploadCurso.setAdapter(adaptorItemsCurso)
 
+        // Verifica o tipo de usuário e oculta se não for admin
         GlobalScope.launch(Dispatchers.Main) {
             val userType = getSharedPreferences("shared_prefs", MODE_PRIVATE).getString(
                 "userType", "user"
@@ -78,6 +82,7 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
+        // Configura o launcher de resultado da atividade de seleção de imagem
         val activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -92,11 +97,13 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
+        // Define o listener de clique para o campo de imagem
         binding.uploadImage.setOnClickListener {
             val photoPicker = Intent(Intent.ACTION_PICK)
             photoPicker.type = "image/*"
             activityResultLauncher.launch(photoPicker)
         }
+        // Define o listener de clique para o botão de upload
         binding.uploadButton.setOnClickListener {
             saveData()
         }
@@ -105,10 +112,12 @@ class UploadActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun saveData() {
+        // Cria uma referência para o armazenamento do Firebase
         val storageReference: StorageReference =
             FirebaseStorage.getInstance().reference.child("Android Images")
                 .child(uri?.lastPathSegment.toString())
 
+        // Constrói e exibe o diálogo de progresso
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setCancelable(false)
         builder.setView(R.layout.progress_layout)
@@ -119,9 +128,11 @@ class UploadActivity : AppCompatActivity() {
                 .isEmpty() || binding.uploadAviso.text.toString()
                 .isEmpty()
         ) {
+            // Dismiss the dialog and show a toast if any required field is empty
             dialog.dismiss()
             Toast.makeText(this, "Nenhum dos campos podem ser vazios!", Toast.LENGTH_SHORT).show()
         } else {
+            // Upload da imagem para o Firebase Storage
             storageReference.putFile(uri!!).addOnSuccessListener { taskSnapshot ->
                 val uriTask: Task<Uri> = taskSnapshot.storage.downloadUrl
                 while (!uriTask.isComplete);
@@ -137,6 +148,7 @@ class UploadActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun uploadData() {
+        // Obtém as informações do usuário atual das SharedPreferences
         sharedPreferences = getSharedPreferences("shared_prefs", MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
@@ -148,15 +160,15 @@ class UploadActivity : AppCompatActivity() {
         val data = LocalDateTime.now().format(format)
 
         val titulo = binding.uploadTitulo.text.toString()
-        val avisoPre = binding.uploadAviso.text.toString()
+        val aviso = binding.uploadAviso.text.toString()
 
-        val aviso =
-            avisoPre + "\n\n- Email para contato: " + FirebaseAuth.getInstance().currentUser?.email
+        val emailAutor = FirebaseAuth.getInstance().currentUser?.email
 
         val dataMili = System.currentTimeMillis()
 
         val currentDate = data.replace("/", "-")
 
+        // Obtém o nome do autor do banco de dados
         FirebaseDatabase.getInstance().reference.child("Users").child(save).get().addOnSuccessListener {
             val autor = it.child("name").value.toString()
             if (binding.exclusive.isChecked) {
@@ -167,7 +179,7 @@ class UploadActivity : AppCompatActivity() {
 
                 val type = "exclusive"
 
-                val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+                val dataClass = DataClass(titulo, aviso, data, autor, emailAutor, imageURL, dataMili, type)
 
                 FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
                     .child(currentDate).setValue(dataClass)
@@ -182,7 +194,7 @@ class UploadActivity : AppCompatActivity() {
             } else {
                 val type = "normal"
 
-                val dataClass = DataClass(titulo, aviso, data, autor, imageURL, dataMili, type)
+                val dataClass = DataClass(titulo, aviso, data, autor, emailAutor, imageURL, dataMili, type)
 
                 FirebaseDatabase.getInstance().getReference("RAE").child(currentDate)
                     .setValue(dataClass)
@@ -198,6 +210,7 @@ class UploadActivity : AppCompatActivity() {
         }
     }
 
+    // Método chamado quando um item é clicado
     fun itemClicked(v: View) {
         if ((v as CheckBox).isChecked) {
             binding.arrays.visibility = View.VISIBLE

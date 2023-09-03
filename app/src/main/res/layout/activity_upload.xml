@@ -1,34 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background"
     android:fillViewport="true"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".data.UploadActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
         android:gravity="center"
+        android:background="@drawable/border"
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/aviso"
-            android:textAlignment="center"
-            android:textColor="@color/teal_200"
-            android:textSize="50sp"
-            android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/aviso"
+        android:textAlignment="center"
+        android:textColor="@color/accent_color"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/border_retangular"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <ImageView
             android:id="@+id/uploadImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_cloud_upload_24" />
 
@@ -46,7 +62,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/uploadTitulo"
@@ -71,7 +87,7 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/teal_200">
+            app:boxStrokeColor="@color/accent_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/uploadAviso"
@@ -86,7 +102,7 @@
             android:id="@+id/exclusive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/teal_200"
+            android:buttonTint="@color/accent_color"
             android:onClick="itemClicked"
             android:text="@string/exclusive"
             android:textColor="@color/text" />
@@ -115,9 +131,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_serie_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/uploadPeriodo"
@@ -143,9 +159,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_serie_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/uploadSerie"
@@ -171,9 +187,9 @@
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/teal_200"
+                    app:boxStrokeColor="@color/accent_color"
                     app:startIconDrawable="@drawable/ic_cursos_24"
-                    app:startIconTint="@color/teal_200">
+                    app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/uploadCurso"
@@ -198,11 +214,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@color/accent_color"
             android:text="@string/send"
             android:textSize="18sp"
             app:cornerRadius="20dp" />
 
     </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

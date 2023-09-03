@@ -11,11 +11,15 @@
     <color name="green">#00ff00</color>
     <color name="grey">#ff606060</color>
 
-    <color name="background">#FF151515</color>
+    <color name="background">#FF131313</color>
+    <color name="background_middle">#ff080808</color>
     <color name="background_dimer">#ff000000</color>
     <color name="text">#ffffffff</color>
     <color name="reverse_text">#ff000000</color>
-    <color name="recycler">#ff101010</color>
+    <color name="recycler">#ff151515</color>
+    <color name="dropdown">#10000000</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#FF03DAC5</color>
+    <color name="accent_color">#ff267755</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff267755</color>
 </resources>

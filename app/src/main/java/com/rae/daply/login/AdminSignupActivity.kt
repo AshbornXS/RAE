@@ -31,7 +31,7 @@ class AdminSignupActivity : AppCompatActivity() {
 
         binding.signupAdminPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed for this implementation
+                // Não é necessário para esta implementação
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -40,7 +40,7 @@ class AdminSignupActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Not needed for this implementation
+                // Não é necessário para esta implementação
             }
         })
 
@@ -60,9 +60,13 @@ class AdminSignupActivity : AppCompatActivity() {
 
             GlobalScope.launch(Dispatchers.IO) {
                 if (!email.contains("@etec.sp.gov.br")) {
-                    showToast("Digite um email válido!")
+                    runOnUiThread {
+                        Toast.makeText(this@AdminSignupActivity, "Digite um email válido!", Toast.LENGTH_SHORT).show()
+                    }
                 } else if (password.length < 6) {
-                    showToast("A senha deve ter no mínimo 6 caracteres!")
+                    runOnUiThread {
+                        Toast.makeText(this@AdminSignupActivity, "A senha deve ter no mínimo 6 caracteres!", Toast.LENGTH_SHORT).show()
+                    }
                 } else if (name.isNotEmpty() && email.isNotEmpty() && email.contains("@etec.sp.gov.br") && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
                     if (password == passwordConfirm) {
                         val dataClass = DataClass(
@@ -85,35 +89,35 @@ class AdminSignupActivity : AppCompatActivity() {
                                     firebaseAuth.currentUser?.sendEmailVerification()
                                         ?.addOnSuccessListener {
                                             dialog.dismiss()
-                                            showToast("Email de verificação enviado!")
+                                            Toast.makeText(this@AdminSignupActivity, "Email de verificação enviado!", Toast.LENGTH_SHORT).show()
                                             val intent = Intent(
                                                 this@AdminSignupActivity, LoginActivity::class.java
                                             )
                                             startActivity(intent)
                                         }?.addOnFailureListener {
                                             dialog.dismiss()
-                                            showToast(it.toString())
+                                            Toast.makeText(this@AdminSignupActivity, it.toString(), Toast.LENGTH_SHORT).show()
                                         }
                                 } else if (task.exception.toString()
                                         .contains("The email address is already in use by another account.")
                                 ) {
-                                    showToast("Email já cadastrado!")
                                     dialog.dismiss()
+                                    runOnUiThread {
+                                        Toast.makeText(this@AdminSignupActivity, "Email já cadastrado!", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
                     } else {
-                        showToast("As senhas não são iguais!")
+                        runOnUiThread {
+                            Toast.makeText(this@AdminSignupActivity, "As senhas não são iguais!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
-                    showToast("Preencha todos os campos!")
+                    runOnUiThread {
+                        Toast.makeText(this@AdminSignupActivity, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
-    }
-
-    private fun showToast(message: String) {
-        runOnUiThread {
-            Toast.makeText(this@AdminSignupActivity, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

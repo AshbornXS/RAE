@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_dimer"
+    android:background="@drawable/border_retangular"
+    android:padding="10dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_retangular"
+        android:background="@drawable/border"
         android:orientation="vertical">
 
         <TextView
@@ -18,7 +19,7 @@
             android:layout_gravity="center"
             android:padding="16dp"
             android:text="Atualizar Informações de Perfil"
-            android:textColor="@color/text"
+            android:textColor="@color/accent_color"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -30,9 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:padding="8dp"
-        android:text="Para concluir tais alterações é necessário digitar sua senha atual: "
+        android:textStyle="italic"
+        android:text="Para concluir a alteração de senha, é necessário digitar sua senha atual"
         android:textColor="@color/text"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -49,11 +51,11 @@
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/teal_200"
+        app:boxStrokeColor="@color/accent_color"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/teal_200"
+        app:passwordToggleTint="@color/accent_color"
         app:startIconDrawable="@drawable/ic_lock_24"
-        app:startIconTint="@color/teal_200">
+        app:startIconTint="@color/accent_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/oldPassword"
@@ -71,19 +73,9 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/updateCancelar"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:text="Cancelar"
-            android:textSize="15sp"
-            app:cornerRadius="30dp" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/updateConfirmar"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:text="Confirmar"
