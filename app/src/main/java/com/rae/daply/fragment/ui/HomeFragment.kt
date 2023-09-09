@@ -16,14 +16,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdapter
 import com.rae.daply.databinding.FragmentHomeBinding
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -77,7 +74,7 @@ class HomeFragment : Fragment() {
                     for (itemSnapshot in snapshot.children) {
                         val dataClass = itemSnapshot.getValue(DataClass::class.java)
                         dataClass?.let {
-                            it.key = itemSnapshot.key
+                            it.key = itemSnapshot.key/*
                             val image = it.imageURL
                             val key = it.key
                             val uploadDate = it.dataMili
@@ -89,7 +86,7 @@ class HomeFragment : Fragment() {
                                     deleteExpiredDataAndImages(key, image)
                                     itemSnapshot.ref.removeValue().await()
                                 }
-                            }
+                            } */
                             avisosArrayList.add(it)
                         }
                     }
@@ -144,6 +141,7 @@ class HomeFragment : Fragment() {
         })
     }
 
+    /*
     private suspend fun deleteExpiredDataAndImages(key: String, imageUrl: String) {
         // Exclusão assíncrona de dados e imagens expirados
         withContext(Dispatchers.IO) {
@@ -154,6 +152,7 @@ class HomeFragment : Fragment() {
             reference.child(key).removeValue().await()
         }
     }
+     */
 
     private fun sendNotification() {
         // Envio de notificação

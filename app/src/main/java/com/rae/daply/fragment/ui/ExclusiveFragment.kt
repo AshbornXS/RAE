@@ -23,8 +23,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
@@ -34,8 +32,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 
 class ExclusiveFragment : Fragment() {
@@ -59,7 +55,7 @@ class ExclusiveFragment : Fragment() {
         val view = binding.root
 
         setupSharedPreferences()
-        loadUserInfoAndData()
+        setupRecyclerView()
 
         return view
     }
@@ -71,28 +67,11 @@ class ExclusiveFragment : Fragment() {
         editor = sharedPreferences.edit()
     }
 
-    // Carregamento das informações do usuário e dos dados
-    private fun loadUserInfoAndData() {
-        val savedUser = sharedPreferences.getString("save", null).toString()
-
-        FirebaseDatabase.getInstance().reference.child("Users").child(savedUser).get()
-            .addOnSuccessListener { snapshot ->
-                val serie = snapshot.child("serie").value.toString()
-                val curso = snapshot.child("curso").value.toString()
-                val periodo = snapshot.child("periodo").value.toString()
-
-                val classe = serie.take(1) + "-" + curso + "-" + periodo.take(1)
-
-                editor.putString("classe", classe)
-                editor.apply()
-
-                setupRecyclerView(classe)
-            }
-    }
-
     // Configuração do RecyclerView
     @OptIn(DelicateCoroutinesApi::class)
-    private fun setupRecyclerView(classe: String) {
+    private fun setupRecyclerView() {
+        val classe = sharedPreferences.getString("classe", null)!!
+
         val recyclerView: RecyclerView = binding.recyclerView
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.stackFromEnd = true
@@ -121,7 +100,7 @@ class ExclusiveFragment : Fragment() {
                     }
 
                     // Processar dados expirados
-                    processExpiredData(classe, snapshot)
+                    // processExpiredData(classe, snapshot)
 
                     // Notificação
                     checkNotification(databaseReference)
@@ -167,10 +146,12 @@ class ExclusiveFragment : Fragment() {
                     }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
+    /*
     // Processar dados expirados
     private suspend fun processExpiredData(
         classe: String, snapshot: DataSnapshot
@@ -206,6 +187,7 @@ class ExclusiveFragment : Fragment() {
             reference.child(key).removeValue().await()
         }
     }
+     */
 
     // Criar canal de notificação
     private fun createNotificationChannel() {

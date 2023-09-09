@@ -55,6 +55,18 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             val save = sharedPreferences.getString("save", null).toString()
 
+            FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
+                .addOnSuccessListener { snapshot ->
+                    val serie = snapshot.child("serie").value.toString()
+                    val curso = snapshot.child("curso").value.toString()
+                    val periodo = snapshot.child("periodo").value.toString()
+
+                    val classe = serie.take(1) + "-" + curso + "-" + periodo.take(1)
+
+                    editor.putString("classe", classe)
+                    editor.apply()
+                }
+
             val userType = withContext(Dispatchers.IO) {
                 val dbReference = FirebaseDatabase.getInstance()
                 dbReference.reference.child("Users").child(save).child("userType").get()
