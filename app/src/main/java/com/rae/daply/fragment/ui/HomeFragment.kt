@@ -97,9 +97,21 @@ class HomeFragment : Fragment() {
                     checkNotification(databaseReference)
 
                     adapter.updateData(avisosArrayList)
-                    binding.shimmerView.stopShimmer()
-                    binding.shimmerView.visibility = View.GONE
-                    binding.dataView.visibility = View.VISIBLE
+
+                    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            val size = dataSnapshot.childrenCount
+                            binding.shimmerView.stopShimmer()
+                            binding.shimmerView.visibility = View.GONE
+                            if (size.toInt() == 0) {
+                                binding.dataView.visibility = View.GONE
+                            } else {
+                                binding.dataView.visibility = View.VISIBLE
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
                 }
             }
 

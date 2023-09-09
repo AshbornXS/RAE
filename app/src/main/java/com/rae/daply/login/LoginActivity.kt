@@ -102,7 +102,6 @@ open class LoginActivity : AppCompatActivity() {
         // Verificar se o usuário está logado e redirecionar para a MainActivity
         val isLogged = sharedPreferences.getBoolean("isLogged", false)
         if (isLogged) {
-            Toast.makeText(this, "Bem Vindo(a), ${LoginFragment().getName()}", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
             finish()

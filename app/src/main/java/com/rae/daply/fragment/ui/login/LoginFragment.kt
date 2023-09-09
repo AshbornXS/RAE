@@ -97,33 +97,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // Função para obter o nome do usuário após o login
-    fun getName(): String? {
-        // Obter o email do usuário atualmente logado
-        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-            ?.replace(".", "-")
-
-        // Verificar se a variável de atividade foi inicializada
-        if (::activity.isInitialized) {
-            // Obter o nome do usuário a partir do banco de dados
-            val sharedPreferences =
-                activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
-            val saveShared = sharedPreferences.edit().putString("save", save)
-            saveShared.apply()
-
-            val dbReference = FirebaseDatabase.getInstance()
-            var name: String? = null
-            dbReference.reference.child("Users").child(save.toString()).child("name").get()
-                .addOnSuccessListener { snapshot ->
-                    name = snapshot.value.toString().replaceAfter(" ", "")
-                }
-
-            return name
-        }
-        return null
-    }
-
-
     // Função para realizar o login
     private fun login(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -131,9 +104,6 @@ class LoginFragment : Fragment() {
                 // Verificar se o email foi verificado
                 val verification = firebaseAuth.currentUser?.isEmailVerified
                 if (verification == true) {
-                    // Obter o nome e realizar o redirecionamento após o login
-                    coroutineScope.launch { Toast.makeText(activity, "Bem Vindo(a), ${getName()}", Toast.LENGTH_SHORT).show() }
-
                     // Salvar o status de login nas preferências compartilhadas
                     val sharedPreferences = activity.getSharedPreferences(
                         "shared_prefs", AppCompatActivity.MODE_PRIVATE

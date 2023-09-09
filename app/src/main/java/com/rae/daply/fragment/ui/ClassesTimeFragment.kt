@@ -93,13 +93,13 @@ class ClassesTimeFragment : Fragment() {
 
             val array = Gson().fromJson(aulas.toString(), Array<String>::class.java)
 
-            for (i in array.withIndex()) {
-                array[i.index] = array[i.index].replace("-", " ")
-            }
-
             if (aulas == null) {
                 binding.dayOfWeek.text = "Não há aulas"
             } else {
+                for (i in array.withIndex()) {
+                    array[i.index] = array[i.index].replace("-", " ")
+                }
+
                 // Iterar sobre as aulas e adicionar à tabela
                 for (i in array.withIndex()) {
                     val tableRow = LayoutInflater.from(activity).inflate(

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -67,6 +68,8 @@ class MainActivity : AppCompatActivity() {
                 binding.fab.visibility = View.VISIBLE
             }
         }
+
+        welcomeToast()
 
         val tabLayout = binding.tabLayout
 
@@ -127,32 +130,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    /* fun setupBadge(tab: Int) : (ActivityMainBinding) -> Unit {
-        return { val reference = if (tab == 1) {
-            FirebaseDatabase.getInstance().getReference("RAE")
-        } else {
-            val classe = sharedPreferences.getString("classe", null).toString()
-
-            FirebaseDatabase.getInstance().getReference("Exclusive").child(classe)
-        }
-
-            reference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val size = dataSnapshot.childrenCount
-                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.number = size.toInt()
-                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.backgroundColor =
-                        resources.getColor(R.color.red, theme)
-                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.badgeTextColor =
-                        resources.getColor(R.color.white, theme)
-                    binding.tabLayout.getTabAt(tab)?.orCreateBadge?.badgeGravity =
-                        BadgeDrawable.TOP_START
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
-        }
-    } */
-
     private fun Context.isDarkThemeOn(): Boolean {
         return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
     }
@@ -206,6 +183,20 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
             true
         }
+    }
+
+    private fun welcomeToast() {
+        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+            ?.replace(".", "-")
+
+        editor.putString("save", save)
+        editor.apply()
+
+        FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).child("name")
+            .get().addOnSuccessListener {
+                val name = it.value.toString().split(" ")[0]
+                Toast.makeText(this, "Bem Vindo(a), $name!", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun setupFabClick() {

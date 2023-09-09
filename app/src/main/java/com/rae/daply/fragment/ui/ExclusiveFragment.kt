@@ -127,9 +127,21 @@ class ExclusiveFragment : Fragment() {
                     checkNotification(databaseReference)
 
                     adapter.updateData(avisosArrayList)
-                    binding.shimmerViewExclusive.stopShimmer()
-                    binding.shimmerViewExclusive.visibility = View.GONE
-                    binding.dataViewExclusive.visibility = View.VISIBLE
+
+                    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            val size = dataSnapshot.childrenCount
+                            binding.shimmerViewExclusive.stopShimmer()
+                            binding.shimmerViewExclusive.visibility = View.GONE
+                            if (size.toInt() == 0) {
+                                binding.dataViewExclusive.visibility = View.GONE
+                            } else {
+                                binding.dataViewExclusive.visibility = View.VISIBLE
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
                 }
             }
 
