@@ -28,6 +28,7 @@
     <string name="loading">Carregando...</string>
     <string name="saving">Salvando...</string>
     <string name="themeswitch">themeSwitch</string>
+    <string name="voltar">Voltar</string>
 
     <string-array name="periodos">
         <item>Manhã</item>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -148,5 +149,9 @@ class UpdateProfileActivity : AppCompatActivity() {
             }
             updateProfileDialog.dismiss()
         }
+    }
+
+    fun goBack(view: View) {
+        finish()
     }
 }

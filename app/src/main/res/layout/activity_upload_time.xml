@@ -7,21 +7,36 @@
     android:background="@drawable/background"
     tools:context=".data.UploadTimeActivity">
 
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_retangular"
+        android:contentDescription="@string/voltar"
+        android:onClick="goBack"
+        android:padding="10dp"
+        android:src="@drawable/ic_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/text" />
+
     <LinearLayout
         android:id="@+id/linearDay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/border"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back">
 
         <TextView
             android:id="@+id/txtDayUpload"
@@ -86,8 +101,8 @@
         android:layout_margin="20dp"
         android:background="@drawable/border_retangular"
         android:gravity="center"
-        android:padding="20dp"
         android:orientation="vertical"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearDayDropdown">
@@ -193,8 +208,8 @@
         android:layout_margin="20dp"
         android:background="@drawable/border_retangular"
         android:gravity="center"
-        android:padding="20dp"
         android:orientation="vertical"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearTable">
@@ -204,17 +219,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/scrollview"
             app:layout_constraintBottom_toTopOf="@+id/scrollAdd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollview">
 
             <LinearLayout
                 android:id="@+id/arrays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginBottom="20dp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -307,13 +322,13 @@
         </HorizontalScrollView>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:hint="Primeira"
-            android:id="@+id/firstInput"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
@@ -333,17 +348,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/secondInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:hint="Segunda"
-            android:id="@+id/secondInput"
             android:maxLines="1"
-            android:visibility="gone"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
+            android:visibility="gone"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -360,6 +375,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/thirdInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -367,10 +383,9 @@
             android:layout_marginEnd="10dp"
             android:hint="Terceira"
             android:maxLines="1"
-            android:visibility="gone"
-            android:id="@+id/thirdInput"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
+            android:visibility="gone"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -387,17 +402,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fourthInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:visibility="gone"
             android:layout_marginEnd="10dp"
             android:hint="Quarta"
-            android:id="@+id/fourthInput"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
+            android:visibility="gone"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -414,17 +429,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fifthInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:hint="Quinta"
-            android:id="@+id/fifthInput"
-            android:visibility="gone"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
+            android:visibility="gone"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -441,17 +456,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sixthInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:hint="Sexta"
-            android:id="@+id/sixthInput"
-            android:visibility="gone"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
+            android:visibility="gone"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"

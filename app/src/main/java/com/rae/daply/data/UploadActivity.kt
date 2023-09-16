@@ -218,4 +218,8 @@ class UploadActivity : AppCompatActivity() {
             binding.arrays.visibility = View.GONE
         }
     }
+
+    fun goBack(view: View) {
+        finish()
+    }
 }

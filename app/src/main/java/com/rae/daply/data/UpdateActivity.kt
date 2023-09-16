@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -141,5 +142,9 @@ class UpdateActivity : AppCompatActivity() {
                 Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun goBack(view: View) {
+        finish()
     }
 }

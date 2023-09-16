@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/accent_color</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/background_dimer</item>
         <item name="android:navigationBarColor">@color/background</item>
         <!-- Customize your theme here. -->
     </style>

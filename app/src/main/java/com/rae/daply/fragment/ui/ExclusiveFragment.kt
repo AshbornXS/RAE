@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
@@ -39,15 +40,20 @@ class ExclusiveFragment : Fragment() {
     // Variáveis necessárias
     private lateinit var notificationManager: NotificationManager
     private lateinit var binding: FragmentExclusiveBinding
-    private val currentDate = System.currentTimeMillis()
+    // private val currentDate = System.currentTimeMillis()
 
     private lateinit var activity: MainActivity
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
+    private var classList: List<String> = listOf(
+        "", "", ""
+    )
+
     private var isFirstUpdate = true // Controla a primeira atualização
     private var firstSize = 0 // Tamanho inicial da lista
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -55,8 +61,43 @@ class ExclusiveFragment : Fragment() {
         val view = binding.root
 
         setupSharedPreferences()
-        setupRecyclerView()
 
+        /*
+        val userType = sharedPreferences.getString("userType", null)!!
+
+        if (userType == "admin") {
+            binding.arrays.visibility = View.VISIBLE
+            val adaptorItemsPeriodo = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.periodos)
+            )
+            binding.exclusivePeriodo.setAdapter(adaptorItemsPeriodo)
+
+            val adaptorItemsSerie = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.series)
+            )
+            binding.exclusiveSerie.setAdapter(adaptorItemsSerie)
+
+            val adaptorItemsCurso = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.cursos)
+            )
+            binding.exclusiveCurso.setAdapter(adaptorItemsCurso)
+
+            lifecycleScope.launch {
+                getClass().collect {
+                    if (it[0] != "" && it[1] != "" && it[2] != "") {
+                        val classe = it[0] + "-" + it[1] + "-" + it[2]
+                        setupRecyclerView(classe)
+                    }
+                }
+            }
+
+        } else {
+
+         */
+        val classe = sharedPreferences.getString("classe", null)!!
+
+        setupRecyclerView(classe)
+        // }
         return view
     }
 
@@ -69,8 +110,13 @@ class ExclusiveFragment : Fragment() {
 
     // Configuração do RecyclerView
     @OptIn(DelicateCoroutinesApi::class)
-    private fun setupRecyclerView() {
-        val classe = sharedPreferences.getString("classe", null)!!
+    private fun setupRecyclerView(classe: String) {
+        if (classe == "--") {
+            binding.shimmerViewExclusive.stopShimmer()
+            binding.shimmerViewExclusive.visibility = View.GONE
+            binding.dataViewExclusive.visibility = View.VISIBLE
+            return
+        }
 
         val recyclerView: RecyclerView = binding.recyclerView
         val linearLayoutManager = LinearLayoutManager(activity)
@@ -245,4 +291,29 @@ class ExclusiveFragment : Fragment() {
             activity = context
         }
     }
+
+    /*
+    private fun getClass() = channelFlow {
+        binding.exclusivePeriodo.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val periodo = parent?.getItemAtPosition(position).toString().take(1)
+                classList = listOf(periodo, classList[1], classList[2])
+                channel.send(classList)
+            }
+
+        binding.exclusiveSerie.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val serie = parent?.getItemAtPosition(position).toString().take(1)
+                classList = listOf(classList[0], serie, classList[2])
+                channel.send(classList)
+            }
+
+        binding.exclusiveCurso.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val curso = parent?.getItemAtPosition(position).toString()
+                classList = listOf(classList[0], classList[1], curso)
+                channel.send(classList)
+            }
+    }.flowOn(Dispatchers.Main)
+     */
 }

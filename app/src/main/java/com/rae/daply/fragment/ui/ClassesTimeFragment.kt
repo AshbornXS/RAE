@@ -66,15 +66,16 @@ class ClassesTimeFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupDaySpinnerListener() {
         // Configurar o listener do spinner para atualizar a tabela ao selecionar um dia
         binding.day.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 if (binding.tableLayout.childCount > 1) {
                     binding.tableLayout.removeViews(1, 6)
-                    val day = parent?.getItemAtPosition(position).toString()
-                    addAulas(day)
                 }
+                val day = parent?.getItemAtPosition(position).toString()
+                addAulas(day)
             }
     }
 
@@ -86,36 +87,33 @@ class ClassesTimeFragment : Fragment() {
         binding.dayOfWeek.text = day
 
         // Obter os dados de aulas do Firebase
-        val reference =
-            FirebaseDatabase.getInstance().getReference("Aulas").child(classe).child(day)
-        reference.get().addOnSuccessListener {
-            val aulas = it.value
+        FirebaseDatabase.getInstance().getReference("Aulas").child(classe).child(day).get()
+            .addOnSuccessListener {
+                if (it.value == null) {
+                    binding.dayOfWeek.text = "Não há aulas"
+                } else {
+                    val aulas = Gson().fromJson(it.value.toString(), Array<String>::class.java)
 
-            val array = Gson().fromJson(aulas.toString(), Array<String>::class.java)
+                    for (i in aulas.withIndex()) {
+                        aulas[i.index] = aulas[i.index].replace("-", " ")
+                    }
 
-            if (aulas == null) {
-                binding.dayOfWeek.text = "Não há aulas"
-            } else {
-                for (i in array.withIndex()) {
-                    array[i.index] = array[i.index].replace("-", " ")
+                    // Iterar sobre as aulas e adicionar à tabela
+                    for (i in aulas.withIndex()) {
+                        val tableRow = LayoutInflater.from(activity).inflate(
+                            R.layout.table_row_user, binding.root, false
+                        ) as TableRow
+
+                        tableRow.findViewById<TextView>(R.id.timeTextView).text =
+                            activity.resources.getStringArray(R.array.time)[i.index]
+                        tableRow.findViewById<TextView>(R.id.firstTextView).text = i.value
+
+                        binding.tableLayout.addView(tableRow)
+                    }
                 }
-
-                // Iterar sobre as aulas e adicionar à tabela
-                for (i in array.withIndex()) {
-                    val tableRow = LayoutInflater.from(activity).inflate(
-                        R.layout.table_row_user, binding.root, false
-                    ) as TableRow
-
-                    tableRow.findViewById<TextView>(R.id.timeTextView).text =
-                        activity.resources.getStringArray(R.array.time)[i.index]
-                    tableRow.findViewById<TextView>(R.id.firstTextView).text = i.value
-
-                    binding.tableLayout.addView(tableRow)
-                }
+            }.addOnFailureListener {
+                binding.dayOfWeek.text = "Erro ao carregar aulas"
             }
-        }.addOnFailureListener {
-            binding.dayOfWeek.text = "Erro ao carregar aulas"
-        }
     }
 
     override fun onAttach(mContext: Context) {

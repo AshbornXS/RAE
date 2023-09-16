@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -53,7 +52,11 @@ class MainActivity : AppCompatActivity() {
 
         // Verificar tipo de usuário e definir visibilidade do FAB
         GlobalScope.launch(Dispatchers.Main) {
-            val save = sharedPreferences.getString("save", null).toString()
+            val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
+                ?.replace(".", "-").toString()
+
+            editor.putString("save", save)
+            editor.apply()
 
             FirebaseDatabase.getInstance().reference.child("Users").child(save).get()
                 .addOnSuccessListener { snapshot ->
@@ -80,8 +83,6 @@ class MainActivity : AppCompatActivity() {
                 binding.fab.visibility = View.VISIBLE
             }
         }
-
-        welcomeToast()
 
         val tabLayout = binding.tabLayout
 
@@ -195,20 +196,6 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
             true
         }
-    }
-
-    private fun welcomeToast() {
-        val save = FirebaseAuth.getInstance().currentUser?.email?.replace("@etec.sp.gov.br", "")
-            ?.replace(".", "-")
-
-        editor.putString("save", save)
-        editor.apply()
-
-        FirebaseDatabase.getInstance().reference.child("Users").child(save.toString()).child("name")
-            .get().addOnSuccessListener {
-                val name = it.value.toString().split(" ")[0]
-                Toast.makeText(this, "Bem Vindo(a), $name!", Toast.LENGTH_SHORT).show()
-            }
     }
 
     private fun setupFabClick() {

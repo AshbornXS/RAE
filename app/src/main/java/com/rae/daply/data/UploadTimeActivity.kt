@@ -3,6 +3,7 @@ package com.rae.daply.data
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TableRow
@@ -60,6 +61,7 @@ class UploadTimeActivity : AppCompatActivity() {
                     } else {
                         binding.firstInput.visibility = TextView.GONE
                         binding.secondInput.visibility = TextView.VISIBLE
+                        binding.secondInput.requestFocus()
                     }
                 }
 
@@ -70,6 +72,7 @@ class UploadTimeActivity : AppCompatActivity() {
                     } else {
                         binding.secondInput.visibility = TextView.GONE
                         binding.thirdInput.visibility = TextView.VISIBLE
+                        binding.thirdInput.requestFocus()
                     }
                 }
 
@@ -80,6 +83,7 @@ class UploadTimeActivity : AppCompatActivity() {
                     } else {
                         binding.thirdInput.visibility = TextView.GONE
                         binding.fourthInput.visibility = TextView.VISIBLE
+                        binding.fourthInput.requestFocus()
                     }
                 }
 
@@ -90,6 +94,7 @@ class UploadTimeActivity : AppCompatActivity() {
                     } else {
                         binding.fourthInput.visibility = TextView.GONE
                         binding.fifthInput.visibility = TextView.VISIBLE
+                        binding.fifthInput.requestFocus()
                     }
                 }
 
@@ -100,6 +105,7 @@ class UploadTimeActivity : AppCompatActivity() {
                     } else {
                         binding.fifthInput.visibility = TextView.GONE
                         binding.sixthInput.visibility = TextView.VISIBLE
+                        binding.sixthInput.requestFocus()
                     }
                 }
 
@@ -219,5 +225,9 @@ class UploadTimeActivity : AppCompatActivity() {
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 binding.txtDayUpload.text = parent?.getItemAtPosition(position).toString()
             }
+    }
+
+    fun goBack(view: View) {
+        finish()
     }
 }
