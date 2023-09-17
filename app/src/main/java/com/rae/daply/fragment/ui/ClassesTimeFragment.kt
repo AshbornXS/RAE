@@ -12,11 +12,16 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.FragmentClassesTimeBinding
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -27,6 +32,7 @@ class ClassesTimeFragment : Fragment() {
 
     private lateinit var binding: FragmentClassesTimeBinding
     private lateinit var activity: MainActivity
+    private var classList = listOf("", "", "")
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -36,18 +42,60 @@ class ClassesTimeFragment : Fragment() {
 
         setupDaySpinner()
         val dayOfWeek = getCurrentDayOfWeek()
-        setupDaySpinnerListener()
-        addAulas(dayOfWeek)
 
+        val sharedPreferences = activity.getSharedPreferences("shared_prefs", Context.MODE_PRIVATE)
+
+        val userType = sharedPreferences.getString("userType", null)!!
+
+        if (userType == "admin") {
+            binding.arrays.visibility = View.VISIBLE
+            val adaptorItemsPeriodo = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.periodos)
+            )
+            binding.aulaPeriodo.setAdapter(adaptorItemsPeriodo)
+
+            val adaptorItemsSerie = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.series)
+            )
+            binding.aulaSerie.setAdapter(adaptorItemsSerie)
+
+            val adaptorItemsCurso = ArrayAdapter(
+                activity, R.layout.list_item, resources.getStringArray(R.array.cursos)
+            )
+            binding.aulaCurso.setAdapter(adaptorItemsCurso)
+
+            lifecycleScope.launch {
+                getClass().collect {
+                    if (it[0] != "" && it[1] != "" && it[2] != "") {
+                        val classe = it[0] + "-" + it[1] + "-" + it[2]
+                        if (binding.tableLayout.childCount > 1) {
+                            binding.tableLayout.removeViews(1, 6)
+                        }
+                        binding.day.setText(getCurrentDayOfWeek(), false)
+                        setupDaySpinnerListener(classe)
+                        addAulas(dayOfWeek, classe)
+                    }
+                }
+            }
+
+        } else {
+            val classe = sharedPreferences.getString("classe", null)!!
+
+            setupDaySpinnerListener(classe)
+            addAulas(dayOfWeek, classe)
+        }
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupDaySpinner() {
         // Configurar o adaptador do spinner para os dias da semana
         val adapterItemsDias = ArrayAdapter(
             activity, R.layout.list_item, resources.getStringArray(R.array.dias)
         )
-        binding.day.setAdapter(adapterItemsDias)
+        binding.day.setAdapter(adapterItemsDias).also {
+            binding.day.setText(getCurrentDayOfWeek(), false)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,7 +115,7 @@ class ClassesTimeFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupDaySpinnerListener() {
+    private fun setupDaySpinnerListener(classe: String) {
         // Configurar o listener do spinner para atualizar a tabela ao selecionar um dia
         binding.day.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -75,14 +123,11 @@ class ClassesTimeFragment : Fragment() {
                     binding.tableLayout.removeViews(1, 6)
                 }
                 val day = parent?.getItemAtPosition(position).toString()
-                addAulas(day)
+                addAulas(day, classe)
             }
     }
 
-    private fun addAulas(day: String) {
-        // Obter a classe do SharedPreferences
-        val classe = activity.getSharedPreferences("shared_prefs", Context.MODE_PRIVATE)
-            .getString("classe", null).toString()
+    private fun addAulas(day: String, classe: String) {
 
         binding.dayOfWeek.text = day
 
@@ -114,6 +159,38 @@ class ClassesTimeFragment : Fragment() {
             }.addOnFailureListener {
                 binding.dayOfWeek.text = "Erro ao carregar aulas"
             }
+    }
+
+    private fun getClass() = channelFlow {
+        binding.aulaPeriodo.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val periodo = parent?.getItemAtPosition(position).toString().take(1)
+                classList = listOf(classList[0], classList[1], periodo)
+                runBlocking {
+                    channel.trySend(classList)
+                }
+            }
+
+        binding.aulaSerie.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val serie = parent?.getItemAtPosition(position).toString().take(1)
+                classList = listOf(serie, classList[1], classList[2])
+                runBlocking {
+                    channel.trySend(classList)
+                }
+            }
+
+        binding.aulaCurso.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val curso = parent?.getItemAtPosition(position).toString()
+                classList = listOf(classList[0], curso, classList[2])
+                runBlocking {
+                    channel.trySend(classList)
+                }
+            }
+        awaitClose {
+            channel.close()
+        }
     }
 
     override fun onAttach(mContext: Context) {

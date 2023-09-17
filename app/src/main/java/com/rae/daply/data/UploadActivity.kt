@@ -78,7 +78,7 @@ class UploadActivity : AppCompatActivity() {
             )
 
             if (userType != "admin") {
-                finishActivity(1)
+                finish()
             }
         }
 

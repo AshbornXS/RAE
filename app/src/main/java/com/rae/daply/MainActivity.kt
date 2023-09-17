@@ -144,6 +144,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Context.isDarkThemeOn(): Boolean {
+        editor.putBoolean("isDarkTheme", true)
         return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
     }
 

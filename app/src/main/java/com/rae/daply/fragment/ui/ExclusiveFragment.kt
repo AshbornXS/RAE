@@ -13,10 +13,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -32,7 +35,10 @@ import com.rae.daply.databinding.FragmentExclusiveBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class ExclusiveFragment : Fragment() {
@@ -62,7 +68,6 @@ class ExclusiveFragment : Fragment() {
 
         setupSharedPreferences()
 
-        /*
         val userType = sharedPreferences.getString("userType", null)!!
 
         if (userType == "admin") {
@@ -82,9 +87,16 @@ class ExclusiveFragment : Fragment() {
             )
             binding.exclusiveCurso.setAdapter(adaptorItemsCurso)
 
+            if (classList[0] == "" && classList[1] == "" && classList[2] == "") {
+                binding.shimmerViewExclusive.stopShimmer()
+                binding.shimmerViewExclusive.visibility = View.GONE
+                binding.dataViewExclusive.visibility = View.GONE
+            }
+
             lifecycleScope.launch {
                 getClass().collect {
                     if (it[0] != "" && it[1] != "" && it[2] != "") {
+                        isFirstUpdate = true
                         val classe = it[0] + "-" + it[1] + "-" + it[2]
                         setupRecyclerView(classe)
                     }
@@ -92,12 +104,10 @@ class ExclusiveFragment : Fragment() {
             }
 
         } else {
+            val classe = sharedPreferences.getString("classe", null)!!
 
-         */
-        val classe = sharedPreferences.getString("classe", null)!!
-
-        setupRecyclerView(classe)
-        // }
+            setupRecyclerView(classe)
+        }
         return view
     }
 
@@ -111,13 +121,6 @@ class ExclusiveFragment : Fragment() {
     // Configuração do RecyclerView
     @OptIn(DelicateCoroutinesApi::class)
     private fun setupRecyclerView(classe: String) {
-        if (classe == "--") {
-            binding.shimmerViewExclusive.stopShimmer()
-            binding.shimmerViewExclusive.visibility = View.GONE
-            binding.dataViewExclusive.visibility = View.VISIBLE
-            return
-        }
-
         val recyclerView: RecyclerView = binding.recyclerView
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.stackFromEnd = true
@@ -292,28 +295,35 @@ class ExclusiveFragment : Fragment() {
         }
     }
 
-    /*
     private fun getClass() = channelFlow {
         binding.exclusivePeriodo.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val periodo = parent?.getItemAtPosition(position).toString().take(1)
-                classList = listOf(periodo, classList[1], classList[2])
-                channel.send(classList)
+                classList = listOf(classList[0], classList[1], periodo)
+                runBlocking {
+                    channel.trySend(classList)
+                }
             }
 
         binding.exclusiveSerie.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val serie = parent?.getItemAtPosition(position).toString().take(1)
-                classList = listOf(classList[0], serie, classList[2])
-                channel.send(classList)
+                classList = listOf(serie, classList[1], classList[2])
+                runBlocking {
+                    channel.trySend(classList)
+                }
             }
 
         binding.exclusiveCurso.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val curso = parent?.getItemAtPosition(position).toString()
-                classList = listOf(classList[0], classList[1], curso)
-                channel.send(classList)
+                classList = listOf(classList[0], curso, classList[2])
+                runBlocking {
+                    channel.trySend(classList)
+                }
             }
-    }.flowOn(Dispatchers.Main)
-     */
+        awaitClose {
+            channel.close()
+        }
+    }
 }
