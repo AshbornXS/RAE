@@ -1,24 +1,32 @@
 package com.rae.daply
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.rae.daply.data.UpdateProfileActivity
 import com.rae.daply.data.UploadActivity
 import com.rae.daply.data.UploadTimeActivity
@@ -63,6 +71,11 @@ class MainActivity : AppCompatActivity() {
                     val serie = snapshot.child("serie").value.toString()
                     val curso = snapshot.child("curso").value.toString()
                     val periodo = snapshot.child("periodo").value.toString()
+                    val profileImage = snapshot.child("profileImage").value.toString()
+
+                    if (profileImage != "null") {
+                        Glide.with(this@MainActivity).load(profileImage).into(binding.pfp)
+                    }
 
                     val classe = serie.take(1) + "-" + curso + "-" + periodo.take(1)
 
@@ -97,9 +110,54 @@ class MainActivity : AppCompatActivity() {
         // Configurar clique do FAB
         setupFabClick()
 
+        val pfpBuilder = AlertDialog.Builder(this)
+        val pfpView = layoutInflater.inflate(R.layout.dialog_profile, null)
+        pfpBuilder.setCancelable(true)
+        pfpBuilder.setView(pfpView)
+        val pfpDialog = pfpBuilder.create()
+
+        val pfpImage = pfpView.findViewById<ImageView>(R.id.pfpImage)
+
+        val activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val uri = data?.data!!
+                pfpImage.setImageURI(uri)
+                uploadProfile(uri)
+            } else {
+                Toast.makeText(
+                    this, "Nenhuma imagem selecionada!", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        // Define o listener de clique para o campo de imagem
+        pfpImage.setOnClickListener {
+            val photoPicker = Intent(Intent.ACTION_PICK)
+            photoPicker.type = "image/*"
+            activityResultLauncher.launch(photoPicker)
+        }
+
         // Configurar clique da foto de perfil
         binding.pfp.setOnClickListener {
-            showProfileDialog()
+            showProfileDialog(pfpView, pfpDialog, pfpImage)
+        }
+    }
+
+    private fun uploadProfile(uri: Uri) {
+        val save = sharedPreferences.getString("save", null).toString()
+
+        val storageReference: StorageReference =
+            FirebaseStorage.getInstance().reference.child("Profile Images").child(save)
+
+        storageReference.putFile(uri).addOnSuccessListener {
+            storageReference.downloadUrl.addOnSuccessListener { uri ->
+                val url = uri.toString()
+                FirebaseDatabase.getInstance().reference.child("Users").child(save)
+                    .child("profileImage").setValue(url)
+            }
         }
     }
 
@@ -213,12 +271,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showProfileDialog() {
-        val pfpBuilder = AlertDialog.Builder(this)
-        val pfpView = layoutInflater.inflate(R.layout.dialog_profile, null)
-        pfpBuilder.setCancelable(true)
-        pfpBuilder.setView(pfpView)
-        val pfpDialog = pfpBuilder.create()
+    private fun showProfileDialog(pfpView: View, pfpDialog: AlertDialog, pfpImage: ImageView) {
 
         pfpDialog.window?.setBackgroundDrawable(ColorDrawable(0))
 
@@ -228,7 +281,7 @@ class MainActivity : AppCompatActivity() {
         val labelCurso = pfpView.findViewById<TextView>(R.id.pfpCurso)
         val labelPeriodo = pfpView.findViewById<TextView>(R.id.pfpPeriodo)
 
-        fillProfileInfo(labelName, labelEmail, labelSerie, labelCurso, labelPeriodo)
+        fillProfileInfo(labelName, labelEmail, labelSerie, labelCurso, labelPeriodo, pfpImage)
 
         pfpDialog.show()
 
@@ -259,7 +312,8 @@ class MainActivity : AppCompatActivity() {
         labelEmail: TextView,
         labelSerie: TextView,
         labelCurso: TextView,
-        labelPeriodo: TextView
+        labelPeriodo: TextView,
+        pfpImage: ImageView
     ) {
         val save = sharedPreferences.getString("save", null).toString()
 
@@ -270,12 +324,14 @@ class MainActivity : AppCompatActivity() {
                 val periodo = snapshot.child("periodo").value.toString()
                 val serie = snapshot.child("serie").value.toString()
                 val curso = snapshot.child("curso").value.toString()
+                val profileImage = snapshot.child("profileImage").value.toString()
 
                 labelName.text = name
                 labelEmail.text = email
                 labelSerie.text = serie
                 labelCurso.text = curso
                 labelPeriodo.text = periodo
+                Glide.with(this).load(profileImage).into(pfpImage)
             }
     }
 }

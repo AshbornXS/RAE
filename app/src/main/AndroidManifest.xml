@@ -9,15 +9,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".utils.FirebaseHandler"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".utils.FirebaseHandler"
         android:theme="@style/Theme.RAE"
         tools:targetApi="31">
+        <activity
+            android:name=".utils.CropperActivity"
+            android:exported="false" />
         <activity
             android:name=".data.UploadTimeActivity"
             android:exported="false" />
@@ -60,6 +63,10 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:taskAffinity="" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

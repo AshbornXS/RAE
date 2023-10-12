@@ -15,18 +15,18 @@
         app:layout_constraintBottom_toTopOf="@+id/tab_layout"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/pfp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/profile"
             android:padding="8dp"
+            android:src="@drawable/ic_face_24"
             android:scaleType="centerCrop"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_face_24"
-            app:tint="@color/text" />
+            app:shapeAppearanceOverlay="@style/roundedImageView" />
 
         <ImageView
             android:layout_width="match_parent"

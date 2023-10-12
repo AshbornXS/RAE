@@ -19,7 +19,7 @@
     <color name="recycler">#ff151515</color>
     <color name="dropdown">#10000000</color>
 
-    <color name="accent_color">#ff267755</color>
+    <color name="accent_color">#ff56008c</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff267755</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff56008c</color>
 </resources>

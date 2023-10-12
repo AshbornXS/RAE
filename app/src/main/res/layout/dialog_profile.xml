@@ -25,6 +25,17 @@
 
     </LinearLayout>
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/pfpImage"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/profile"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_add_profile_24"
+        app:shapeAppearanceOverlay="@style/roundedImageView" />
+
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
