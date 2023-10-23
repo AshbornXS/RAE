@@ -37,7 +37,7 @@
         app:tabIndicatorColor="@null"
         app:tabIndicatorGravity="stretch"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/reverse_text"
+        app:tabSelectedTextColor="@color/text"
         app:tabTextColor="@color/text" />
 
     <androidx.viewpager2.widget.ViewPager2

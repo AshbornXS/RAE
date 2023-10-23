@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_retangular"
+        android:background="@drawable/border"
         android:contentDescription="@string/voltar"
         android:onClick="goBack"
         android:padding="10dp"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/accent_color"
+            android:textColor="@color/text"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -68,6 +68,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:hint="@string/day"
+            app:hintTextColor="@color/grey"
             android:padding="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -124,7 +125,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="Dia"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -135,7 +136,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="07:10"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -146,7 +147,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="08:00"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -157,7 +158,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="08:50"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -168,7 +169,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="10:10"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -179,7 +180,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="11:00"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -190,7 +191,7 @@
                     android:background="@drawable/header_shape"
                     android:gravity="center"
                     android:text="11:50"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -239,13 +240,14 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/periodo"
                     android:padding="5dp"
+                    app:hintTextColor="@color/grey"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
                     app:boxStrokeColor="@color/accent_color"
-                    app:startIconDrawable="@drawable/ic_serie_24"
+                    app:startIconDrawable="@drawable/ic_time_24"
                     app:startIconTint="@color/accent_color">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -266,6 +268,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/serie"
+                    app:hintTextColor="@color/grey"
                     android:padding="5dp"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
@@ -295,6 +298,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/curso"
                     android:padding="5dp"
+                    app:hintTextColor="@color/grey"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
                     app:boxCornerRadiusBottomStart="20dp"
@@ -330,6 +334,7 @@
             android:layout_marginEnd="10dp"
             android:hint="Primeira"
             android:maxLines="1"
+            app:hintTextColor="@color/grey"
             android:paddingBottom="5dp"
             android:textColorHint="@color/grey"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -354,6 +359,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            app:hintTextColor="@color/grey"
             android:hint="Segunda"
             android:maxLines="1"
             android:paddingBottom="5dp"
@@ -379,6 +385,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:hintTextColor="@color/grey"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:hint="Terceira"
@@ -408,6 +415,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            app:hintTextColor="@color/grey"
             android:hint="Quarta"
             android:maxLines="1"
             android:paddingBottom="5dp"
@@ -432,6 +440,7 @@
             android:id="@+id/fifthInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
+            app:hintTextColor="@color/grey"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -461,6 +470,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            app:hintTextColor="@color/grey"
             android:layout_marginEnd="10dp"
             android:hint="Sexta"
             android:maxLines="1"
@@ -488,8 +498,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:backgroundTint="@color/accent_color"
-            android:text="Próxima"
+            android:text="@string/next"
             android:textSize="18sp"
+            android:textColor="@color/white"
             app:cornerRadius="20dp" />
 
     </LinearLayout>

@@ -152,11 +152,17 @@ class MainActivity : AppCompatActivity() {
         val storageReference: StorageReference =
             FirebaseStorage.getInstance().reference.child("Profile Images").child(save)
 
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        builder.setCancelable(false)
+        builder.setView(R.layout.progress_layout)
+        val dialog: android.app.AlertDialog = builder.create()
+        dialog.show()
+
         storageReference.putFile(uri).addOnSuccessListener {
             storageReference.downloadUrl.addOnSuccessListener { uri ->
                 val url = uri.toString()
                 FirebaseDatabase.getInstance().reference.child("Users").child(save)
-                    .child("profileImage").setValue(url)
+                    .child("profileImage").setValue(url).addOnSuccessListener { dialog.dismiss() }
             }
         }
     }
@@ -168,18 +174,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewPager2.adapter = adapter
         binding.viewPager2.currentItem = 1
-        tabLayout.selectTab(tabLayout.getTabAt(1))
-        tabLayout.getTabAt(1)?.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
+        tabLayout.selectTab(tabLayout.getTabAt(1))/*tabLayout.getTabAt(1)?.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
             resources.getColor(R.color.reverse_text, theme), android.graphics.PorterDuff.Mode.SRC_IN
-        )
+        )*/
 
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.viewPager2.currentItem = tab!!.position
-                tab.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
+                binding.viewPager2.currentItem = tab!!.position/*tab.icon?.colorFilter = android.graphics.PorterDuffColorFilter(
                     resources.getColor(R.color.reverse_text, theme),
                     android.graphics.PorterDuff.Mode.SRC_IN
-                )
+                )*/
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -285,6 +289,31 @@ class MainActivity : AppCompatActivity() {
 
         pfpDialog.show()
 
+        pfpImage.setOnLongClickListener {
+            val save = sharedPreferences.getString("save", null).toString()
+            val profileImage = sharedPreferences.getString("profileImage", null).toString()
+            val storageReference: StorageReference =
+                FirebaseStorage.getInstance().reference.child("Profile Images").child(save)
+
+            if (profileImage != "null") {
+                val builder = AlertDialog.Builder(this)
+                builder.setCancelable(true)
+                builder.setTitle("Remover foto de perfil")
+                builder.setMessage("Deseja remover sua foto de perfil?")
+                builder.setPositiveButton("Sim") { _, _ ->
+                    storageReference.delete().addOnSuccessListener {
+                        FirebaseDatabase.getInstance().reference.child("Users").child(save)
+                            .child("profileImage").removeValue()
+                        pfpImage.setImageResource(R.drawable.ic_add_profile_24)
+                        binding.pfp.setImageResource(R.drawable.ic_profile_picture_24)
+                    }
+                }
+                builder.setNegativeButton("Não") { _, _ -> }
+                builder.show()
+            }
+            true
+        }
+
         pfpDialog.findViewById<Button>(R.id.pfpUpdate)?.setOnClickListener {
             val intent = Intent(this, UpdateProfileActivity::class.java).putExtra(
                 "name", labelName.text.toString()
@@ -326,12 +355,16 @@ class MainActivity : AppCompatActivity() {
                 val curso = snapshot.child("curso").value.toString()
                 val profileImage = snapshot.child("profileImage").value.toString()
 
+                sharedPreferences.edit().putString("profileImage", profileImage).apply()
+
                 labelName.text = name
                 labelEmail.text = email
                 labelSerie.text = serie
                 labelCurso.text = curso
                 labelPeriodo.text = periodo
-                Glide.with(this).load(profileImage).into(pfpImage)
+                if (profileImage != "null") {
+                    Glide.with(this).load(profileImage).into(pfpImage)
+                }
             }
     }
 }

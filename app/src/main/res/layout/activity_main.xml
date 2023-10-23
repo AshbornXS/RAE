@@ -37,15 +37,15 @@
 
         <ImageView
             android:id="@+id/theme_switcher"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/themeswitch"
             android:padding="8dp"
-            android:src="@drawable/ic_light_24"
             android:scaleType="centerCrop"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true" />
+            android:src="@drawable/ic_light_24" />
 
     </RelativeLayout>
 
@@ -64,7 +64,7 @@
         app:tabInlineLabel="true"
         app:tabGravity="center"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/reverse_text"
+        app:tabSelectedTextColor="@color/text"
         app:tabTextColor="@color/text" />
 
     <androidx.viewpager2.widget.ViewPager2

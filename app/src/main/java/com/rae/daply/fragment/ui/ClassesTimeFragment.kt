@@ -45,7 +45,7 @@ class ClassesTimeFragment : Fragment() {
 
         val sharedPreferences = activity.getSharedPreferences("shared_prefs", Context.MODE_PRIVATE)
 
-        val userType = sharedPreferences.getString("userType", null)!!
+        val userType = sharedPreferences.getString("userType", "aluno")!!
 
         if (userType == "admin") {
             binding.arrays.visibility = View.VISIBLE
@@ -79,7 +79,7 @@ class ClassesTimeFragment : Fragment() {
             }
 
         } else {
-            val classe = sharedPreferences.getString("classe", null)!!
+            val classe = sharedPreferences.getString("classe", "aluno")!!
 
             setupDaySpinnerListener(classe)
             addAulas(dayOfWeek, classe)

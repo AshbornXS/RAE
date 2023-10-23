@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_retangular"
+        android:background="@drawable/border"
         android:contentDescription="@string/voltar"
         android:onClick="goBack"
         android:padding="10dp"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/edit"
                 android:textAlignment="center"
-                android:textColor="@color/accent_color"
+                android:textColor="@color/text"
                 android:textSize="50sp"
                 android:textStyle="bold" />
 
@@ -71,6 +71,7 @@
                 android:layout_marginEnd="10dp"
                 android:hint="@string/full_name"
                 android:paddingBottom="5dp"
+                app:hintTextColor="@color/grey"
                 android:textColorHint="@color/grey"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
@@ -97,6 +98,7 @@
                 android:layout_marginEnd="10dp"
                 android:hint="@string/senha"
                 android:minEms="8"
+                app:hintTextColor="@color/grey"
                 android:paddingBottom="5dp"
                 android:textColorHint="@color/grey"
                 app:boxCornerRadiusBottomEnd="20dp"
@@ -105,7 +107,7 @@
                 app:boxCornerRadiusTopStart="20dp"
                 app:boxStrokeColor="@color/accent_color"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/accent_color"
+                app:passwordToggleTint="@color/grey"
                 app:startIconDrawable="@drawable/ic_lock_24"
                 app:startIconTint="@color/accent_color">
 
@@ -137,13 +139,14 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/periodo"
                         android:padding="5dp"
+                        app:hintTextColor="@color/grey"
                         android:textColorHint="@color/grey"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
                         app:boxCornerRadiusTopEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
                         app:boxStrokeColor="@color/accent_color"
-                        app:startIconDrawable="@drawable/ic_serie_24"
+                        app:startIconDrawable="@drawable/ic_time_24"
                         app:startIconTint="@color/accent_color">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -165,6 +168,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/serie"
                         android:padding="5dp"
+                        app:hintTextColor="@color/grey"
                         android:textColorHint="@color/grey"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
@@ -196,6 +200,7 @@
                         android:textColorHint="@color/grey"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
+                        app:hintTextColor="@color/grey"
                         app:boxCornerRadiusTopEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
                         app:boxStrokeColor="@color/accent_color"
@@ -228,6 +233,7 @@
                 android:backgroundTint="@color/accent_color"
                 android:text="@string/update"
                 android:textSize="18sp"
+                android:textColor="@color/white"
                 app:cornerRadius="20dp" />
 
         </LinearLayout>

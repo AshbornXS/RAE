@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:padding="16dp"
             android:text="Perfil do Usuário"
-            android:textColor="@color/accent_color"
+            android:textColor="@color/text"
             android:textSize="20sp"
             android:textStyle="bold" />
 

@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#c70000</color>
     <color name="green">#00ff00</color>
-    <color name="grey">#ff606060</color>
+    <color name="grey">#ff909090</color>
 
 
     <color name="background">#ffdddddd</color>
@@ -22,5 +22,6 @@
 
     <color name="accent_color">#ff56008c</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff56008c</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/accent_color</color>
+    <color name="mtrl_indicator_text_color" tools:override="true">@color/grey</color>
 </resources>

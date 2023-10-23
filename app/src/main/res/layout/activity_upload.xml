@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_retangular"
+        android:background="@drawable/border"
         android:contentDescription="@string/voltar"
         android:onClick="goBack"
         android:padding="10dp"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/aviso"
                     android:textAlignment="center"
-                    android:textColor="@color/accent_color"
+                    android:textColor="@color/text"
                     android:textSize="50sp"
                     android:textStyle="bold" />
 
@@ -90,6 +90,7 @@
                     android:layout_marginEnd="10dp"
                     android:hint="@string/title"
                     android:maxLines="1"
+                    app:hintTextColor="@color/grey"
                     android:paddingBottom="5dp"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
@@ -116,6 +117,7 @@
                     android:hint="@string/aviso"
                     android:maxLines="1"
                     android:paddingBottom="5dp"
+                    app:hintTextColor="@color/grey"
                     android:textColorHint="@color/grey"
                     app:boxCornerRadiusBottomEnd="20dp"
                     app:boxCornerRadiusBottomStart="20dp"
@@ -159,6 +161,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/periodo"
+                            app:hintTextColor="@color/grey"
                             android:padding="5dp"
                             android:textColorHint="@color/grey"
                             app:boxCornerRadiusBottomEnd="20dp"
@@ -166,7 +169,7 @@
                             app:boxCornerRadiusTopEnd="20dp"
                             app:boxCornerRadiusTopStart="20dp"
                             app:boxStrokeColor="@color/accent_color"
-                            app:startIconDrawable="@drawable/ic_serie_24"
+                            app:startIconDrawable="@drawable/ic_time_24"
                             app:startIconTint="@color/accent_color">
 
                             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -188,6 +191,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/serie"
                             android:padding="5dp"
+                            app:hintTextColor="@color/grey"
                             android:textColorHint="@color/grey"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
@@ -215,6 +219,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/curso"
+                            app:hintTextColor="@color/grey"
                             android:padding="5dp"
                             android:textColorHint="@color/grey"
                             app:boxCornerRadiusBottomEnd="20dp"
@@ -250,6 +255,7 @@
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/accent_color"
                     android:text="@string/send"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     app:cornerRadius="20dp" />
 
