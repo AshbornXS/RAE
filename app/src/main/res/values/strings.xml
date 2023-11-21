@@ -44,14 +44,14 @@
     </string-array>
 
     <string-array name="cursos">
+        <item>ADM</item>
+        <item>DS</item>
+        <item>ELECTRO</item>
         <item>IPIA</item>
+        <item>LOG</item>
         <item>MEC</item>
         <item>MECA</item>
-        <item>DS</item>
-        <item>ADM</item>
         <item>MEIO</item>
-        <item>LOG</item>
-        <item>ELECTRO</item>
     </string-array>
 
     <string-array name="time">

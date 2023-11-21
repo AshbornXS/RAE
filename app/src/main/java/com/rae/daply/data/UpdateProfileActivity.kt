@@ -88,6 +88,13 @@ class UpdateProfileActivity : AppCompatActivity() {
             "curso" to updatedCurso
         )
 
+        if (updatedName.isEmpty() || updatedPeriodo.isEmpty() || updatedSerie.isEmpty() || updatedCurso.isEmpty()) {
+            Toast.makeText(
+                this, "Preencha todos os campos", Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         // Constrói e exibe o diálogo de confirmação
         val updateProfileBuilder = AlertDialog.Builder(this)
         val view = layoutInflater.inflate(R.layout.dialog_update, null)

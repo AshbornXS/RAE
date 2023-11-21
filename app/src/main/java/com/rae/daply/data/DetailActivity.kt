@@ -78,7 +78,7 @@ class DetailActivity : AppCompatActivity() {
         binding.detailTitulo.text = bundle.getString("titulo")
         binding.detailData.text = bundle.getString("data")
         binding.detailAutor.text = bundle.getString("autor")
-        binding.detailEmail.text = "Email para contato:\n" + bundle.getString("emailAutor")
+        binding.detailEmail.text = "Contato: " + bundle.getString("emailAutor")
 
         Glide.with(this).load(bundle.getString("image")).into(binding.detailImage)
     }

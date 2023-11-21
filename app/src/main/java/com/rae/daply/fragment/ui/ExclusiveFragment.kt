@@ -152,7 +152,9 @@ class ExclusiveFragment : Fragment() {
                     // processExpiredData(classe, snapshot)
 
                     // Notificação
-                    checkNotification(databaseReference)
+                    if (sharedPreferences.getBoolean("isLogged", false)) {
+                        checkNotification(databaseReference)
+                    }
 
                     adapter.updateData(avisosArrayList)
 

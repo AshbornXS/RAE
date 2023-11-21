@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.databinding.FragmentLoginBinding
@@ -121,6 +120,8 @@ class LoginFragment : Fragment() {
                     Toast.makeText(activity, "Verifique seu email", Toast.LENGTH_SHORT).show()
                 }
             }
+        }.addOnFailureListener {
+            Toast.makeText(activity, "Erro ao fazer login", Toast.LENGTH_SHORT).show()
         }
     }
 

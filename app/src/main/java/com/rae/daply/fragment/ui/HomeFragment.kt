@@ -5,17 +5,20 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import com.rae.daply.MainActivity
 import com.rae.daply.R
 import com.rae.daply.data.DataClass
 import com.rae.daply.data.MyAdapter
@@ -29,15 +32,23 @@ class HomeFragment : Fragment() {
     private lateinit var notificationManager: NotificationManager
     private var isFirstUpdate = true
     private lateinit var binding: FragmentHomeBinding
-    private val currentDate = System.currentTimeMillis()
-    private lateinit var mContext: Context
+
+    // private val currentDate = System.currentTimeMillis()
     private var firstSize = 0
+
+    private lateinit var activity: MainActivity
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        sharedPreferences =
+            activity.getSharedPreferences("shared_prefs", AppCompatActivity.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
 
         setupRecyclerView()
         loadDataFromFirebase()
@@ -91,7 +102,11 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-                    checkNotification(databaseReference)
+                    val isLogged = sharedPreferences.getBoolean("isLogged", false)
+
+                    if (isLogged) {
+                        checkNotification(databaseReference)
+                    }
 
                     adapter.updateData(avisosArrayList)
 
@@ -158,18 +173,18 @@ class HomeFragment : Fragment() {
         // Envio de notificação
         createNotificationChannel()
 
-        val notifyIntent = Intent(mContext, HomeFragment::class.java).apply {
+        val notifyIntent = Intent(activity, HomeFragment::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            mContext,
+            activity,
             0,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val notificationBuilder =
-            NotificationCompat.Builder(mContext, "primary_notification_channel").apply {
+            NotificationCompat.Builder(activity, "primary_notification_channel").apply {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 setContentTitle("ATENÇÃO!!!")
                 setContentText("Um novo aviso foi postado.")
@@ -185,7 +200,7 @@ class HomeFragment : Fragment() {
     private fun createNotificationChannel() {
         // Criação do canal de notificação
         notificationManager =
-            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -203,6 +218,8 @@ class HomeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mContext = context
+        if (context is MainActivity) {
+            activity = context
+        }
     }
 }
